@@ -3,7 +3,7 @@ package com.example.testmapkit
 import android.os.Bundle
 import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
-import com.example.testmapkit.location.Location
+import com.example.testmapkit.location.LocationProcessing
 import com.yandex.mapkit.MapKitFactory
 import com.yandex.mapkit.mapview.MapView
 
@@ -13,7 +13,9 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var locationButton: Button
 
-    private lateinit var location: Location
+    private lateinit var startButton: Button
+
+    private lateinit var location: LocationProcessing
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -25,14 +27,18 @@ class MainActivity : AppCompatActivity() {
 
         locationButton = findViewById(R.id.location_btn)
 
-        location = Location(this, mapView)
+        startButton = findViewById(R.id.start_btn)
 
-        location.setInitialMapPosition()
+        location = LocationProcessing(this, mapView)
 
         location.enableLocationServices()
 
         locationButton.setOnClickListener {
             location.moveToUserLocation()
+        }
+
+        startButton.setOnClickListener {
+            location.getTextLocation()
         }
     }
 
@@ -40,11 +46,13 @@ class MainActivity : AppCompatActivity() {
         super.onStart()
         MapKitFactory.getInstance().onStart()
         mapView.onStart()
+        location.startLocationUpdates()
     }
 
     override fun onStop() {
         super.onStop()
         MapKitFactory.getInstance().onStop()
         mapView.onStop()
+        location.startLocationUpdates()
     }
 }
