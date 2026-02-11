@@ -4,12 +4,9 @@ import android.content.pm.PackageManager
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
-import com.example.testmapkit.R
 import com.yandex.mapkit.Animation
 import com.yandex.mapkit.MapKit
 import com.yandex.mapkit.MapKitFactory
-import com.yandex.mapkit.geometry.Circle
 import com.yandex.mapkit.location.Location
 import com.yandex.mapkit.location.LocationListener
 import com.yandex.mapkit.location.LocationManager
@@ -31,7 +28,7 @@ class LocationProcessing(private val activity: AppCompatActivity, private val ma
     private var locationListener: LocationListener? = null
     // Добавляем поле для хранения слоя местоположения пользователя
     private var userLocationLayer: UserLocationLayer? = null
-    private lateinit var circle: Circle
+    private var circle = CircleProcessing(activity)
 
     // Проверка на наличие разрешения на использование локации
     private fun checkLocationPermissions(): Boolean {
@@ -155,11 +152,6 @@ class LocationProcessing(private val activity: AppCompatActivity, private val ma
                     // Обновляем UI в UI-потоке
                     activity.runOnUiThread {
                         moveToLocation(location)
-                        Toast.makeText(
-                            activity,
-                            "Локация обновлена вручную",
-                            Toast.LENGTH_SHORT
-                        ).show()
                     }
                 }
 
@@ -175,18 +167,7 @@ class LocationProcessing(private val activity: AppCompatActivity, private val ma
         requestLocationUpdate()
         lastKnownLocation?.let { location ->
             moveToLocation(location)
-            Toast.makeText(
-                activity,
-                "Перемещено к вашему местоположению",
-                Toast.LENGTH_SHORT
-            ).show()
         } ?: run {
-            // Если локации нет, запрашиваем новую
-            Toast.makeText(
-                activity,
-                "Определяем местоположение...",
-                Toast.LENGTH_SHORT
-            ).show()
         }
     }
 
@@ -220,22 +201,22 @@ class LocationProcessing(private val activity: AppCompatActivity, private val ma
         ).show()
     }
 
-    private fun getCircle(location: Location){
-        map.mapObjects.clear()
-        circle = Circle(
-            location.position,
-            1000f // в метрах
-        )
-        map.mapObjects.addCircle(circle).apply {
-            strokeWidth = 1f
-            strokeColor = ContextCompat.getColor(activity, R.color.brilliant_blue)
-            fillColor = ContextCompat.getColor(activity, R.color.light_blue)
+    fun getTextLocation() {
+        lastKnownLocation?.let {
+            circle.clickCircle(it, map)
+            getLocation(it)
+        } ?: run {
+            Toast.makeText(
+                activity,
+                "Местоположение еще не определено",
+                Toast.LENGTH_SHORT
+            ).show()
         }
     }
 
-    fun getTextLocation() {
+    fun changeCircleRadius(radius: Int) {
         lastKnownLocation?.let {
-            getCircle(it)
+            circle.updateRadius(radius, it, map)
             getLocation(it)
         } ?: run {
             Toast.makeText(
