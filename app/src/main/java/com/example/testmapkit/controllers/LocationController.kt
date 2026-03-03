@@ -1,9 +1,10 @@
-package com.example.testmapkit.location
+package com.example.testmapkit.controllers
 
 import android.content.pm.PackageManager
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
+import com.example.testmapkit.models.LocationData
 import com.yandex.mapkit.Animation
 import com.yandex.mapkit.MapKit
 import com.yandex.mapkit.MapKitFactory
@@ -18,17 +19,18 @@ import com.yandex.mapkit.map.CameraPosition
 import com.yandex.mapkit.mapview.MapView
 import com.yandex.mapkit.user_location.UserLocationLayer
 
-class LocationProcessing(private val activity: AppCompatActivity, private val mapView: MapView) {
+class LocationController(private val activity: AppCompatActivity, private val mapView: MapView) {
 
 
     private lateinit var locationManager: LocationManager
     private var lastKnownLocation: Location? = null
     private val map = mapView.mapWindow.map
-    // Добавляем поле для сохранения ссылки на слушатель, чтобы он не был собран сборщиком мусора
+    // Добавляем поле для сохранения ссылки на слушателя, чтобы он не был собран сборщиком мусора
     private var locationListener: LocationListener? = null
     // Добавляем поле для хранения слоя местоположения пользователя
     private var userLocationLayer: UserLocationLayer? = null
-    private var circle = CircleProcessing(activity)
+    private var circle = CircleController(activity)
+    private var searchController = SearchController()
 
     // Проверка на наличие разрешения на использование локации
     private fun checkLocationPermissions(): Boolean {
@@ -74,7 +76,7 @@ class LocationProcessing(private val activity: AppCompatActivity, private val ma
             locationMapkit.isVisible = true
 
             // 2. Создаем LocationManager для отслеживания местоположения
-            locationManager = MapKitFactory.getInstance().createLocationManager()
+            locationManager = mapKit.createLocationManager()
 
             // 3. Создаем и сохраняем слушатель в поле класса, чтобы он не был удален GC
             locationListener = object : LocationListener {
@@ -184,27 +186,42 @@ class LocationProcessing(private val activity: AppCompatActivity, private val ma
         map.move(
             CameraPosition(
                 point,         // Координаты пользователя
-                17.0f,         // Уровень приближения
+                16.0f,         // Уровень приближения
                 0.0f,          // Азимут (направление камеры)
                 0.0f           // Наклон камеры
             ),
             Animation(Animation.Type.SMOOTH, 1f),
             null
         )
+
+        circle.clickCircle(location, map)
     }
 
-    private fun getLocation(location: Location) {
+    private fun getLocation(location: Location): LocationData {
         Toast.makeText(
             activity,
             "Текущая локация: ${location.position.longitude} ${location.position.latitude}",
             Toast.LENGTH_SHORT
         ).show()
+        return LocationData(
+            longitude = location.position.longitude,
+            latitude = location.position.latitude,
+            circleRadius = circle.getCircleRadius()
+        )
     }
 
-    fun getTextLocation() {
+    fun getTextLocation(): LocationData? {
         lastKnownLocation?.let {
-            circle.clickCircle(it, map)
-            getLocation(it)
+            circle.fixCircle()
+            val randomLocation = searchController.searchRandomPosition(
+                getLocation(it)
+            )
+            Toast.makeText(
+                activity,
+                "Рандомная локация: ${randomLocation.longitude} ${randomLocation.latitude}",
+                Toast.LENGTH_SHORT
+            ).show()
+            return  randomLocation
         } ?: run {
             Toast.makeText(
                 activity,
@@ -212,6 +229,7 @@ class LocationProcessing(private val activity: AppCompatActivity, private val ma
                 Toast.LENGTH_SHORT
             ).show()
         }
+        return null
     }
 
     fun changeCircleRadius(radius: Int) {
