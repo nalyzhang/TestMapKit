@@ -1,6 +1,6 @@
 package com.example.testmapkit.controllers
 
-import com.example.testmapkit.AppConstants
+import com.example.testmapkit.EARTH_RADIUS
 import com.example.testmapkit.models.LocationData
 import kotlin.math.PI
 import kotlin.math.cos
@@ -22,13 +22,13 @@ class SearchController {
         val deltaLatitude = (
                 180 * randomLatitudeDistance
                 ) / (
-                PI * AppConstants().EARTH_RADIUS
+                PI * EARTH_RADIUS
                         )
         val cosLatitude = cos(locationData.latitude)
         val deltaLongitude = (
                 180 * randomLongitudeDistance
                 ) / (
-                PI * AppConstants().EARTH_RADIUS * cosLatitude
+                PI * EARTH_RADIUS * cosLatitude
                         )
         val randomLatitude = locationData.latitude + deltaLatitude
         val randomLongitude = locationData.longitude + deltaLongitude

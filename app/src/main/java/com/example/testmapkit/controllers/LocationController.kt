@@ -1,6 +1,7 @@
 package com.example.testmapkit.controllers
 
 import android.content.pm.PackageManager
+import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
@@ -138,10 +139,11 @@ class LocationController(private val activity: AppCompatActivity, private val ma
             activity.runOnUiThread {
                 Toast.makeText(
                     activity,
-                    "Ошибка инициализации геолокации: ${e.message}",
+                    "Инициализируем локацию...",
                     Toast.LENGTH_LONG
                 ).show()
             }
+            Log.d("MainActivity", "${e.message}")
         }
     }
 
@@ -198,11 +200,11 @@ class LocationController(private val activity: AppCompatActivity, private val ma
     }
 
     private fun getLocation(location: Location): LocationData {
-        Toast.makeText(
-            activity,
-            "Текущая локация: ${location.position.longitude} ${location.position.latitude}",
-            Toast.LENGTH_SHORT
-        ).show()
+//        Toast.makeText(
+//            activity,
+//            "Текущая локация: ${location.position.longitude} ${location.position.latitude}",
+//            Toast.LENGTH_SHORT
+//        ).show()
         return LocationData(
             longitude = location.position.longitude,
             latitude = location.position.latitude,
@@ -216,11 +218,11 @@ class LocationController(private val activity: AppCompatActivity, private val ma
             val randomLocation = searchController.searchRandomPosition(
                 getLocation(it)
             )
-            Toast.makeText(
-                activity,
-                "Рандомная локация: ${randomLocation.longitude} ${randomLocation.latitude}",
-                Toast.LENGTH_SHORT
-            ).show()
+//            Toast.makeText(
+//                activity,
+//                "Рандомная локация: ${randomLocation.longitude} ${randomLocation.latitude}",
+//                Toast.LENGTH_SHORT
+//            ).show()
             return  randomLocation
         } ?: run {
             Toast.makeText(
