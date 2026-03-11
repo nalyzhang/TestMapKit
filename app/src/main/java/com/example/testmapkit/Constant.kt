@@ -8,3 +8,5 @@ val RADIUS_TEXT = "Радиус поиска %.1f км"
 val RADIUS_SCALE_FACTOR = 0.1f
 val EARTH_RADIUS = 6378
 val ADDRESS = "ADDRESS"
+
+var PROCESSING = false

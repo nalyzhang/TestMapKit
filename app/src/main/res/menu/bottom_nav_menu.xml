@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/location_item"
+        android:title="Location"
+        android:icon="@drawable/ic_location"
+        android:orderInCategory="1"
+        />
+
+    <item
+        android:id="@+id/history_item"
+        android:title="History"
+        android:icon="@drawable/ic_history"
+        android:orderInCategory="2"
+        />
+
+    <item
+        android:id="@+id/statistic_item"
+        android:title="Statistic"
+        android:icon="@drawable/ic_statistic"
+        android:orderInCategory="3"
+        />
+
+    <item
+        android:id="@+id/profile_item"
+        android:title="Profile"
+        android:icon="@drawable/ic_profile"
+        android:orderInCategory="4"
+        />
+</menu>

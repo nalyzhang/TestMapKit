@@ -1,13 +1,10 @@
 package com.example.testmapkit.controllers
 
+import android.content.Context
 import android.content.pm.PackageManager
 import android.util.Log
-import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import com.example.testmapkit.models.LocationData
-import com.yandex.mapkit.Animation
-import com.yandex.mapkit.MapKit
 import com.yandex.mapkit.MapKitFactory
 import com.yandex.mapkit.location.Location
 import com.yandex.mapkit.location.LocationListener
@@ -16,267 +13,156 @@ import com.yandex.mapkit.location.LocationStatus
 import com.yandex.mapkit.location.Purpose
 import com.yandex.mapkit.location.SubscriptionSettings
 import com.yandex.mapkit.location.UseInBackground
-import com.yandex.mapkit.map.CameraPosition
-import com.yandex.mapkit.mapview.MapView
 import com.yandex.mapkit.user_location.UserLocationLayer
-
-class LocationController(private val activity: AppCompatActivity, private val mapView: MapView) {
+class LocationController(private val context: Context) {
 
 
     private lateinit var locationManager: LocationManager
     private var lastKnownLocation: Location? = null
-    private val map = mapView.mapWindow.map
     // Добавляем поле для сохранения ссылки на слушателя, чтобы он не был собран сборщиком мусора
     private var locationListener: LocationListener? = null
-    // Добавляем поле для хранения слоя местоположения пользователя
-    private var userLocationLayer: UserLocationLayer? = null
-    private var circle = CircleController(activity)
+
+
+    // Для поиска адресов
     private var searchController = SearchController()
+
+    // Слушатели для обновлений
+    private var listeners = mutableListOf<LocationUpdateListener>()
+
+    interface LocationUpdateListener {
+        fun onLocationUpdated(location: Location)
+        fun onLocationStatusChanged(status: LocationStatus)
+    }
 
     // Проверка на наличие разрешения на использование локации
     private fun checkLocationPermissions(): Boolean {
         return (ActivityCompat.checkSelfPermission(
-            activity,
+            context,
             android.Manifest.permission.ACCESS_FINE_LOCATION
         ) == PackageManager.PERMISSION_GRANTED ||
                 ActivityCompat.checkSelfPermission(
-                    activity,
+                    context,
                     android.Manifest.permission.ACCESS_COARSE_LOCATION
                 ) == PackageManager.PERMISSION_GRANTED)
     }
 
-    // Запрос на разрешение использования геолокации
-    private fun requestLocationPermission(){
-        ActivityCompat.requestPermissions(
-            activity,
-            arrayOf(
-                android.Manifest.permission.ACCESS_FINE_LOCATION,
-                android.Manifest.permission.ACCESS_COARSE_LOCATION
-            ),
-            0
-        )
-    }
-
-    // Включение локационных сервисов
-    fun enableLocationServices() {
+    // Инициализация и запуск
+    fun startLocationTracking() {
         if (checkLocationPermissions()) {
             setupLocationServices()
         } else {
-            requestLocationPermission()
+            Log.e("LocationServer", "Нет разрешений на геолокацию")
+            // В сервисе нельзя запросить разрешения, они должны быть получены заранее
         }
     }
+
+    // Запрос на разрешение использования геолокации
+//    private fun requestLocationPermission(){
+//        ActivityCompat.requestPermissions(
+//            context,
+//            arrayOf(
+//                android.Manifest.permission.ACCESS_FINE_LOCATION,
+//                android.Manifest.permission.ACCESS_COARSE_LOCATION
+//            ),
+//            0
+//        )
+//    }
 
     // Настройка локационных сервисов
     private fun setupLocationServices() {
 
         try {
-            // 1. Создаем слой отображения местоположения пользователя
-            val mapKit: MapKit = MapKitFactory.getInstance()
-            requestLocationPermission()
-            val locationMapkit = mapKit.createUserLocationLayer(mapView.mapWindow)
-            locationMapkit.isVisible = true
+            // Создаем LocationManager
+            locationManager = MapKitFactory.getInstance().createLocationManager()
+            Log.d("LocationService", "Manager is created")
 
-            // 2. Создаем LocationManager для отслеживания местоположения
-            locationManager = mapKit.createLocationManager()
-
-            // 3. Создаем и сохраняем слушатель в поле класса, чтобы он не был удален GC
+            // Создаем и сохраняем слушатель в поле класса, чтобы он не был удален GC
             locationListener = object : LocationListener {
                 override fun onLocationUpdated(location: Location) {
                     // Сохраняем последнее местоположение
                     lastKnownLocation = location
 
                     // Добавляем Toast для отладки - видим, когда приходит новая локация
-                    activity.runOnUiThread {
-                        Toast.makeText(
-                            activity,
-                            "Обновлена локация: ${location.position.latitude}, ${location.position.longitude}",
-                            Toast.LENGTH_SHORT
-                        ).show()
-                        moveToLocation(location)
-                    }
+                    listeners.forEach { it.onLocationUpdated(location) }
+
+                    Log.d(
+                        "LocationService",
+                        "Обновлена локация: ${location.position.latitude}, ${location.position.longitude}"
+                    )
                 }
 
                 // Добавляем обработку статуса в UI-потоке
                 override fun onLocationStatusUpdated(status: LocationStatus) {
-                    activity.runOnUiThread {
-                        when (status) {
-                            LocationStatus.NOT_AVAILABLE -> {
-                                Toast.makeText(
-                                    activity,
-                                    "Служба местоположения недоступна",
-                                    Toast.LENGTH_SHORT
-                                ).show()
-                            }
+                    listeners.forEach { it.onLocationStatusChanged(status) }
 
-                            LocationStatus.AVAILABLE -> {
-                                // Служба доступна
-                            }
-
-                            else -> {
-                                // Другие статусы
-                            }
+                    when (status) {
+                        LocationStatus.NOT_AVAILABLE -> {
+                            Log.e("LocationService", "Служба местоположения недоступна")
+                        }
+                        LocationStatus.AVAILABLE -> {
+                            Log.d("LocationService", "Служба местоположения доступна")
+                        }
+                        else -> {}
                         }
                     }
                 }
-            }
+            Log.d("LocationService", "Location listener is created")
 
-            // 4. Подписываемся на обновления
+            // Подписываемся на обновления
 
             locationListener?.let { listener ->
                 // Создаем настройки подписки для более тонкого контроля
-                val subscriptionSettings = SubscriptionSettings().apply {
-                    UseInBackground.ALLOW
+                val subscriptionSettings = SubscriptionSettings(
+                    UseInBackground.ALLOW,
                     Purpose.GENERAL
-                }
+                )
+                Log.d("LocationService", "Настройки сервиса подписки есть")
                 locationManager.subscribeForLocationUpdates(
                     subscriptionSettings,
                     listener
                 )
+
+                Log.d("LocationService", "Подписка на обновления локации оформлена")
             }
 
         } catch (e: Exception){
             // Обрабатываем исключения и показываем пользователю сообщение об ошибке
-            activity.runOnUiThread {
-                Toast.makeText(
-                    activity,
-                    "Инициализируем локацию...",
-                    Toast.LENGTH_LONG
-                ).show()
-            }
-            Log.d("MainActivity", "${e.message}")
+            Log.e("LocationService", "Ошибка инициализации: ${e.message}")
         }
     }
 
-    // Добавляем метод для ручного запроса обновления местоположения
-    fun requestLocationUpdate() {
-        locationManager.requestSingleUpdate(
-            object : LocationListener {
-                override fun onLocationUpdated(location: Location) {
-                    lastKnownLocation = location
-                    // Обновляем UI в UI-потоке
-                    activity.runOnUiThread {
-                        moveToLocation(location)
-                    }
-                }
-
-                override fun onLocationStatusUpdated(status: LocationStatus) {
-                    // Обработка статуса (можно оставить пустым)
-                }
-            }
-        )
-    }
-
-    // Функция для перемещения позиции камеры на точку пользователя
-    fun moveToUserLocation() {
-        requestLocationUpdate()
-        lastKnownLocation?.let { location ->
-            moveToLocation(location)
-        } ?: run {
-        }
-    }
-
-    // Для картинки перемещения
-    private fun moveToLocation(location: Location) {
-        val point = location.position
-
-        // Проверяем, что координаты валидны
-        if (point.latitude == 0.0 && point.longitude == 0.0) {
-            return
-        }
-
-        // Перемещаем камеру на местоположение пользователя
-        map.move(
-            CameraPosition(
-                point,         // Координаты пользователя
-                16.0f,         // Уровень приближения
-                0.0f,          // Азимут (направление камеры)
-                0.0f           // Наклон камеры
-            ),
-            Animation(Animation.Type.SMOOTH, 1f),
-            null
-        )
-
-        circle.clickCircle(location, map)
-    }
-
-    private fun getLocation(location: Location): LocationData {
-//        Toast.makeText(
-//            activity,
-//            "Текущая локация: ${location.position.longitude} ${location.position.latitude}",
-//            Toast.LENGTH_SHORT
-//        ).show()
-        return LocationData(
-            longitude = location.position.longitude,
-            latitude = location.position.latitude,
-            circleRadius = circle.getCircleRadius()
-        )
-    }
-
-    fun getTextLocation(): LocationData? {
-        lastKnownLocation?.let {
-            circle.fixCircle()
-            val randomLocation = searchController.searchRandomPosition(
-                getLocation(it)
-            )
-//            Toast.makeText(
-//                activity,
-//                "Рандомная локация: ${randomLocation.longitude} ${randomLocation.latitude}",
-//                Toast.LENGTH_SHORT
-//            ).show()
-            return  randomLocation
-        } ?: run {
-            Toast.makeText(
-                activity,
-                "Местоположение еще не определено",
-                Toast.LENGTH_SHORT
-            ).show()
-        }
-        return null
-    }
-
-    fun changeCircleRadius(radius: Int) {
-        lastKnownLocation?.let {
-            circle.updateRadius(radius, it, map)
-            getLocation(it)
-        } ?: run {
-            Toast.makeText(
-                activity,
-                "Местоположение еще не определено",
-                Toast.LENGTH_SHORT
-            ).show()
-        }
-    }
-
-    // Добавляем методы для управления жизненным циклом
-
-    // Метод для возобновления обновлений локации (вызывать в onStart)
-    fun startLocationUpdates() {
+    fun stopLocationTracking() {
         locationListener?.let { listener ->
-            try {
-                val subscriptionSettings = SubscriptionSettings().apply {
-                    UseInBackground.ALLOW
-                    Purpose.GENERAL
-                }
-                // Подписываемся заново на случай, если подписка была отменена
-                locationManager.subscribeForLocationUpdates(subscriptionSettings, listener)
-            } catch (e: Exception) {
-                // Игнорируем исключение, если уже подписаны
-            }
-        }
-    }
-
-    // Метод для остановки обновлений локации (вызывать в onStop)
-    fun stopLocationUpdates() {
-        locationListener?.let { listener ->
-            // Отписываемся от обновлений для экономии батареи
             locationManager.unsubscribe(listener)
         }
     }
 
+    fun getCurrentLocation(): Location? = lastKnownLocation
+
+    fun addListener(listener: LocationUpdateListener) {
+        listeners.add(listener)
+    }
+
+    fun removeListener(listener: LocationUpdateListener) {
+        listeners.remove(listener)
+    }
+
+    // Метод для генерации случайного адреса
+    fun getRandomAddress(circleRadius: Int): LocationData? {
+        lastKnownLocation?.let { location ->
+            return searchController.getRandomAddress(
+                longitude = location.position.longitude,
+                latitude = location.position.latitude,
+                circleRadius = circleRadius
+            )
+        }
+        return null
+    }
+
     // Метод для очистки ресурсов (вызывать в onDestroy)
     fun cleanup() {
-        stopLocationUpdates()
-        locationListener = null  // Освобождаем ссылку на слушатель
-        userLocationLayer = null // Освобождаем ссылку на слой
+        stopLocationTracking()
+        locationListener = null
+        listeners.clear()
     }
 }
