@@ -2,11 +2,13 @@ package com.example.testmapkit
 
 import android.annotation.SuppressLint
 import android.os.Bundle
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import com.yandex.mapkit.MapKitFactory
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import com.example.testmapkit.databinding.ActivityMainBinding
+import kotlin.experimental.ExperimentalObjCEnum
 
 
 class MainActivity : AppCompatActivity() {
@@ -16,40 +18,48 @@ class MainActivity : AppCompatActivity() {
     @SuppressLint("DefaultLocale", "UseKtx")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        try {
 
-        MapKitFactory.setApiKey(BuildConfig.key)
-        MapKitFactory.initialize(this)
+            MapKitFactory.setApiKey(BuildConfig.key)
+            MapKitFactory.initialize(this)
 
-        binding = ActivityMainBinding.inflate(layoutInflater)
-        setContentView(binding.root)
+            binding = ActivityMainBinding.inflate(layoutInflater)
+            setContentView(binding.root)
 
-        MAIN = this
+            MAIN = this
 
-        val navHostFragment = supportFragmentManager
-            .findFragmentById(R.id.nav_host_fragment) as NavHostFragment
-        navController = navHostFragment.navController
+            val navHostFragment = supportFragmentManager
+                .findFragmentById(R.id.nav_host_fragment) as NavHostFragment
+            navController = navHostFragment.navController
 
-        binding.navBottom.setOnItemSelectedListener {
-            when(it.itemId) {
-                R.id.location_item -> {
-                    if (PROCESSING) navController.navigate(R.id.walkFragment)
-                    else navController.navigate(R.id.locationFragment)
-                    true
+            binding.navBottom.setOnItemSelectedListener {
+                when (it.itemId) {
+                    R.id.location_item -> {
+                        if (PROCESSING) navController.navigate(R.id.walkFragment)
+                        else navController.navigate(R.id.locationFragment)
+                        true
+                    }
+
+                    R.id.history_item -> {
+                        navController.navigate(R.id.historyFragment)
+                        true
+                    }
+
+                    R.id.profile_item -> {
+                        navController.navigate(R.id.settingFragment)
+                        true
+                    }
+
+                    R.id.statistic_item -> {
+                        navController.navigate(R.id.statisticFragment)
+                        true
+                    }
+
+                    else -> false
                 }
-                R.id.history_item -> {
-                    navController.navigate(R.id.historyFragment)
-                    true
-                }
-                R.id.profile_item -> {
-                    navController.navigate(R.id.profileFragment)
-                    true
-                }
-                R.id.statistic_item -> {
-                    navController.navigate(R.id.statisticFragment)
-                    true
-                }
-                else -> false
             }
+        } catch (e: Exception){
+            Log.e("MainActivityFragments", "$e")
         }
     }
 }

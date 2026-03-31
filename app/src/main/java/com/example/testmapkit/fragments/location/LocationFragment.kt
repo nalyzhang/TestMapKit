@@ -1,11 +1,10 @@
-package com.example.testmapkit.fragments
+package com.example.testmapkit.fragments.location
 
 import android.annotation.SuppressLint
 import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
 import android.content.ServiceConnection
-import android.graphics.Bitmap.createBitmap
 import android.graphics.Canvas
 import android.os.Bundle
 import android.os.IBinder
@@ -29,7 +28,6 @@ import com.example.testmapkit.R
 import com.example.testmapkit.RADIUS_SCALE_FACTOR
 import com.example.testmapkit.RADIUS_TEXT
 import com.example.testmapkit.controllers.CircleController
-import com.example.testmapkit.controllers.LocationController
 import com.example.testmapkit.databinding.FragmentLocationBinding
 import com.example.testmapkit.models.LocationData
 import com.example.testmapkit.services.LocationService
@@ -64,8 +62,10 @@ class LocationFragment : Fragment() {
     @SuppressLint("DefaultLocale")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        retainInstance = true // Сохраняем фрагмент при повороте
+        init()
+    }
 
+    private fun init() {
         circleController = CircleController(MAIN)
 
         setupViews()
@@ -124,7 +124,7 @@ class LocationFragment : Fragment() {
             progress = DEFAULT_RADIUS_KM
         }
 
-        binding.radiusSizeText.text = String.format(
+        binding.radiusSizeText.text = String.Companion.format(
             RADIUS_TEXT,
             binding.radiusSizeBar.progress * RADIUS_SCALE_FACTOR
         )
@@ -156,8 +156,9 @@ class LocationFragment : Fragment() {
         }
     }
 
+    @SuppressLint("DefaultLocale")
     private fun updateRadiusText(progress: Int) {
-        binding.radiusSizeText.text = String.format(
+        binding.radiusSizeText.text = String.Companion.format(
             RADIUS_TEXT,
             progress * RADIUS_SCALE_FACTOR
         )
@@ -203,8 +204,6 @@ class LocationFragment : Fragment() {
             val bundle = Bundle().apply {
                 putString(ADDRESS, randomAddress.getAddress().getAddressLine(0))
             }
-
-            PROCESSING = true
 
             findNavController().navigate(
                 R.id.action_locationFragment_to_walkFragment,
@@ -281,75 +280,3 @@ class LocationFragment : Fragment() {
         }
     }
 }
-
-//        location = LocationController(MAIN, binding.mapView)
-//
-//        location.enableLocationServices()
-//
-//        binding.locationBtn.setOnClickListener {
-//            location.moveToUserLocation()
-//        }
-//
-//        binding.startBtn.setOnClickListener {
-//            try {
-//                val randomAddress = location.getTextLocation()
-//                if (randomAddress != null) {
-////                    val randomPoint = Point(randomLocation.latitude, randomLocation.longitude)
-////                    binding.mapView.mapWindow.map.move(
-////                        CameraPosition(randomPoint, 15.0f, 0.0f, 0.0f)
-////                    )
-////                    binding.mapView.mapWindow.map.mapObjects.addPlacemark().apply {
-////                        geometry = randomPoint
-////                        val drawable = AppCompatResources.getDrawable(
-////                            MAIN,
-////                            R.drawable.baseline_location_on_24
-////                        )
-////                        if (drawable != null) {
-////                            val bitmap =
-////                                createBitmap(drawable.intrinsicWidth, drawable.intrinsicHeight)
-////                            val canvas = Canvas(bitmap)
-////                            drawable.setBounds(0, 0, canvas.width, canvas.height)
-////                            drawable.draw(canvas)
-////
-////                            setIcon(ImageProvider.fromBitmap(bitmap))
-////                        }
-////                        zIndex = 100f
-////                    }
-//
-//                    val bundle = Bundle().apply {
-//                        putString(ADDRESS, "${randomAddress.getAddress().getAddressLine(0)}")
-//                    }
-//
-//                    PROCESSING = true
-//
-//                    findNavController().navigate(
-//                        R.id.action_locationFragment_to_walkFragment,
-//                        bundle
-//                    )
-//                }
-//            } catch (e: Exception) {
-//                Log.d("MainActivity", "$e")
-//            }
-//        }
-//
-//        binding.radiusSizeBar.setOnSeekBarChangeListener(
-//            object : SeekBar.OnSeekBarChangeListener {
-//                override fun onProgressChanged(
-//                    radiusCircleBar: SeekBar?,
-//                    progress: Int,
-//                    fromUser: Boolean
-//                ) {
-//                    binding.radiusSizeText.text = String.format(
-//                        RADIUS_TEXT,
-//                        progress * RADIUS_SCALE_FACTOR
-//                    )
-//                    location.changeCircleRadius(progress)
-//                }
-//
-//                override fun onStartTrackingTouch(radiusCircleBar: SeekBar?) {
-//                }
-//
-//                override fun onStopTrackingTouch(radiusCircleBar: SeekBar?) {
-//                }
-//            })
-//    }

@@ -10,3 +10,5 @@ val EARTH_RADIUS = 6378
 val ADDRESS = "ADDRESS"
 
 var PROCESSING = false
+
+var TOKEN: String? = null

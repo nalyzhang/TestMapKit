@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".fragments.LocationFragment">
+    tools:context=".fragments.location.LocationFragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/main"
@@ -34,6 +34,7 @@
             <Button
                 android:id="@+id/location_btn"
                 android:text="Я"
+                android:textSize="@dimen/text_normal"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginStart="-50dp"
@@ -52,9 +53,12 @@
             app:layout_constraintStart_toEndOf="@id/location_card"
             app:layout_constraintBottom_toTopOf="@id/radiusSize_bar">
 
-            <Button
+            <ImageButton
                 android:id="@+id/start_btn"
-                android:text="Поиск"
+                android:contentDescription="Поиск"
+                android:background="@color/purple_500"
+                android:src="@drawable/ic_search"
+                android:textSize="18sp"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginStart="-50dp"
@@ -70,7 +74,9 @@
             app:layout_constraintBottom_toTopOf="@id/radiusSize_bar"
             app:layout_constraintTop_toBottomOf="@id/location_card"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
+            app:layout_constraintStart_toStartOf="parent"
+            android:textSize="@dimen/text_normal"
+            />
 
         <SeekBar
             android:id="@+id/radiusSize_bar"

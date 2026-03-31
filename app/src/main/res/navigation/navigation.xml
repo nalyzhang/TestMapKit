@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/locationFragment"
-        android:name="com.example.testmapkit.fragments.LocationFragment"
+        android:name="com.example.testmapkit.fragments.location.LocationFragment"
         android:label="fragment_location"
         tools:layout="@layout/fragment_location" >
         <action
@@ -16,7 +16,7 @@
     </fragment>
     <fragment
         android:id="@+id/walkFragment"
-        android:name="com.example.testmapkit.fragments.WalkFragment"
+        android:name="com.example.testmapkit.fragments.location.WalkFragment"
         android:label="fragment_walk"
         tools:layout="@layout/fragment_walk" >
         <action
@@ -25,17 +25,103 @@
     </fragment>
     <fragment
         android:id="@+id/historyFragment"
-        android:name="com.example.testmapkit.fragments.HistoryFragment"
+        android:name="com.example.testmapkit.fragments.history.HistoryFragment"
         android:label="fragment_history"
-        tools:layout="@layout/fragment_history" />
-    <fragment
-        android:id="@+id/profileFragment"
-        android:name="com.example.testmapkit.fragments.ProfileFragment"
-        android:label="fragment_profile"
-        tools:layout="@layout/fragment_profile" />
+        tools:layout="@layout/fragment_history" >
+        <action
+            android:id="@+id/action_historyFragment_to_historyItemFragment"
+            app:destination="@id/historyItemFragment" />
+    </fragment>
     <fragment
         android:id="@+id/statisticFragment"
-        android:name="com.example.testmapkit.fragments.StatisticFragment"
+        android:name="com.example.testmapkit.fragments.statistic.StatisticFragment"
         android:label="fragment_statistic"
         tools:layout="@layout/fragment_statistic" />
+    <fragment
+        android:id="@+id/historyItemFragment"
+        android:name="com.example.testmapkit.fragments.history.HistoryItemFragment"
+        android:label="fragment_history_item"
+        tools:layout="@layout/fragment_history_detail" >
+        <action
+            android:id="@+id/action_historyItemFragment_to_historyFragment"
+            app:destination="@id/historyFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/friendsListFragment"
+        android:name="com.example.testmapkit.fragments.setting.FriendsListFragment"
+        android:label="fragment_friends_list"
+        tools:layout="@layout/fragment_friends_list" >
+        <action
+            android:id="@+id/action_friendsListFragment_to_friendFragment"
+            app:destination="@id/friendFragment" />
+        <action
+            android:id="@+id/action_friendsListFragment_to_settingFragment"
+            app:destination="@id/settingFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/friendFragment"
+        android:name="com.example.testmapkit.fragments.setting.FriendFragment"
+        android:label="fragment_friend"
+        tools:layout="@layout/fragment_friend" >
+        <action
+            android:id="@+id/action_friendFragment_to_friendsListFragment"
+            app:destination="@id/friendsListFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/authorisationFragment"
+        android:name="com.example.testmapkit.fragments.setting.AuthorisationFragment"
+        android:label="fragment_authorisation"
+        tools:layout="@layout/fragment_authorisation" >
+        <action
+            android:id="@+id/action_authorisationFragment_to_settingFragment"
+            app:destination="@id/settingFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/rulesFragment"
+        android:name="com.example.testmapkit.fragments.setting.RulesFragment"
+        android:label="fragment_rules"
+        tools:layout="@layout/fragment_rules" >
+        <action
+            android:id="@+id/action_rulesFragment_to_settingFragment"
+            app:destination="@id/settingFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/settingFragment"
+        android:name="com.example.testmapkit.fragments.setting.SettingFragment"
+        android:label="fragment_setting"
+        tools:layout="@layout/fragment_setting" >
+        <action
+            android:id="@+id/action_settingFragment_to_profileFragment"
+            app:destination="@id/profileFragment" />
+        <action
+            android:id="@+id/action_settingFragment_to_authorisationFragment"
+            app:destination="@id/authorisationFragment" />
+        <action
+            android:id="@+id/action_settingFragment_to_rulesFragment"
+            app:destination="@id/rulesFragment" />
+        <action
+            android:id="@+id/action_settingFragment_to_friendsListFragment"
+            app:destination="@id/friendsListFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/profileFragment"
+        android:name="com.example.testmapkit.fragments.setting.ProfileFragment"
+        android:label="fragment_profile"
+        tools:layout="@layout/fragment_profile" >
+        <action
+            android:id="@+id/action_profileFragment_to_settingFragment"
+            app:destination="@id/settingFragment" />
+        <action
+            android:id="@+id/action_profileFragment_to_changePasswordFragment"
+            app:destination="@id/changePasswordFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/changePasswordFragment"
+        android:name="com.example.testmapkit.fragments.setting.ChangePasswordFragment"
+        android:label="fragment_change_password"
+        tools:layout="@layout/fragment_change_password" >
+        <action
+            android:id="@+id/action_changePasswordFragment_to_settingFragment"
+            app:destination="@id/settingFragment" />
+    </fragment>
 </navigation>
