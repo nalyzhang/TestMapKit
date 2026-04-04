@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".fragments.setting.ProfileFragment">
+    tools:context=".fragments.setting.EditProfileFragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/cl_btn_profile"
@@ -16,7 +16,7 @@
         android:layout_margin="10dp"
         >
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/btn_back_profile"
+            android:id="@+id/btn_back_edit_profile"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:icon="@drawable/ic_back"
@@ -27,22 +27,10 @@
             android:textSize="@dimen/text_normal"
             />
 
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/btn_edit_profile"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:icon="@drawable/ic_edit"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            android:layout_margin="5dp"
-            android:text=""
-            android:textSize="@dimen/text_normal"/>
-
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.cardview.widget.CardView
-        android:id="@+id/cv_img_profile"
+        android:id="@+id/cv_img_edit_profile"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:cardElevation="5dp"
@@ -57,7 +45,7 @@
             android:layout_height="wrap_content">
 
             <ImageView
-                android:id="@+id/img_profile"
+                android:id="@+id/img_edit_profile"
                 android:layout_width="200dp"
                 android:layout_height="200dp"
                 android:background="@color/light_blue"
@@ -68,6 +56,17 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
+            <ImageButton
+                android:id="@+id/btn_edit_avatar"
+                android:layout_width="200dp"
+                android:layout_height="48dp"
+                android:src="@drawable/ic_edit"
+                android:background="@color/brilliant_blue"
+                app:layout_constraintBottom_toBottomOf="@id/img_edit_profile"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                android:contentDescription="Edit"/>
+
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.cardview.widget.CardView>
@@ -75,42 +74,41 @@
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/cv_img_profile"
-        app:layout_constraintBottom_toTopOf="@id/btn_change_pass">
+        android:orientation="horizontal"
+        app:layout_constraintTop_toBottomOf="@id/cv_img_edit_profile"
+        app:layout_constraintBottom_toBottomOf="parent">
 
         <LinearLayout
-            android:id="@+id/ll_profile_detail"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:layout_margin="20dp">
+            android:layout_margin="20dp"
+            android:orientation="vertical">
 
             <LinearLayout
-                android:id="@+id/ll_profile_email"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
+                android:layout_marginStart="30dp"
                 android:layout_marginTop="10dp"
                 android:layout_marginEnd="30dp"
-                android:layout_marginStart="30dp">
+                android:orientation="horizontal">
 
                 <TextView
                     android:layout_width="@dimen/text_view_width_normal"
                     android:layout_height="match_parent"
                     android:layout_margin="5dp"
-                    android:textSize="@dimen/text_normal"
+                    android:gravity="center_vertical"
                     android:text="Почта"
-                    android:gravity="center_vertical"/>
+                    android:textSize="@dimen/text_normal" />
 
-                <TextView
-                    android:id="@+id/tv_profile_email"
+                <EditText
+                    android:id="@+id/et_edit_email"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_margin="5dp"
-                    android:textSize="@dimen/text_normal"
-                    android:text="Почта"
-                    android:gravity="center_vertical"/>
+                    android:importantForAutofill="no"
+                    android:inputType="textEmailAddress"
+                    android:labelFor="@id/et_auth_email"
+                    android:textSize="@dimen/text_normal" />
 
             </LinearLayout>
 
@@ -118,29 +116,28 @@
                 android:id="@+id/ll_profile_username"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
+                android:layout_marginStart="30dp"
                 android:layout_marginTop="10dp"
                 android:layout_marginEnd="30dp"
-                android:layout_marginStart="30dp"
-                android:visibility="visible"
-                >
+                android:orientation="horizontal"
+                android:visibility="visible">
 
                 <TextView
                     android:layout_width="@dimen/text_view_width_normal"
                     android:layout_height="match_parent"
                     android:layout_margin="5dp"
-                    android:textSize="@dimen/text_normal"
+                    android:gravity="center_vertical"
                     android:text="Ник"
-                    android:gravity="center_vertical" />
+                    android:textSize="@dimen/text_normal" />
 
-                <TextView
-                    android:id="@+id/tv_profile_username"
+                <EditText
+                    android:id="@+id/et_edit_username"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_margin="5dp"
-                    android:textSize="@dimen/text_normal"
-                    android:text="Ник"
-                    android:gravity="center_vertical" />
+                    android:importantForAutofill="no"
+                    android:inputType="text"
+                    android:textSize="@dimen/text_normal" />
 
             </LinearLayout>
 
@@ -148,29 +145,28 @@
                 android:id="@+id/ll_user_first_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
+                android:layout_marginStart="30dp"
                 android:layout_marginTop="10dp"
                 android:layout_marginEnd="30dp"
-                android:layout_marginStart="30dp"
-                android:visibility="visible"
-                >
+                android:orientation="horizontal"
+                android:visibility="visible">
 
                 <TextView
                     android:layout_width="@dimen/text_view_width_normal"
                     android:layout_height="match_parent"
                     android:layout_margin="5dp"
-                    android:textSize="@dimen/text_normal"
+                    android:gravity="center_vertical"
                     android:text="Имя"
-                    android:gravity="center_vertical" />
+                    android:textSize="@dimen/text_normal" />
 
-                <TextView
-                    android:id="@+id/tv_profile_first_name"
+                <EditText
+                    android:id="@+id/et_edit_first_name"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_margin="5dp"
-                    android:textSize="@dimen/text_normal"
-                    android:text="Имя"
-                    android:gravity="center_vertical" />
+                    android:importantForAutofill="no"
+                    android:inputType="text"
+                    android:textSize="@dimen/text_normal" />
 
             </LinearLayout>
 
@@ -178,84 +174,32 @@
                 android:id="@+id/ll_profile_last_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
+                android:layout_marginStart="30dp"
                 android:layout_marginTop="10dp"
                 android:layout_marginEnd="30dp"
-                android:layout_marginStart="30dp"
-                android:visibility="visible"
-                >
+                android:orientation="horizontal"
+                android:visibility="visible">
 
                 <TextView
                     android:layout_width="@dimen/text_view_width_normal"
                     android:layout_height="match_parent"
                     android:layout_margin="5dp"
-                    android:textSize="@dimen/text_normal"
+                    android:gravity="center_vertical"
                     android:text="Фамилия"
-                    android:gravity="center_vertical" />
+                    android:textSize="@dimen/text_normal" />
 
-                <TextView
-                    android:id="@+id/tv_profile_last_name"
+                <EditText
+                    android:id="@+id/et_auth_last_name"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_margin="5dp"
-                    android:textSize="@dimen/text_normal"
-                    android:text="Фамилия"
-                    android:gravity="center_vertical" />
+                    android:importantForAutofill="no"
+                    android:inputType="text"
+                    android:textSize="@dimen/text_normal" />
 
             </LinearLayout>
 
-            <LinearLayout
-                android:id="@+id/ll_profile_stat_count"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_marginTop="10dp"
-                android:layout_marginEnd="30dp"
-                android:layout_marginStart="30dp"
-                android:visibility="visible"
-                >
-
-                <TextView
-                    android:layout_width="@dimen/text_view_width_normal"
-                    android:layout_height="match_parent"
-                    android:layout_margin="5dp"
-                    android:textSize="@dimen/text_normal"
-                    android:text="Кол-во прогулок"
-                    android:gravity="center_vertical" />
-
-                <TextView
-                    android:id="@+id/tv_profile_stat_count"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_margin="5dp"
-                    android:textSize="@dimen/text_normal"
-                    android:text="Количество прогулок"
-                    android:gravity="center_vertical" />
-
-            </LinearLayout>
         </LinearLayout>
     </ScrollView>
-
-    <Button
-        android:id="@+id/btn_change_pass"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Изменить пароль"
-        android:layout_margin="10dp"
-        android:textSize="@dimen/text_normal"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"/>
-
-    <ProgressBar
-        android:id="@+id/progressBarProfile"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -114,6 +114,9 @@
         <action
             android:id="@+id/action_profileFragment_to_changePasswordFragment"
             app:destination="@id/changePasswordFragment" />
+        <action
+            android:id="@+id/action_profileFragment_to_editProfileFragment"
+            app:destination="@id/editProfileFragment" />
     </fragment>
     <fragment
         android:id="@+id/changePasswordFragment"
@@ -121,7 +124,16 @@
         android:label="fragment_change_password"
         tools:layout="@layout/fragment_change_password" >
         <action
-            android:id="@+id/action_changePasswordFragment_to_settingFragment"
-            app:destination="@id/settingFragment" />
+            android:id="@+id/action_changePasswordFragment_to_profileFragment"
+            app:destination="@id/profileFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/editProfileFragment"
+        android:name="com.example.testmapkit.fragments.setting.EditProfileFragment"
+        android:label="fragment_edit_profile"
+        tools:layout="@layout/fragment_edit_profile" >
+        <action
+            android:id="@+id/action_editProfileFragment_to_profileFragment"
+            app:destination="@id/profileFragment" />
     </fragment>
 </navigation>

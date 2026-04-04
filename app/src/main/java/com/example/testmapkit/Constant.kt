@@ -12,3 +12,5 @@ val ADDRESS = "ADDRESS"
 var PROCESSING = false
 
 var TOKEN: String? = null
+
+val TAG: String = "Android DRF debug"
