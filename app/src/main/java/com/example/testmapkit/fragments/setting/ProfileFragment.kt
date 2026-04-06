@@ -100,7 +100,7 @@ class ProfileFragment : Fragment() {
 
         if (!currentUser.avatarUrl.isNullOrEmpty()) {
             Glide.with(this)
-                .load(currentUser.avatarUrl)
+                .load(currentUser.getFullAvatarUrl())
                 .placeholder(R.drawable.ic_profile)
                 .error(R.drawable.ic_profile)
                 .circleCrop()
@@ -112,10 +112,10 @@ class ProfileFragment : Fragment() {
 
     private fun showLoading(isLoading: Boolean) {
         if (isLoading) {
-            binding.progressBarProfile.visibility = View.VISIBLE
+            binding.pbProfile.visibility = View.VISIBLE
             binding.llProfileDetail.visibility = View.GONE
         } else {
-            binding.progressBarProfile.visibility = View.GONE
+            binding.pbProfile.visibility = View.GONE
             binding.llProfileDetail.visibility = View.VISIBLE
         }
     }

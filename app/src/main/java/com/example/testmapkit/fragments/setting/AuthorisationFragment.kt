@@ -48,6 +48,7 @@ class AuthorisationFragment : Fragment() {
     private fun init() {
 
         binding.btnToReg.isEnabled = false
+        binding.tvAuthTitle.text = "Регистрация"
 
         binding.btnToReg.setOnClickListener {
             showRegistrationForm()
@@ -80,6 +81,7 @@ class AuthorisationFragment : Fragment() {
         binding.btnRegistration.visibility = View.VISIBLE
         binding.btnToReg.isEnabled = false
         binding.btnToAuth.isEnabled = true
+        binding.tvAuthTitle.text = "Регистрация"
         clearFields()
     }
 
@@ -91,6 +93,7 @@ class AuthorisationFragment : Fragment() {
         binding.btnAuth.visibility = View.VISIBLE
         binding.btnToReg.isEnabled = true
         binding.btnToAuth.isEnabled = false
+        binding.tvAuthTitle.text = "Вход"
         clearFields()
     }
 

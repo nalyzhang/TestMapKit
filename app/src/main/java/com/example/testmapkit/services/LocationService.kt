@@ -8,7 +8,6 @@ import android.os.Build
 import android.os.IBinder
 import android.util.Log
 import androidx.core.app.NotificationCompat
-import com.example.testmapkit.MAIN
 import com.example.testmapkit.R
 import com.example.testmapkit.controllers.LocationController
 import com.example.testmapkit.models.LocationData
@@ -46,26 +45,17 @@ class LocationService : Service() {
         super.onCreate()
 
         // Инициализируем контроллер
-        locationController = LocationController(MAIN)
+        locationController = LocationController(applicationContext)
 
         // Подписываемся на обновления от контроллера
         locationController.addListener(object :
             LocationController.LocationUpdateListener {
             override fun onLocationUpdated(location: Location) {
                 currentLocation = location
-
-                // Передаем обновления всем подписанным фрагментам
                 fragmentListeners.forEach { it.onLocationUpdated(location) }
-
-                // TODO: Проверка достижения цели
-                // checkGoalReached(location)
-
-                // TODO: Сохранение маршрута
-                // routePoints.add(location.position)
             }
 
             override fun onLocationStatusChanged(status: LocationStatus) {
-                // Обработка статуса
                 when (status) {
                     LocationStatus.AVAILABLE -> {
                         Log.d("LocationService", "Location service available")
@@ -148,7 +138,7 @@ class LocationService : Service() {
 
     override fun onDestroy() {
         super.onDestroy()
-        locationController.cleanup()
+        // locationController.cleanup()
     }
 
     // Методы для взаимодействия с фрагментами

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -30,10 +30,15 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <LinearLayout
+        android:id="@+id/ll_settings_detail"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:gravity="center"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/cl_btn_auth"
+        app:layout_constraintBottom_toBottomOf="parent">
 
         <TextView
             android:id="@+id/tv_auth_title"
@@ -90,7 +95,7 @@
             <EditText
                 android:id="@+id/et_auth_email"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="48dp"
                 android:importantForAutofill="no"
                 android:inputType="textEmailAddress"
                 android:layout_margin="5dp"
@@ -122,12 +127,11 @@
             <EditText
                 android:id="@+id/et_auth_username"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:importantForAutofill="no"
+                android:layout_height="48dp"
                 android:layout_margin="5dp"
+                android:importantForAutofill="no"
                 android:inputType="text"
-                android:textSize="@dimen/text_normal"
-                />
+                android:textSize="@dimen/text_normal"/>
 
         </LinearLayout>
 
@@ -153,12 +157,11 @@
             <EditText
                 android:id="@+id/et_auth_first_name"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="48dp"
                 android:importantForAutofill="no"
                 android:layout_margin="5dp"
                 android:inputType="text"
-                android:textSize="@dimen/text_normal"
-                />
+                android:textSize="@dimen/text_normal" />
 
         </LinearLayout>
 
@@ -184,12 +187,11 @@
             <EditText
                 android:id="@+id/et_auth_last_name"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="48dp"
                 android:importantForAutofill="no"
                 android:layout_margin="5dp"
                 android:inputType="text"
-                android:textSize="@dimen/text_normal"
-                />
+                android:textSize="@dimen/text_normal" />
 
         </LinearLayout>
 
@@ -214,12 +216,11 @@
             <EditText
                 android:id="@+id/et_auth_password"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="48dp"
                 android:importantForAutofill="no"
                 android:layout_margin="5dp"
                 android:inputType="textPassword"
-                android:textSize="@dimen/text_normal"
-                />
+                android:textSize="@dimen/text_normal" />
 
         </LinearLayout>
 
@@ -242,4 +243,4 @@
             android:visibility="visible"/>
     </LinearLayout>
 
-</FrameLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

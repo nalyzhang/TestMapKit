@@ -90,7 +90,7 @@ class SettingFragment : Fragment() {
         // Наблюдаем за данными текущего пользователя
         userViewModel.currentUser.observe(viewLifecycleOwner) { user ->
             user?.let {
-                updateUserAvatar(it.avatarUrl)
+                updateUserAvatar(it.getFullAvatarUrl())
                 updateUserName(it.username)
             }
         }

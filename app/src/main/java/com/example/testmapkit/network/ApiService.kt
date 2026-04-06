@@ -23,7 +23,7 @@ interface ApiService {
     suspend fun getCurrentUser(): Response<UserWithStatistic>
 
     @PUT("api/v1/users/me/")
-    suspend fun putCurrentUser(): Response<UserUpdate>
+    suspend fun putCurrentUser(@Body request: UserUpdate): Response<UserUpdate>
 
     // ========== Пользователи ==========
     @GET("api/v1/users/")

@@ -211,7 +211,7 @@ class LocationFragment : Fragment() {
             )
         } else {
             Toast.makeText(
-                MAIN,
+                requireContext(),
                 "Локация еще не определена",
                 Toast.LENGTH_LONG
             ).show()
@@ -230,30 +230,39 @@ class LocationFragment : Fragment() {
 
     override fun onStart() {
         super.onStart()
-        Log.i("LocationServer", "onStart запущен")
+        Log.d("LocationFragment", "onStart - calling mapView.onStart()")
+        MapKitFactory.getInstance().onStart()
+        binding.mapView.onStart()
     }
 
     override fun onResume() {
         super.onResume()
-        Log.i("LocationServer", "onResume запущен")
+        Log.d("LocationFragment", "onResume - starting map")
         binding.mapView.onStart()
+        MapKitFactory.getInstance().onStart()
         updateCamera = true
     }
 
     override fun onPause() {
-        binding.mapView.onStop()
-        Log.i("LocationServer", "onPause запущен")
         super.onPause()
+        Log.d("LocationFragment", "onPause - stopping map")
+        binding.mapView.onStop()
+        MapKitFactory.getInstance().onStop()
+    }
+
+    override fun onStop() {
+        super.onStop()
+        Log.d("LocationFragment", "onStop")
+        // Не вызываем onStop у mapView, так как он уже вызван в onPause
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        Log.i("LocationServer", "onDestroy запущен")
+        Log.d("LocationFragment", "onDestroy")
         if (isServiceBound) {
             requireContext().unbindService(serviceConnection)
             isServiceBound = false
         }
-        // НЕ останавливаем сервис здесь, если квест еще идет!
     }
 
     fun printPoint(randomLocation: LocationData) {
@@ -264,7 +273,7 @@ class LocationFragment : Fragment() {
         binding.mapView.mapWindow.map.mapObjects.addPlacemark().apply {
             geometry = randomPoint
             val drawable = AppCompatResources.getDrawable(
-                MAIN,
+                requireContext(),
                 R.drawable.ic_location
             )
             if (drawable != null) {

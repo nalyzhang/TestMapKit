@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.testmapkit.TAG
 import com.example.testmapkit.dataModels.User
+import com.example.testmapkit.dataModels.UserUpdate
 import com.example.testmapkit.dataModels.UserWithStatistic
 import com.example.testmapkit.network.TokenManager
 import com.example.testmapkit.repositories.UserRepository
@@ -46,6 +47,11 @@ class UserViewModel (
 
     private val _changePassword = MutableLiveData<UserResult<Unit>?>()
     val changePassword: LiveData<UserResult<Unit>?> = _changePassword
+    private val _updateState = MutableLiveData<UserResult<UserUpdate>?>()
+    val updateState: LiveData<UserResult<UserUpdate>?> = _updateState
+
+    private val _avatarUpdateState = MutableLiveData<UserResult<String>?>()
+    val avatarUpdateState: LiveData<UserResult<String>?> = _avatarUpdateState
 
     init {
         Log.d(TAG, "UserViewModel инициализирован")
@@ -179,6 +185,65 @@ class UserViewModel (
                 Log.e(TAG, "Исключение при получении пользователя", e)
                 _errorMessage.value = e.message ?: "Ошибка получения данных пользователя"
                 _currentUser.value = null
+            }
+        }
+    }
+
+    /**
+     * Изменение текущего пользователя (асинхронно)
+     * Результат придет в LiveData currentUser
+     */
+    fun putCurrentUser(
+        username: String,
+        email: String,
+        firstName: String,
+        lastName: String
+    ) {
+        Log.d(TAG, "ViewModel: изменение текущего пользователя")
+
+        val validationError = validateNewProfileData(
+            username, email, firstName, lastName
+        )
+
+        if (validationError != null) {
+            Log.e(TAG, "Ошибка валидации: $validationError")
+            _errorMessage.value = validationError
+            return
+        }
+
+        // Проверяем, есть ли токен
+        if (!tokenManager.hasToken()) {
+            Log.w(TAG, "Нет токена, невозможно получить пользователя")
+            _currentUser.value = null
+            return
+        }
+
+        _updateState.value = UserResult.Loading
+
+        viewModelScope.launch {
+            try {
+                val result = userRepository.putCurrentUser(
+                    username, email, firstName, lastName)
+                Log.d(TAG, "Результат изменение текущего пользователя: $result")
+
+                _updateState.value = result
+
+                when (result) {
+                    is UserResult.Success -> {
+                        Log.d(TAG, "Текущий пользователь: ${result.data.username}")
+                        _errorMessage.value = null
+                        // Обновляем данные в currentUser
+                        getCurrentUser()
+                    }
+                    is UserResult.Error -> {
+                        Log.e(TAG, "Ошибка изменения пользователя: ${result.message}")
+                        _errorMessage.value = result.message
+                    }
+                    else -> {}
+                }
+            } catch (e: Exception) {
+                Log.e(TAG, "Исключение при изменении пользователя", e)
+                _errorMessage.value = e.message ?: "Ошибка изменения данных пользователя"
             }
         }
     }
@@ -319,14 +384,27 @@ class UserViewModel (
         lastName: String
     ): String? {
         return when {
+            password.isBlank() -> "Введите пароль"
+            password.length < 6 -> "Пароль должен быть не менее 6 символов"
+            else -> validateNewProfileData(
+                username, email, firstName, lastName
+            )
+        }
+    }
+
+    private fun validateNewProfileData(
+        username: String,
+        email: String,
+        firstName: String,
+        lastName: String
+    ): String? {
+        return when {
             username.isBlank() -> "Введите username"
             username.length < 3 -> "Username должен быть не менее 3 символов"
             username.length > 150 -> "Username не должен превышать 150 символов"
             email.isBlank() -> "Введите email"
             !android.util.Patterns.EMAIL_ADDRESS.matcher(
                 email).matches() -> "Введите корректный email"
-            password.isBlank() -> "Введите пароль"
-            password.length < 6 -> "Пароль должен быть не менее 6 символов"
             firstName.isBlank() -> "Введите имя"
             firstName.length > 150 -> "Имя не должно превышать 150 символов"
             lastName.isBlank() -> "Введите фамилию"
@@ -368,5 +446,76 @@ class UserViewModel (
         super.onCleared()
         Log.d(TAG, "UserViewModel уничтожен, ресурсы очищены")
         resetStates()
+    }
+
+    /**
+     * Обновление аватара
+     */
+    fun updateAvatar(base64Image: String) {
+        Log.d(TAG, "ViewModel: обновление аватара")
+
+        _avatarUpdateState.value = UserResult.Loading
+
+        viewModelScope.launch {
+            try {
+                val result = userRepository.updateAvatar(base64Image)
+                Log.d(TAG, "Результат обновления аватара: $result")
+
+                _avatarUpdateState.value = result
+
+                when (result) {
+                    is UserResult.Success -> {
+                        Log.d(TAG, "Аватар успешно обновлен")
+                        _errorMessage.value = null
+                        // Обновляем данные пользователя
+                        getCurrentUser()
+                    }
+                    is UserResult.Error -> {
+                        Log.e(TAG, "Ошибка обновления аватара: ${result.message}")
+                        _errorMessage.value = result.message
+                    }
+                    else -> {}
+                }
+            } catch (e: Exception) {
+                Log.e(TAG, "Исключение при обновлении аватара", e)
+                _avatarUpdateState.value = UserResult.Error(e.message ?: "Ошибка обновления аватара")
+            }
+        }
+    }
+
+    /**
+     * Удаление аватара
+     */
+    fun deleteAvatar() {
+        Log.d(TAG, "ViewModel: удаление аватара")
+
+        _avatarUpdateState.value = UserResult.Loading
+
+        viewModelScope.launch {
+            try {
+                val result = userRepository.deleteAvatar()
+                Log.d(TAG, "Результат удаления аватара: $result")
+
+                when (result) {
+                    is UserResult.Success -> {
+                        _avatarUpdateState.value = UserResult.Success("")
+                        Log.d(TAG, "Аватар успешно удален")
+                        _errorMessage.value = null
+                        getCurrentUser()
+                    }
+                    is UserResult.Error -> {
+                        _avatarUpdateState.value = UserResult.Error(result.message, result.code)
+                        Log.e(TAG, "Ошибка удаления аватара: ${result.message}")
+                        _errorMessage.value = result.message
+                    }
+                    is UserResult.Loading -> {
+                        _avatarUpdateState.value = UserResult.Loading
+                    }
+                }
+            } catch (e: Exception) {
+                Log.e(TAG, "Исключение при удалении аватара", e)
+                _avatarUpdateState.value = UserResult.Error(e.message ?: "Ошибка удаления аватара")
+            }
+        }
     }
 }

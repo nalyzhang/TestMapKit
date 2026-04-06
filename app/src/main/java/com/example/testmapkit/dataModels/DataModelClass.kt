@@ -25,7 +25,16 @@ data class UserWithStatistic(
     @SerializedName("is_friend") val isFriend: Boolean = false,
     @SerializedName("routes") val routes: List<Route> = emptyList(),
     @SerializedName("routes_count") val routesCount: Int = 0
-)
+) {
+    fun getFullAvatarUrl(baseUrl: String = "http://192.168.0.202:8000"): String {
+        if (avatarUrl.isNullOrEmpty()) return ""
+        return if (avatarUrl.startsWith("http")) {
+            avatarUrl
+        } else {
+            "$baseUrl$avatarUrl"
+        }
+    }
+}
 
 // Изменение пользователя
 data class UserUpdate(

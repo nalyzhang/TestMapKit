@@ -248,7 +248,7 @@
         app:layout_constraintBottom_toBottomOf="parent"/>
 
     <ProgressBar
-        android:id="@+id/progressBarProfile"
+        android:id="@+id/pb_profile"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"

@@ -20,9 +20,6 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         try {
 
-            MapKitFactory.setApiKey(BuildConfig.key)
-            MapKitFactory.initialize(this)
-
             binding = ActivityMainBinding.inflate(layoutInflater)
             setContentView(binding.root)
 

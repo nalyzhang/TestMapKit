@@ -158,4 +158,84 @@ class UserRepository(
                 e.message ?: "Неизвестная ошибка при получении текущего пользователя")
         }
     }
+
+    suspend fun putCurrentUser(
+        username: String,
+        email: String,
+        firstName: String,
+        lastName: String
+    ): UserResult<UserUpdate> = withContext(Dispatchers.IO) {
+        try {
+            Log.d(TAG, "Начинаем изменение текущего пользователя")
+
+            val request = UserUpdate(username, email, firstName, lastName)
+
+            val response = apiService.putCurrentUser(request)
+
+            if (response.isSuccessful) {
+                Log.d(TAG, "Текущий пользователь успешно изменен")
+                val updateUser = response.body()!!
+                return@withContext UserResult.Success(updateUser)
+            } else {
+                val errorMsg = "Ошибка изменения текущего пользователя: ${response.code()}"
+                Log.e(TAG, "Ошибка изменения текущего пользователя: $errorMsg")
+                return@withContext UserResult.Error(errorMsg, response.code())
+            }
+        } catch (e: Exception) {
+            Log.e(TAG, "Исключение при изменении текущего пользователя", e)
+            return@withContext UserResult.Error(
+                e.message ?: "Неизвестная ошибка при изменении текущего пользователя")
+        }
+    }
+
+    suspend fun updateAvatar(
+        base64Image: String
+    ): UserResult<String> = withContext(Dispatchers.IO) {
+        try {
+            Log.d(TAG, "Начинаем обновление аватара")
+
+            val request = AvatarUpdateRequest(avatarBase64 = base64Image)
+            val response = apiService.updateAvatar(request)
+
+            if (response.isSuccessful && response.body() != null) {
+                val avatarUrl = response.body()!!.avatarUrl
+                Log.d(TAG, "Аватар обновлен: $avatarUrl")
+                return@withContext UserResult.Success(avatarUrl)
+            } else {
+                val errorMsg = when (response.code()) {
+                    400 -> "Неверный формат изображения"
+                    401 -> "Не авторизован"
+                    else -> "Ошибка обновления аватара: ${response.code()}"
+                }
+                Log.e(TAG, errorMsg)
+                return@withContext UserResult.Error(errorMsg, response.code())
+            }
+        } catch (e: Exception) {
+            Log.e(TAG, "Исключение при обновлении аватара", e)
+            return@withContext UserResult.Error(e.message ?: "Неизвестная ошибка")
+        }
+    }
+
+    /**
+     * Удаление аватара
+     */
+    suspend fun deleteAvatar(): UserResult<Unit> = withContext(Dispatchers.IO) {
+        try {
+            Log.d(TAG, "Начинаем удаление аватара")
+
+            val response = apiService.deleteAvatar()
+
+            if (response.isSuccessful) {
+                Log.d(TAG, "Аватар удален")
+                return@withContext UserResult.Success(Unit)
+            } else {
+                val errorMsg = "Ошибка удаления аватара: ${response.code()}"
+                Log.e(TAG, errorMsg)
+                return@withContext UserResult.Error(errorMsg, response.code())
+            }
+        } catch (e: Exception) {
+            Log.e(TAG, "Исключение при удалении аватара", e)
+            return@withContext UserResult.Error(e.message ?: "Неизвестная ошибка")
+        }
+    }
 }
