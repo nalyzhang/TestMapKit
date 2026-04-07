@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".fragments.setting.FriendFragment">
+    tools:context=".fragments.setting.friend.FriendFragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/cl_btn_friend"
@@ -64,6 +64,34 @@
         android:layout_margin="20dp">
 
         <LinearLayout
+            android:id="@+id/ll_user_id"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="30dp"
+            android:layout_marginStart="30dp">
+
+            <TextView
+                android:layout_width="@dimen/text_view_width_normal"
+                android:layout_height="match_parent"
+                android:layout_margin="5dp"
+                android:textSize="@dimen/text_normal"
+                android:text="ID"
+                android:gravity="center_vertical"/>
+
+            <TextView
+                android:id="@+id/tv_user_id"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="5dp"
+                android:textSize="@dimen/text_normal"
+                android:text="ID"
+                android:gravity="center_vertical"/>
+
+        </LinearLayout>
+
+        <LinearLayout
             android:id="@+id/ll_friend_username"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -75,7 +103,7 @@
             >
 
             <TextView
-                android:layout_width="150dp"
+                android:layout_width="@dimen/text_view_width_normal"
                 android:layout_height="match_parent"
                 android:layout_margin="5dp"
                 android:textSize="@dimen/text_normal"
@@ -84,7 +112,7 @@
 
             <TextView
                 android:id="@+id/tv_friend_username"
-                android:layout_width="150dp"
+                android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_margin="5dp"
                 android:textSize="@dimen/text_normal"
@@ -105,50 +133,20 @@
             >
 
             <TextView
-                android:layout_width="150dp"
+                android:layout_width="@dimen/text_view_width_normal"
                 android:layout_height="match_parent"
                 android:layout_margin="5dp"
                 android:textSize="@dimen/text_normal"
-                android:text="Количество прогулок"
+                android:text="Кол-во прогулок"
                 android:gravity="center_vertical" />
 
             <TextView
                 android:id="@+id/tv_friend_stat_count"
-                android:layout_width="150dp"
+                android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_margin="5dp"
                 android:textSize="@dimen/text_normal"
                 android:text="Количество прогулок"
-                android:gravity="center_vertical" />
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/ll_friend_stat_av_radius"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginTop="10dp"
-            android:layout_marginEnd="30dp"
-            android:layout_marginStart="30dp"
-            android:visibility="visible"
-            >
-
-            <TextView
-                android:layout_width="150dp"
-                android:layout_height="match_parent"
-                android:layout_margin="5dp"
-                android:textSize="@dimen/text_normal"
-                android:text="Средний выбор радиуса"
-                android:gravity="center_vertical" />
-
-            <TextView
-                android:id="@+id/tv_friend_stat_av_radius"
-                android:layout_width="150dp"
-                android:layout_height="match_parent"
-                android:layout_margin="5dp"
-                android:textSize="@dimen/text_normal"
-                android:text="Средний выбор радиуса"
                 android:gravity="center_vertical" />
 
         </LinearLayout>
@@ -166,7 +164,7 @@
         >
 
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/btn_delete_history_item"
+            android:id="@+id/btn_remove_friend"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:layout_constraintEnd_toEndOf="parent"
@@ -177,4 +175,15 @@
             />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <ProgressBar
+        android:id="@+id/pb_friend"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>

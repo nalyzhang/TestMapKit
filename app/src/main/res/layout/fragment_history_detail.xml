@@ -47,7 +47,7 @@
         android:orientation="vertical"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/cl_btn_history"
-        android:layout_margin="20dp">
+        android:layout_margin="15dp">
 
         <TextView
             android:id="@+id/tv_history_route_name"
@@ -62,34 +62,205 @@
             android:id="@+id/tv_history_route_date"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="5dp"
+            android:layout_margin="10dp"
             android:textSize="@dimen/text_normal"
             android:text="Date"
             android:gravity="right"/>
 
-        <TextView
-            android:id="@+id/tv_history_route_username"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="5dp"
-            android:textSize="@dimen/text_normal"
-            android:text="Username" />
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="@dimen/text_view_width_extra"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:textSize="@dimen/text_normal"
+                android:text="Расстояние"
+                android:gravity="center_vertical"/>
+
+            <TextView
+                android:id="@+id/tv_history_route_distance"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:layout_gravity="center"
+                android:textSize="@dimen/text_normal"
+                android:text="Distance" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="@dimen/text_view_width_extra"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:textSize="@dimen/text_normal"
+                android:text="Радиус поиска"
+                android:gravity="center_vertical"/>
+
+            <TextView
+                android:id="@+id/tv_history_route_radius"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:layout_gravity="center"
+                android:textSize="@dimen/text_normal"
+                android:text="Distance" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="@dimen/text_view_width_extra"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:textSize="@dimen/text_normal"
+                android:text="Время в пути"
+                android:gravity="center_vertical"/>
+
+            <TextView
+                android:id="@+id/tv_history_route_time"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:layout_gravity="center"
+                android:textSize="@dimen/text_normal"
+                android:text="Time" />
+
+        </LinearLayout>
 
         <TextView
-            android:id="@+id/tv_history_route_distance"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="5dp"
-            android:textSize="@dimen/text_normal"
-            android:text="Distance" />
+            android:layout_margin="10dp"
+            android:textSize="@dimen/text_title"
+            android:text="Начало пути"
+            android:gravity="center"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="@dimen/text_view_width_extra"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:gravity="center_vertical"
+                android:text="Начальная локация"
+                android:textSize="@dimen/text_normal" />
+
+            <TextView
+                android:id="@+id/tv_history_route_start_location"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:layout_gravity="center"
+                android:textSize="@dimen/text_normal"
+                android:text="Location" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="@dimen/text_view_width_extra"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:textSize="@dimen/text_normal"
+                android:text="Время начала"
+                android:gravity="center_vertical"/>
+
+            <TextView
+                android:id="@+id/tv_history_route_start_time"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:layout_gravity="center"
+                android:textSize="@dimen/text_normal"
+                android:text="Time" />
+
+        </LinearLayout>
 
         <TextView
-            android:id="@+id/tv_history_route_time"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="5dp"
-            android:textSize="@dimen/text_normal"
-            android:text="Time" />
+            android:layout_margin="10dp"
+            android:textSize="@dimen/text_title"
+            android:text="Конец пути"
+            android:gravity="center"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="@dimen/text_view_width_extra"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:textSize="@dimen/text_normal"
+                android:text="Конечная локация"
+                android:gravity="center_vertical"/>
+
+            <TextView
+                android:id="@+id/tv_history_route_finish_location"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:layout_gravity="center"
+                android:textSize="@dimen/text_normal"
+                android:text="Location" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="@dimen/text_view_width_extra"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:textSize="@dimen/text_normal"
+                android:text="Время завершения"
+                android:gravity="center_vertical"/>
+
+            <TextView
+                android:id="@+id/tv_history_route_finish_time"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:layout_gravity="center"
+                android:textSize="@dimen/text_normal"
+                android:text="Time" />
+
+        </LinearLayout>
     </LinearLayout>
+
+    <ProgressBar
+        android:id="@+id/pb_history"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

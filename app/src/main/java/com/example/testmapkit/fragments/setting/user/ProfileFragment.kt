@@ -1,16 +1,17 @@
-package com.example.testmapkit.fragments.setting
+package com.example.testmapkit.fragments.setting.user
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.example.testmapkit.R
 import com.example.testmapkit.dataModels.UserWithStatistic
 import com.example.testmapkit.databinding.FragmentProfileBinding
+import com.example.testmapkit.fragments.setting.user.UserViewModel
 import com.example.testmapkit.network.RetrofitClient
 import com.example.testmapkit.network.TokenManager
 import com.example.testmapkit.repositories.UserRepository
@@ -33,7 +34,7 @@ class ProfileFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         tokenManager = TokenManager(requireContext())
-        val retrofitClient = RetrofitClient.getInstance(tokenManager)
+        val retrofitClient = RetrofitClient.Companion.getInstance(tokenManager)
         val userRepository = UserRepository(retrofitClient.apiService)
         userViewModel = UserViewModel(userRepository, tokenManager)
 
@@ -92,6 +93,7 @@ class ProfileFragment : Fragment() {
     }
 
     private fun updateUser(currentUser: UserWithStatistic) {
+        binding.tvProfileId.text = currentUser.id.toString()
         binding.tvProfileEmail.text = currentUser.email
         binding.tvProfileUsername.text = currentUser.username
         binding.tvProfileFirstName.text = currentUser.firstName

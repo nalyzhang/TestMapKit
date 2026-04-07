@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".fragments.setting.FriendsListFragment"
+    tools:context=".fragments.setting.friend.FriendsListFragment"
     android:orientation="vertical">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -14,7 +14,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        android:layout_margin="10dp"
+        android:layout_margin="5dp"
         >
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btn_back_friend_list"
@@ -52,18 +52,39 @@
             android:id="@+id/search_friend"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:iconifiedByDefault="true"
-            />
+            android:iconifiedByDefault="true" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv_friend"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             tools:listitem="@layout/item_friend"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             />
 
     </LinearLayout>
+
+    <TextView
+        android:id="@+id/tv_empty_friends_list"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Пока нет друзей"
+        android:layout_margin="15dp"
+        android:textSize="@dimen/text_title"
+        app:layout_constraintTop_toBottomOf="@id/cl_btn_friend_list"
+        android:visibility="gone"
+        />
+
+    <ProgressBar
+        android:id="@+id/pb_friends_list"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

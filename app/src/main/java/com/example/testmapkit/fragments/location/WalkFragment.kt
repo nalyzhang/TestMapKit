@@ -14,11 +14,8 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.example.testmapkit.ADDRESS
 import com.example.testmapkit.R
-import com.example.testmapkit.TOKEN
 import com.example.testmapkit.databinding.FragmentWalkBinding
 import com.example.testmapkit.services.ChronometerService
-import java.text.SimpleDateFormat
-import java.util.Locale
 
 class WalkFragment : Fragment() {
 
@@ -66,12 +63,7 @@ class WalkFragment : Fragment() {
         requireContext().startService(intent)
         requireContext().bindService(intent, serviceConnection, Context.BIND_AUTO_CREATE)
 
-        // Временная затычка
-        TOKEN = "aaa"
-
         binding.btnEnd.setOnClickListener {
-            // Временная затычка
-            TOKEN = null
             chronometerService?.stopChronometer()
             findNavController().navigate(R.id.action_walkFragment_to_locationFragment)
         }

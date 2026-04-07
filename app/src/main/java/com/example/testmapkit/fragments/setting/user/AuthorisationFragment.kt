@@ -1,14 +1,15 @@
-package com.example.testmapkit.fragments.setting
+package com.example.testmapkit.fragments.setting.user
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.example.testmapkit.R
 import com.example.testmapkit.databinding.FragmentAuthorisationBinding
+import com.example.testmapkit.fragments.setting.user.UserViewModel
 import com.example.testmapkit.network.RetrofitClient
 import com.example.testmapkit.network.TokenManager
 import com.example.testmapkit.repositories.UserRepository
@@ -34,7 +35,7 @@ class AuthorisationFragment : Fragment() {
 
         // Создаем зависимости
         val tokenManager = TokenManager(requireContext())
-        val retrofitClient = RetrofitClient.getInstance(tokenManager)
+        val retrofitClient = RetrofitClient.Companion.getInstance(tokenManager)
         val userRepository = UserRepository(retrofitClient.apiService)
 
         // Создаем ViewModel с зависимостями

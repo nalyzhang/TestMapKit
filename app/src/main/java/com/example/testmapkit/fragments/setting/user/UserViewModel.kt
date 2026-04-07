@@ -1,6 +1,7 @@
-package com.example.testmapkit.fragments.setting
+package com.example.testmapkit.fragments.setting.user
 
 import android.util.Log
+import android.util.Patterns
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -94,7 +95,8 @@ class UserViewModel (
 
             when (result) {
                 is UserResult.Success -> {
-                    Log.d(TAG,
+                    Log.d(
+                        TAG,
                         "Регистрация успешна, пользователь: ${result.data.username}")
                     _errorMessage.value = null
                     // После успешной регистрации автоматически входим
@@ -403,7 +405,7 @@ class UserViewModel (
             username.length < 3 -> "Username должен быть не менее 3 символов"
             username.length > 150 -> "Username не должен превышать 150 символов"
             email.isBlank() -> "Введите email"
-            !android.util.Patterns.EMAIL_ADDRESS.matcher(
+            !Patterns.EMAIL_ADDRESS.matcher(
                 email).matches() -> "Введите корректный email"
             firstName.isBlank() -> "Введите имя"
             firstName.length > 150 -> "Имя не должно превышать 150 символов"
@@ -419,7 +421,7 @@ class UserViewModel (
     private fun validateLoginData(email: String, password: String): String? {
         return when {
             email.isBlank() -> "Введите email"
-            !android.util.Patterns.EMAIL_ADDRESS.matcher(
+            !Patterns.EMAIL_ADDRESS.matcher(
                 email).matches() -> "Введите корректный email"
             password.isBlank() -> "Введите пароль"
             else -> null

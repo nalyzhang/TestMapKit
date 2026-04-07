@@ -11,7 +11,16 @@ data class User(
     @SerializedName("avatar") val avatar: String? = null, // URL картинки
     @SerializedName("avatar_url") val avatarUrl: String? = null,
     @SerializedName("is_friend") val isFriend: Boolean = false
-)
+){
+    fun getFullAvatarUrl(baseUrl: String = "http://192.168.0.202:8000"): String {
+        if (avatarUrl.isNullOrEmpty()) return ""
+        return if (avatarUrl.startsWith("http")) {
+            avatarUrl
+        } else {
+            "$baseUrl$avatarUrl"
+        }
+    }
+}
 
 // Расширенный пользователь (со статистикой)
 data class UserWithStatistic(

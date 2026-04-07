@@ -7,12 +7,44 @@
     app:cardCornerRadius="15dp"
     android:layout_margin="3dp">
 
-    <TextView
-        android:id="@+id/tv_friend_username"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="15dp"
-        android:textSize="@dimen/text_normal"
-        android:text="Userame"/>
+        android:orientation="horizontal">
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cv_img_friend"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:cardElevation="5dp"
+            app:cardCornerRadius="180dp"
+
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/cl_btn_friend"
+            android:layout_margin="15dp">
+
+
+            <ImageView
+                android:id="@+id/img_friend_list"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:src="@drawable/ic_profile"
+                android:background="@color/light_blue"
+                android:contentDescription="User avatar"
+                />
+
+        </androidx.cardview.widget.CardView>
+
+        <TextView
+            android:id="@+id/tv_friend_username"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="15dp"
+            android:layout_gravity="center"
+            android:textSize="@dimen/text_title"
+            android:text="Userame"/>
+
+    </LinearLayout>
 
 </androidx.cardview.widget.CardView>

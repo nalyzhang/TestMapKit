@@ -1,12 +1,14 @@
-package com.example.testmapkit.fragments.setting
+package com.example.testmapkit.fragments.setting.user
 
+import android.Manifest
+import android.app.Activity
 import android.app.AlertDialog
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
-import androidx.fragment.app.Fragment
+import android.util.Base64
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,12 +16,14 @@ import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.FileProvider
+import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.example.testmapkit.R
 import com.example.testmapkit.dataModels.UserUpdate
 import com.example.testmapkit.dataModels.UserWithStatistic
 import com.example.testmapkit.databinding.FragmentEditProfileBinding
+import com.example.testmapkit.fragments.setting.user.UserViewModel
 import com.example.testmapkit.network.RetrofitClient
 import com.example.testmapkit.network.TokenManager
 import com.example.testmapkit.repositories.UserRepository
@@ -50,7 +54,7 @@ class EditProfileFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         tokenManager = TokenManager(requireContext())
-        val retrofitClient = RetrofitClient.getInstance(tokenManager)
+        val retrofitClient = RetrofitClient.Companion.getInstance(tokenManager)
         val userRepository = UserRepository(retrofitClient.apiService)
         userViewModel = UserViewModel(userRepository, tokenManager)
 
@@ -77,7 +81,7 @@ class EditProfileFragment : Fragment() {
         pickImageLauncher = registerForActivityResult(
             ActivityResultContracts.StartActivityForResult()
         ) { result ->
-            if (result.resultCode == android.app.Activity.RESULT_OK) {
+            if (result.resultCode == Activity.RESULT_OK) {
                 val data: Intent? = result.data
                 val imageUri = data?.data
                 imageUri?.let {
@@ -316,7 +320,7 @@ class EditProfileFragment : Fragment() {
         if (checkCameraPermission()) {
             createImageFile()
         } else {
-            requestCameraPermission.launch(android.Manifest.permission.CAMERA)
+            requestCameraPermission.launch(Manifest.permission.CAMERA)
         }
     }
 
@@ -354,7 +358,7 @@ class EditProfileFragment : Fragment() {
 
     private fun checkCameraPermission(): Boolean {
         return requireContext().checkSelfPermission(
-            android.Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED
+            Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED
     }
 
     private fun uploadAvatar(imageUri: Uri) {
@@ -388,7 +392,7 @@ class EditProfileFragment : Fragment() {
             bytes?.let {
                 // Определяем MIME тип изображения
                 val mimeType = getMimeType(imageUri)
-                val base64Data = android.util.Base64.encodeToString(it, android.util.Base64.NO_WRAP)
+                val base64Data = Base64.encodeToString(it, Base64.NO_WRAP)
 
                 // Формируем правильный формат для Django
                 "data:$mimeType;base64,$base64Data"

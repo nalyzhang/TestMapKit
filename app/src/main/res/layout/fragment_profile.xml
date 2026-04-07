@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".fragments.setting.ProfileFragment">
+    tools:context=".fragments.setting.user.ProfileFragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/cl_btn_profile"
@@ -85,6 +85,34 @@
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:layout_margin="20dp">
+
+            <LinearLayout
+                android:id="@+id/ll_profile_id"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="30dp"
+                android:layout_marginStart="30dp">
+
+                <TextView
+                    android:layout_width="@dimen/text_view_width_normal"
+                    android:layout_height="match_parent"
+                    android:layout_margin="5dp"
+                    android:textSize="@dimen/text_normal"
+                    android:text="ID"
+                    android:gravity="center_vertical"/>
+
+                <TextView
+                    android:id="@+id/tv_profile_id"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_margin="5dp"
+                    android:textSize="@dimen/text_normal"
+                    android:text="ID"
+                    android:gravity="center_vertical"/>
+
+            </LinearLayout>
 
             <LinearLayout
                 android:id="@+id/ll_profile_email"

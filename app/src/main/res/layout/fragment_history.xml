@@ -22,4 +22,26 @@
             tools:listitem="@layout/item_history"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             />
+
+        <TextView
+            android:id="@+id/tv_empty_history_list"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Нет ни одного маршрута"
+            android:layout_margin="15dp"
+            android:textSize="@dimen/text_title"
+            app:layout_constraintTop_toTopOf="parent"
+            android:visibility="gone"
+            />
+
+        <ProgressBar
+            android:id="@+id/pb_history_list"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 </LinearLayout>

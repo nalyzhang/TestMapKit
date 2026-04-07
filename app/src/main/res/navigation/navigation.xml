@@ -48,7 +48,7 @@
     </fragment>
     <fragment
         android:id="@+id/friendsListFragment"
-        android:name="com.example.testmapkit.fragments.setting.FriendsListFragment"
+        android:name="com.example.testmapkit.fragments.setting.friend.FriendsListFragment"
         android:label="fragment_friends_list"
         tools:layout="@layout/fragment_friends_list" >
         <action
@@ -60,7 +60,7 @@
     </fragment>
     <fragment
         android:id="@+id/friendFragment"
-        android:name="com.example.testmapkit.fragments.setting.FriendFragment"
+        android:name="com.example.testmapkit.fragments.setting.friend.FriendFragment"
         android:label="fragment_friend"
         tools:layout="@layout/fragment_friend" >
         <action
@@ -69,7 +69,7 @@
     </fragment>
     <fragment
         android:id="@+id/authorisationFragment"
-        android:name="com.example.testmapkit.fragments.setting.AuthorisationFragment"
+        android:name="com.example.testmapkit.fragments.setting.user.AuthorisationFragment"
         android:label="fragment_authorisation"
         tools:layout="@layout/fragment_authorisation" >
         <action
@@ -105,7 +105,7 @@
     </fragment>
     <fragment
         android:id="@+id/profileFragment"
-        android:name="com.example.testmapkit.fragments.setting.ProfileFragment"
+        android:name="com.example.testmapkit.fragments.setting.user.ProfileFragment"
         android:label="fragment_profile"
         tools:layout="@layout/fragment_profile" >
         <action
@@ -120,7 +120,7 @@
     </fragment>
     <fragment
         android:id="@+id/changePasswordFragment"
-        android:name="com.example.testmapkit.fragments.setting.ChangePasswordFragment"
+        android:name="com.example.testmapkit.fragments.setting.user.ChangePasswordFragment"
         android:label="fragment_change_password"
         tools:layout="@layout/fragment_change_password" >
         <action
@@ -129,7 +129,7 @@
     </fragment>
     <fragment
         android:id="@+id/editProfileFragment"
-        android:name="com.example.testmapkit.fragments.setting.EditProfileFragment"
+        android:name="com.example.testmapkit.fragments.setting.user.EditProfileFragment"
         android:label="fragment_edit_profile"
         tools:layout="@layout/fragment_edit_profile" >
         <action
