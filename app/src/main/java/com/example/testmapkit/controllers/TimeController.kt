@@ -8,7 +8,7 @@ import java.util.Locale
 
 class TimeController {
 
-    // Только дата (yyy-MM-DDT00:00:00+00:00 -> yyyy-MM-dd)
+    // Только дата (yyy-MM-DDT00:00:00+00:00 -> dd.MM.yyyy)
     fun extractDate(dateTimeString: String): String {
         return try {
             val offsetDateTime = OffsetDateTime.parse(dateTimeString)

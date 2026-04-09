@@ -20,8 +20,8 @@
         android:label="fragment_walk"
         tools:layout="@layout/fragment_walk" >
         <action
-            android:id="@+id/action_walkFragment_to_locationFragment"
-            app:destination="@id/locationFragment" />
+            android:id="@+id/action_walkFragment_to_finishFragment"
+            app:destination="@id/finishFragment" />
     </fragment>
     <fragment
         android:id="@+id/historyFragment"
@@ -135,5 +135,14 @@
         <action
             android:id="@+id/action_editProfileFragment_to_profileFragment"
             app:destination="@id/profileFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/finishFragment"
+        android:name="com.example.testmapkit.fragments.location.FinishFragment"
+        android:label="fragment_finish"
+        tools:layout="@layout/fragment_finish" >
+        <action
+            android:id="@+id/action_finishFragment_to_locationFragment"
+            app:destination="@id/locationFragment" />
     </fragment>
 </navigation>

@@ -64,7 +64,7 @@ interface ApiService {
 
     // ========== Локации ==========
     @POST("api/v1/locations/")
-    suspend fun createLocation(@Body location: Location): Response<Location>
+    suspend fun createLocation(@Body location: LocationCreateRequest): Response<Location>
 
     // ========== Маршруты ==========
     @GET("api/v1/routes/")

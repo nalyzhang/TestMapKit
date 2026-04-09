@@ -63,6 +63,14 @@ data class Location(
     @SerializedName("time") val time: String // ISO 8601 формат
 )
 
+data class LocationCreateRequest(
+    @SerializedName("latitude") val latitude: Double,
+    @SerializedName("longitude") val longitude: Double,
+    @SerializedName("radius") val radius: Double? = null,
+    @SerializedName("address") val address: String,
+    @SerializedName("time") val time: String // ISO 8601 формат
+)
+
 // Route.kt
 data class Route(
     @SerializedName("id") val id: Int,

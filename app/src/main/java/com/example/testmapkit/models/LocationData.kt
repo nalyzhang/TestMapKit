@@ -7,7 +7,7 @@ import com.example.testmapkit.controllers.SearchController
 class LocationData(
     val longitude: Double,
     val latitude: Double,
-    val circleRadius: Int
+    val circleRadius: Double?
 ) {
 
     private lateinit var address: Address
@@ -23,6 +23,10 @@ class LocationData(
 
     fun getAddress(): Address {
         return address
+    }
+
+    fun getAddressLine(): String {
+        return address.getAddressLine(0)
     }
 
 }

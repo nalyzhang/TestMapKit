@@ -65,7 +65,7 @@ class WalkFragment : Fragment() {
 
         binding.btnEnd.setOnClickListener {
             chronometerService?.stopChronometer()
-            findNavController().navigate(R.id.action_walkFragment_to_locationFragment)
+            findNavController().navigate(R.id.action_walkFragment_to_finishFragment)
         }
     }
 
