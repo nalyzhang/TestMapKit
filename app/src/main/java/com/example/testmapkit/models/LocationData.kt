@@ -1,32 +1,37 @@
 package com.example.testmapkit.models
 
-import android.location.Address
-import com.example.testmapkit.controllers.SearchController
-
+import java.io.Serializable
 
 class LocationData(
     val longitude: Double,
     val latitude: Double,
-    val circleRadius: Double?
-) {
+    val circleRadius: Double? = null
+) : Serializable {
 
-    private lateinit var address: Address
+    private var address: String = ""
+    private var dateTime: String = ""
 
-    fun setAddress(textAddresses: Address?) {
+    fun setAddress(textAddresses: String?) {
         if (textAddresses != null) address = textAddresses
     }
 
-    fun setAddress () {
-        val result = SearchController().getAddress(longitude, latitude)
-        if (result != null) address = result
-    }
-
-    fun getAddress(): Address {
+    fun getAddress(): String {
         return address
     }
 
-    fun getAddressLine(): String {
-        return address.getAddressLine(0)
+    fun setDateTime(textDateTime: String) {
+        dateTime = textDateTime
     }
 
+    fun getDateTime(): String {
+        return dateTime
+    }
+
+    override fun toString(): String {
+        return "LocationData(lat=$latitude, lon=$longitude, radius=$circleRadius, address='$address')"
+    }
+
+    companion object {
+        private const val serialVersionUID = 1L
+    }
 }

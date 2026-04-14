@@ -1,11 +1,9 @@
 package com.example.testmapkit.fragments.location
 
-import android.annotation.SuppressLint
 import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
 import android.content.ServiceConnection
-import android.graphics.Canvas
 import android.os.Bundle
 import android.os.IBinder
 import android.util.Log
@@ -14,54 +12,74 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.SeekBar
 import android.widget.Toast
-import androidx.appcompat.content.res.AppCompatResources
-import androidx.core.graphics.createBitmap
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
+import androidx.work.impl.utils.INITIAL_ID
 import com.example.testmapkit.ADDRESS
 import com.example.testmapkit.DEFAULT_RADIUS_KM
 import com.example.testmapkit.MAIN
 import com.example.testmapkit.MAX_RADIUS_KM
 import com.example.testmapkit.MIN_RADIUS_KM
+import com.example.testmapkit.MainActivity
 import com.example.testmapkit.PROCESSING
 import com.example.testmapkit.R
 import com.example.testmapkit.RADIUS_SCALE_FACTOR
 import com.example.testmapkit.RADIUS_TEXT
+import com.example.testmapkit.TAG
 import com.example.testmapkit.controllers.CircleController
 import com.example.testmapkit.databinding.FragmentLocationBinding
 import com.example.testmapkit.models.LocationData
+import com.example.testmapkit.network.RetrofitClient
+import com.example.testmapkit.network.TokenManager
+import com.example.testmapkit.repositories.HistoryRepository
+import com.example.testmapkit.repositories.RouteRepository
 import com.example.testmapkit.services.LocationService
 import com.yandex.mapkit.Animation
 import com.yandex.mapkit.MapKitFactory
-import com.yandex.mapkit.geometry.Point
 import com.yandex.mapkit.location.Location
 import com.yandex.mapkit.map.CameraPosition
 import com.yandex.mapkit.user_location.UserLocationLayer
-import com.yandex.runtime.image.ImageProvider
+import java.util.Locale
 
 class LocationFragment : Fragment() {
 
     lateinit var binding: FragmentLocationBinding
     private var locationService: LocationService? = null
-    private var isServiceBound = false
     private var userLocationLayer: UserLocationLayer? = null
     private lateinit var circleController: CircleController
     private var currentLocation: Location? = null
 
     private var updateCamera: Boolean = true
+    private lateinit var routeViewModel: RouteViewModel
+    private lateinit var tokenManager: TokenManager
+    private val sharedLocationsViewModel: SharedLocationsViewModel by activityViewModels()
 
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = FragmentLocationBinding.inflate(layoutInflater, container, false)
+        binding = FragmentLocationBinding.inflate(
+            layoutInflater, container, false)
         return binding.root
     }
 
-    @SuppressLint("DefaultLocale")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        tokenManager = TokenManager(requireContext())
+        val retrofitClient = RetrofitClient.getInstance(tokenManager)
+        val routeRepository = RouteRepository(retrofitClient.apiService)
+        val historyRepository = HistoryRepository(retrofitClient.apiService)
+        routeViewModel = RouteViewModel(routeRepository, historyRepository, tokenManager)
+
+        // Получаем сервис из Activity
+        locationService = (requireActivity() as MainActivity).getLocationService()
+
+        // Устанавливаем слушатель
+        (requireActivity() as MainActivity).setLocationUpdateListener(serviceListener)
+
         init()
     }
 
@@ -70,7 +88,11 @@ class LocationFragment : Fragment() {
 
         setupViews()
         setupUserLocationLayer()
-        startLocationService()
+
+        // Получаем текущую позицию если есть
+        locationService?.getCurrentLocation()?.let { location ->
+            updateMapWithLocation(location)
+        }
     }
 
     private val serviceListener = object : LocationService.LocationUpdateListener {
@@ -82,38 +104,6 @@ class LocationFragment : Fragment() {
                 updateMapWithLocation(location)
                 updateCamera = false
             }
-
-            // Обновляем круг, используя существующий locationController?
-            // Но теперь locationController в сервисе, поэтому нужно либо:
-            // 1. Передавать радиус в сервис и там обновлять круг
-            // 2. Или дублировать логику круга здесь (проще)
-        }
-
-        override fun onGoalReached() {
-            // TODO: Обработка достижения цели
-//            findNavController().navigate(R.id.action_locationFragment_to_resultFragment)
-        }
-    }
-
-    private val serviceConnection = object : ServiceConnection {
-        override fun onServiceConnected(name: ComponentName?, service: IBinder?) {
-            val binder = service as LocationService.LocationBinder
-            locationService = binder.getService()
-            isServiceBound = true
-
-            // Подписываемся на обновления
-            locationService?.addLocationListener(serviceListener)
-
-            // Получаем текущую позицию если есть
-            locationService?.getCurrentLocation()?.let { location ->
-                updateMapWithLocation(location)
-            }
-        }
-
-        override fun onServiceDisconnected(name: ComponentName?) {
-            locationService?.removeLocationListener(serviceListener)
-            locationService = null
-            isServiceBound = false
         }
     }
 
@@ -124,7 +114,8 @@ class LocationFragment : Fragment() {
             progress = DEFAULT_RADIUS_KM
         }
 
-        binding.radiusSizeText.text = String.Companion.format(
+        binding.radiusSizeText.text = String.format(
+            Locale.getDefault(),
             RADIUS_TEXT,
             binding.radiusSizeBar.progress * RADIUS_SCALE_FACTOR
         )
@@ -156,9 +147,9 @@ class LocationFragment : Fragment() {
         }
     }
 
-    @SuppressLint("DefaultLocale")
     private fun updateRadiusText(progress: Int) {
-        binding.radiusSizeText.text = String.Companion.format(
+        binding.radiusSizeText.text = String.format(
+            Locale.getDefault(),
             RADIUS_TEXT,
             progress * RADIUS_SCALE_FACTOR
         )
@@ -172,15 +163,9 @@ class LocationFragment : Fragment() {
         }
     }
 
-    private fun startLocationService() {
-        val intent = Intent(requireContext(), LocationService::class.java)
-        requireContext().startService(intent)
-        requireContext().bindService(intent, serviceConnection, Context.BIND_AUTO_CREATE)
-    }
-
     private fun startQuest() {
         // Получаем выбранный радиус
-        val radius = binding.radiusSizeBar.progress / 10
+        val radius = binding.radiusSizeBar.progress.toDouble() / 10
 
         // Отправляем команду сервису
         Intent(requireContext(), LocationService::class.java).also { intent ->
@@ -189,34 +174,21 @@ class LocationFragment : Fragment() {
             requireContext().startService(intent)
         }
 
-        currentLocation?.let { location ->
+        currentLocation?.let { _ ->
             circleController.fixCircle()
-        }
-
-        // Получаем случайный адрес через сервис
-        // TODO radius int -> double
-        val randomAddress = locationService?.getRandomAddress(radius.toDouble())
-
-        if (randomAddress != null) {
-
-            printPoint(randomAddress)
-
-            // Переходим к WalkFragment с адресом
-            val bundle = Bundle().apply {
-                putString(ADDRESS, randomAddress.getAddress().getAddressLine(0))
+            if (currentLocation != null) {
+                routeViewModel.getAddresses(currentLocation!!.position, radius)
             }
-
-            findNavController().navigate(
-                R.id.action_locationFragment_to_walkFragment,
-                bundle
-            )
-        } else {
-            Toast.makeText(
+            else {
+                Toast.makeText(
                 requireContext(),
                 "Локация еще не определена",
                 Toast.LENGTH_LONG
             ).show()
+            }
         }
+
+        observeViewModel()
     }
 
     private fun updateMapWithLocation(location: Location) {
@@ -260,33 +232,76 @@ class LocationFragment : Fragment() {
     override fun onDestroy() {
         super.onDestroy()
         Log.d("LocationFragment", "onDestroy")
-        if (isServiceBound) {
-            requireContext().unbindService(serviceConnection)
-            isServiceBound = false
+        (requireActivity() as MainActivity).setLocationUpdateListener(null)
+    }
+
+    private fun observeViewModel() {
+
+        // Наблюдаем за состоянием загрузки
+        routeViewModel.isLoading.observe(viewLifecycleOwner) { isLoading ->
+            showLoading(isLoading)
+        }
+
+        routeViewModel.currentAddressState.observe(viewLifecycleOwner) { location ->
+            if (location[0] != null && location[1] != null) {
+                showLoading(false)
+
+                Log.d(TAG, "Получен текущий адрес: ${location[0]?.getAddress()}")
+
+                Log.d(TAG, "Получен рандомный адрес: ${location[1]?.getAddress()}")
+                sharedLocationsViewModel.setStartLocation(location[0])
+                sharedLocationsViewModel.setFinishLocation(location[1])
+                moveToWalk(location[0], location[1])
+            } else {
+                Toast.makeText(
+                    requireContext(),
+                    "Ошибка поиска, повторите запрос",
+                    Toast.LENGTH_LONG
+                ).show()
+                routeViewModel.clearError()
+            }
+        }
+
+        // Наблюдаем за ошибками
+        routeViewModel.errorMessage.observe(viewLifecycleOwner) { error ->
+            error?.let {
+                Toast.makeText(
+                    requireContext(),
+                    it,
+                    Toast.LENGTH_LONG
+                ).show()
+                routeViewModel.clearError()
+                showLoading(false)
+            }
         }
     }
 
-    fun printPoint(randomLocation: LocationData) {
-        val randomPoint = Point(randomLocation.latitude, randomLocation.longitude)
-        binding.mapView.mapWindow.map.move(
-            CameraPosition(randomPoint, 15.0f, 0.0f, 0.0f)
-        )
-        binding.mapView.mapWindow.map.mapObjects.addPlacemark().apply {
-            geometry = randomPoint
-            val drawable = AppCompatResources.getDrawable(
-                requireContext(),
-                R.drawable.ic_location
-            )
-            if (drawable != null) {
-                val bitmap =
-                    createBitmap(drawable.intrinsicWidth, drawable.intrinsicHeight)
-                val canvas = Canvas(bitmap)
-                drawable.setBounds(0, 0, canvas.width, canvas.height)
-                drawable.draw(canvas)
+    private fun moveToWalk(startLocation: LocationData?, finishLocation: LocationData?) {
+        Log.d(TAG, "Переход из локации в прогулку")
+        if (startLocation == null || finishLocation == null) return
+        val currentDestination = findNavController().currentDestination
+        if (currentDestination?.id != R.id.locationFragment) {
+            Log.d(TAG, "Текущий destination не LocationFragment (id: ${currentDestination?.id}), пропускаем навигацию")
+            return
+        }
+        val bundle = Bundle().apply {
+            // Передаем начальную локацию
+            putSerializable("start_location", startLocation)
+            // Передаем конечную локацию
+            putSerializable("finish_location", finishLocation)
+        }
+        findNavController().navigate(
+            R.id.action_locationFragment_to_walkFragment,
+            bundle)
+    }
 
-                setIcon(ImageProvider.fromBitmap(bitmap))
-            }
-            zIndex = 100f
+    private fun showLoading(isLoading: Boolean) {
+        if (isLoading) {
+            binding.pbLocation.visibility = View.VISIBLE
+            binding.clLocationMain.visibility = View.GONE
+        } else {
+            binding.pbLocation.visibility = View.GONE
+            binding.clLocationMain.visibility = View.VISIBLE
         }
     }
 }

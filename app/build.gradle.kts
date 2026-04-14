@@ -97,10 +97,9 @@ dependencies {
     implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.8.7")
 
     // Room
-    val room_version = "2.6.1" // Обновлено с 2.5.2
+    val room_version = "2.8.4" // Обновлено с 2.5.2
     implementation("androidx.room:room-runtime:$room_version")
     implementation("androidx.room:room-ktx:$room_version")
-    annotationProcessor("androidx.room:room-compiler:$room_version")
     ksp("androidx.room:room-compiler:$room_version")
 
     // Testing

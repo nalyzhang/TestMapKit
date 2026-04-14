@@ -68,7 +68,10 @@ interface ApiService {
 
     // ========== Маршруты ==========
     @GET("api/v1/routes/")
-    suspend fun getMyRoutes(): Response<PaginatedResponse<Route>>
+    suspend fun getMyRoutes(
+        @Query("address") address: String? = null,
+        @Query("active") active: Boolean? = null
+    ): Response<PaginatedResponse<Route>>
 
     @GET("api/v1/routes/{id}/")
     suspend fun getRouteById(@Path("id") routeId: Int): Response<Route>

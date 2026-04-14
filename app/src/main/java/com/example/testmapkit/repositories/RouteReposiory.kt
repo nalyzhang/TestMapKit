@@ -26,13 +26,13 @@ class RouteRepository(
         time: String
     ): RouteResult<Location> = withContext(Dispatchers.IO) {
         try {
-            Log.d(TAG, "Начинаем создание локации: ${location.getAddressLine()}")
+            Log.d(TAG, "Начинаем создание локации: ${location.getAddress()}")
 
             val request = LocationCreateRequest(
                 location.latitude,
                 location.longitude,
                 location.circleRadius,
-                location.getAddressLine(),
+                location.getAddress(),
                 time
             )
 
@@ -75,17 +75,17 @@ class RouteRepository(
             val response = apiService.createRoute(request)
 
             if (response.isSuccessful && response.body() != null) {
-                Log.d(TAG, "Локация успешно создана, ID: ${response.body()?.id}")
+                Log.d(TAG, "Маршрут успешно создан, ID: ${response.body()?.id}")
                 return@withContext RouteResult.Success(response.body()!!)
             } else {
-                val errorMsg = "Ошибка создания локации: ${response.code()}"
-                Log.e(TAG, "Ошибка создания локации: $errorMsg")
+                val errorMsg = "Ошибка создания маршрута: ${response.code()}"
+                Log.e(TAG, "Ошибка создания маршрута: $errorMsg")
                 return@withContext RouteResult.Error(errorMsg, response.code())
             }
         } catch (e: Exception) {
-            Log.e(TAG, "Неизвестная ошибка при создании локации: $e")
+            Log.e(TAG, "Неизвестная ошибка при создании маршрута: $e")
             return@withContext RouteResult.Error(
-                e.message ?: "Неизвестная ошибка при создании локации")
+                e.message ?: "Неизвестная ошибка при создании маршрута")
         }
     }
 }

@@ -10,7 +10,6 @@ import android.util.Log
 import androidx.core.app.NotificationCompat
 import com.example.testmapkit.R
 import com.example.testmapkit.controllers.LocationController
-import com.example.testmapkit.models.LocationData
 import com.yandex.mapkit.location.Location
 import com.yandex.mapkit.location.LocationStatus
 
@@ -25,16 +24,8 @@ class LocationService : Service() {
     // Слушатели из фрагментов
     private val fragmentListeners = mutableListOf<LocationUpdateListener>()
 
-    // Флаг для проверки достижения цели
-    var isGoalReached = false
-        private set
-
-    // TODO: Добавить поля для маршрута
-    // val routePoints = mutableListOf<Point>()
-
     interface LocationUpdateListener {
         fun onLocationUpdated(location: Location)
-        fun onGoalReached() // TODO: Реализовать позже
     }
 
     inner class LocationBinder : Binder() {
@@ -122,13 +113,10 @@ class LocationService : Service() {
     }
 
     private fun startQuest(radius: Int) {
-        // TODO: Генерация случайного адреса через locationController.getRandomAddress(radius)
-        // TODO: Сохранение целевой точки
         Log.d("LocationService", "Квест начат с радиусом $radius км")
     }
 
     private fun stopQuest() {
-        // TODO: Остановка квеста, сохранение результатов
         Log.d("LocationService", "Квест остановлен")
     }
 
@@ -154,6 +142,4 @@ class LocationService : Service() {
 
     fun getCurrentLocation(): Location? = currentLocation
 
-    fun getRandomAddress(radius: Double): LocationData? =
-        locationController.getRandomAddress(radius)
 }

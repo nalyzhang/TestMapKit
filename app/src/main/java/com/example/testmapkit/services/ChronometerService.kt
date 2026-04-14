@@ -10,6 +10,7 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.testmapkit.PROCESSING
+import com.example.testmapkit.controllers.TimeController
 
 class ChronometerService : Service() {
 
@@ -18,6 +19,7 @@ class ChronometerService : Service() {
     private val handler = Handler(Looper.getMainLooper())
     private val _timeLiveData = MutableLiveData<Long>()
     val timeLiveData: LiveData<Long> get() = _timeLiveData
+    val timeController = TimeController()
 
     private val updateRunnable = object : Runnable {
         override fun run() {
@@ -39,7 +41,7 @@ class ChronometerService : Service() {
         return START_NOT_STICKY
     }
 
-    fun startChronometer() {
+    fun startChronometer(): String {
         if (!PROCESSING) {
             PROCESSING = true
             elapsedTime = 0
@@ -47,12 +49,14 @@ class ChronometerService : Service() {
             Log.d("LocationService", "1")
             handler.post(updateRunnable)
         }
+        return timeController.formatNow()
     }
 
-    fun stopChronometer() {
+    fun stopChronometer(): String {
         PROCESSING = false
         Log.d("LocationService", "0")
         handler.removeCallbacks(updateRunnable)
+        return timeController.formatNow()
     }
 
     fun resetChronometer() {

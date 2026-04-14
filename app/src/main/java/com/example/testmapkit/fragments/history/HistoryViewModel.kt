@@ -35,15 +35,15 @@ class HistoryViewModel (
 
 
     /**
-     * Получение списка друзей текущего пользователя (асинхронно)
+     * Получение списка маршрутов текущего пользователя (асинхронно)
      * Результат придет в LiveData currentUser
      */
     fun getMyRoutes() {
-        Log.d(TAG, "ViewModel: получение списка друзей")
+        Log.d(TAG, "ViewModel: получение списка маршрутов")
 
         // Проверяем, есть ли токен
         if (!tokenManager.hasToken()) {
-            Log.w(TAG, "Нет токена, невозможно получить список друзей")
+            Log.w(TAG, "Нет токена, невозможно получить список маршрутов")
             _historyList.value = null
             return
         }
@@ -54,17 +54,17 @@ class HistoryViewModel (
         viewModelScope.launch {
             try {
                 val result = historyRepository.getMyRoutes()
-                Log.d(TAG, "Результат получения списка друзей: $result")
+                Log.d(TAG, "Результат получения списка маршрутов: $result")
                 _isLoading.value = false
 
                 when (result) {
                     is HistoryResult.Success -> {
                         _historyList.value = result.data
-                        Log.d(TAG, "Размер списка друзей: ${result.data.size}")
+                        Log.d(TAG, "Размер списка маршрутов: ${result.data.size}")
                     }
 
                     is HistoryResult.Error -> {
-                        Log.e(TAG, "Ошибка получения списка друзей: ${result.message}")
+                        Log.e(TAG, "Ошибка получения списка маршрутов: ${result.message}")
                         _errorMessage.value = result.message
                         _historyList.value = null
                     }
@@ -72,8 +72,8 @@ class HistoryViewModel (
                     else -> {}
                 }
             } catch (e: Exception) {
-                Log.e(TAG, "Исключение при получении списка друзей", e)
-                _errorMessage.value = e.message ?: "Ошибка получения списка друзей"
+                Log.e(TAG, "Исключение при получении списка маршрутов", e)
+                _errorMessage.value = e.message ?: "Ошибка получения списка маршрутов"
                 _historyList.value = null
                 _isLoading.value = false
             }

@@ -17,11 +17,12 @@ class HistoryRepository(
     private val apiService: ApiService
 ) {
     suspend fun getMyRoutes(
+        address: String? = null
     ): HistoryResult<List<Route>> = withContext(Dispatchers.IO) {
         try {
             Log.d(TAG, "Начинаем получение списка маршрутов")
 
-            val response = apiService.getMyRoutes()
+            val response = apiService.getMyRoutes(address)
 
             if (response.isSuccessful && response.body() != null) {
                 Log.d(TAG, "Успешно получено маршрутов: ${response.body()?.count}")

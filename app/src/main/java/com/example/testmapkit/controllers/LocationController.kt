@@ -4,7 +4,6 @@ import android.content.Context
 import android.content.pm.PackageManager
 import android.util.Log
 import androidx.core.app.ActivityCompat
-import com.example.testmapkit.models.LocationData
 import com.yandex.mapkit.MapKitFactory
 import com.yandex.mapkit.location.Location
 import com.yandex.mapkit.location.LocationListener
@@ -13,7 +12,6 @@ import com.yandex.mapkit.location.LocationStatus
 import com.yandex.mapkit.location.Purpose
 import com.yandex.mapkit.location.SubscriptionSettings
 import com.yandex.mapkit.location.UseInBackground
-import com.yandex.mapkit.user_location.UserLocationLayer
 class LocationController(private val context: Context) {
 
 
@@ -21,10 +19,6 @@ class LocationController(private val context: Context) {
     private var lastKnownLocation: Location? = null
     // Добавляем поле для сохранения ссылки на слушателя, чтобы он не был собран сборщиком мусора
     private var locationListener: LocationListener? = null
-
-
-    // Для поиска адресов
-    private var searchController = SearchController()
 
     // Слушатели для обновлений
     private var listeners = mutableListOf<LocationUpdateListener>()
@@ -55,20 +49,6 @@ class LocationController(private val context: Context) {
             // В сервисе нельзя запросить разрешения, они должны быть получены заранее
         }
     }
-
-    // Запрос на разрешение использования геолокации
-//    private fun requestLocationPermission(){
-//        ActivityCompat.requestPermissions(
-//            context,
-//            arrayOf(
-//                android.Manifest.permission.ACCESS_FINE_LOCATION,
-//                android.Manifest.permission.ACCESS_COARSE_LOCATION
-//            ),
-//            0
-//        )
-//    }
-
-    // Настройка локационных сервисов
     private fun setupLocationServices() {
 
         try {
@@ -145,18 +125,6 @@ class LocationController(private val context: Context) {
 
     fun removeListener(listener: LocationUpdateListener) {
         listeners.remove(listener)
-    }
-
-    // Метод для генерации случайного адреса
-    fun getRandomAddress(circleRadius: Double): LocationData? {
-        lastKnownLocation?.let { location ->
-            return searchController.getRandomAddress(
-                longitude = location.position.longitude,
-                latitude = location.position.latitude,
-                circleRadius = circleRadius
-            )
-        }
-        return null
     }
 
     // Метод для очистки ресурсов (вызывать в onDestroy)

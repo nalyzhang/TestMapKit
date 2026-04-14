@@ -147,23 +147,16 @@ class HistoryFragment : Fragment() {
         if (tokenManager.hasToken()) {
             historyViewModel.getMyRoutes()
         } else {
-            Toast.makeText(
-                requireContext(),
-                "Пользователь не авторизован",
-                Toast.LENGTH_SHORT
-            ).show()
-            showLoading(false)
+            updateHistoryList(emptyList())
         }
     }
 
     private fun updateHistoryList(historyList: List<Route>) {
         if (historyList.isEmpty()) {
             binding.rvHistory.visibility = View.GONE
-            binding.searchHistory.visibility = View.GONE
             binding.tvEmptyHistoryList.visibility = View.VISIBLE
         } else {
             binding.rvHistory.visibility = View.VISIBLE
-            binding.searchHistory.visibility = View.VISIBLE
             binding.tvEmptyHistoryList.visibility = View.GONE
             historyAdapter.updateData(historyList)
         }
