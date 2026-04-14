@@ -1,11 +1,15 @@
 package com.example.testmapkit.fragments.setting.friend
 
 import android.app.AlertDialog
+import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
+import android.widget.SearchView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
@@ -13,6 +17,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.testmapkit.FRIEND_ID
 import com.example.testmapkit.R
+import com.example.testmapkit.TAG
 import com.example.testmapkit.adapters.UserAdapter
 import com.example.testmapkit.dataModels.User
 import com.example.testmapkit.databinding.FragmentFriendsListBinding
@@ -78,6 +83,35 @@ class FriendsListFragment : Fragment() {
 
         binding.rvFriend.layoutManager = LinearLayoutManager(requireContext())
         binding.rvFriend.adapter = userAdapter
+        binding.searchFriend.setOnQueryTextListener(object: SearchView.OnQueryTextListener {
+            override fun onQueryTextChange(query: String): Boolean {
+                Log.d(TAG, "onQueryTextChange")
+                observeViewModel()
+                userAdapter.findItem(query)
+                return false
+            }
+
+            override fun onQueryTextSubmit(query: String): Boolean {
+                Log.d(TAG, "onQueryTextSubmit")
+                binding.searchFriend.hideKeyboard()
+                binding.searchFriend.clearFocus()
+                observeViewModel()
+                userAdapter.findItem(query)
+                return false
+            }
+        })
+
+        binding.root.setOnClickListener {
+            if (binding.searchFriend.hasFocus()) {
+                binding.searchFriend.hideKeyboard()
+                binding.searchFriend.clearFocus()
+            }
+        }
+    }
+
+    fun View.hideKeyboard() {
+        val imm = context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        imm.hideSoftInputFromWindow(windowToken, 0)
     }
 
     private fun observeViewModel() {

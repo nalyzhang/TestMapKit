@@ -154,6 +154,6 @@ class LocationService : Service() {
 
     fun getCurrentLocation(): Location? = currentLocation
 
-    fun getRandomAddress(radius: Int): LocationData? =
+    fun getRandomAddress(radius: Double): LocationData? =
         locationController.getRandomAddress(radius)
 }

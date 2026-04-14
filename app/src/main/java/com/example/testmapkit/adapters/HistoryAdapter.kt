@@ -1,14 +1,16 @@
 package com.example.testmapkit.adapters
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.example.testmapkit.TAG
 import com.example.testmapkit.controllers.TimeController
 import com.example.testmapkit.dataModels.Route
 import com.example.testmapkit.databinding.ItemHistoryBinding
 import java.text.SimpleDateFormat
 import java.util.Date
-import java.util.Locale
+import java.util.Locale.getDefault
 
 class HistoryAdapter(
     private var routes: List<Route>,
@@ -26,11 +28,15 @@ class HistoryAdapter(
         return ViewHolder(binding)
     }
 
+    private fun returnRouteName(route: Route): String {
+        return "${route.start.address} -> ${route.finish.address}"
+    }
+
     override fun onBindViewHolder(viewHolder: ViewHolder, position: Int) {
         val route = routes[position]
 
         with(viewHolder) {
-            binding.tvRouteName.text = "${route.start.address} -> ${route.finish.address}"
+            binding.tvRouteName.text = returnRouteName(route)
 
             val timeController = TimeController()
 
@@ -51,14 +57,36 @@ class HistoryAdapter(
     }
 
     private fun sortRoutes(routes: List<Route>): List<Route> {
-        val dateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+        val dateFormat = SimpleDateFormat("yyyy-MM-dd", getDefault())
 
         return routes.sortedWith(compareBy { route ->
-        try {
-            dateFormat.parse(route.date)
-        } catch (e: Exception) {
-            Date(0) // Если ошибка парсинга, ставим в начало/конец
+            try {
+                dateFormat.parse(route.date)
+            } catch (e: Exception) {
+                Date(0) // Если ошибка парсинга, ставим в начало/конец
+            }
+        }).reversed()
+    }
+
+    fun findItem(query: String) {
+        val foundRoutes: MutableList<Route> = mutableListOf()
+
+        val timeController = TimeController()
+
+        query.lowercase(getDefault())
+
+        for (route in routes) {
+            val name = returnRouteName(route).lowercase(getDefault())
+            val time = timeController.formatDate(
+                route.date).lowercase(getDefault())
+            if (name.contains(query.lowercase(getDefault())) ||
+                route.date.lowercase(
+                    getDefault()).contains(
+                    query.lowercase(getDefault())) ||
+                time.contains(query.lowercase(getDefault()))) {
+                foundRoutes += route
+            }
         }
-    }).reversed()
+        updateData(foundRoutes)
     }
 }

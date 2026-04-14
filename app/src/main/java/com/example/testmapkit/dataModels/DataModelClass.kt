@@ -1,5 +1,6 @@
 package com.example.testmapkit.dataModels
 
+import com.example.testmapkit.BASE_URL_IP
 import com.google.gson.annotations.SerializedName
 
 data class User(
@@ -12,7 +13,7 @@ data class User(
     @SerializedName("avatar_url") val avatarUrl: String? = null,
     @SerializedName("is_friend") val isFriend: Boolean = false
 ){
-    fun getFullAvatarUrl(baseUrl: String = "http://192.168.0.202:8000"): String {
+    fun getFullAvatarUrl(baseUrl: String = BASE_URL_IP): String {
         if (avatarUrl.isNullOrEmpty()) return ""
         return if (avatarUrl.startsWith("http")) {
             avatarUrl
@@ -35,7 +36,7 @@ data class UserWithStatistic(
     @SerializedName("routes") val routes: List<Route> = emptyList(),
     @SerializedName("routes_count") val routesCount: Int = 0
 ) {
-    fun getFullAvatarUrl(baseUrl: String = "http://192.168.0.202:8000"): String {
+    fun getFullAvatarUrl(baseUrl: String = BASE_URL_IP): String {
         if (avatarUrl.isNullOrEmpty()) return ""
         return if (avatarUrl.startsWith("http")) {
             avatarUrl

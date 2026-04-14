@@ -8,6 +8,7 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.example.testmapkit.R
 import com.example.testmapkit.dataModels.User
 import com.example.testmapkit.databinding.ItemFriendBinding
+import java.util.Locale.getDefault
 
 class UserAdapter(
     private var users: List<User>,
@@ -55,5 +56,19 @@ class UserAdapter(
     fun updateData(newUsers: List<User>) {
         users = newUsers
         notifyDataSetChanged()
+    }
+
+    fun findItem(query: String) {
+        val foundUsers: MutableList<User> = mutableListOf()
+
+        query.lowercase(getDefault())
+
+        for (user in users) {
+            val name = user.username.lowercase(getDefault())
+            if (name.contains(query.lowercase(getDefault()))) {
+                foundUsers += user
+            }
+        }
+        updateData(foundUsers)
     }
 }

@@ -5,6 +5,7 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".fragments.setting.friend.FriendsListFragment"
+    android:contextClickable="true"
     android:orientation="vertical">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -52,7 +53,7 @@
             android:id="@+id/search_friend"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:iconifiedByDefault="true" />
+            android:iconifiedByDefault="false" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv_friend"

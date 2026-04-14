@@ -194,7 +194,8 @@ class LocationFragment : Fragment() {
         }
 
         // Получаем случайный адрес через сервис
-        val randomAddress = locationService?.getRandomAddress(radius)
+        // TODO radius int -> double
+        val randomAddress = locationService?.getRandomAddress(radius.toDouble())
 
         if (randomAddress != null) {
 

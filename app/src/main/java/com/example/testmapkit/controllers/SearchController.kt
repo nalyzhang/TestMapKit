@@ -25,7 +25,7 @@ class SearchController {
 
     private fun searchRandomPosition(longitude: Double,
                                      latitude: Double,
-                                     circleRadius: Int): LocationData{
+                                     circleRadius: Double): LocationData{
         val randomLatitudeDistance = getRandomNonZero() * circleRadius / 10
         val randomLongitudeDistance = getRandomNonZero() * circleRadius / 10
         val deltaLatitude = (
@@ -59,7 +59,7 @@ class SearchController {
 
     fun getRandomAddress(longitude: Double,
                    latitude: Double,
-                   circleRadius: Int): LocationData{
+                   circleRadius: Double): LocationData{
         geocoder = Geocoder(MAIN, Locale.getDefault())
 
         val randomLocationData = searchRandomPosition(

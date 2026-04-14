@@ -1,9 +1,14 @@
 package com.example.testmapkit.fragments.history
 
+import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
+import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.InputMethodManager
+import android.widget.SearchView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
@@ -11,6 +16,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.testmapkit.R
 import com.example.testmapkit.ROUTE_ID
+import com.example.testmapkit.TAG
 import com.example.testmapkit.adapters.HistoryAdapter
 import com.example.testmapkit.dataModels.Route
 import com.example.testmapkit.databinding.FragmentHistoryBinding
@@ -40,7 +46,7 @@ class HistoryFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         tokenManager = TokenManager(requireContext())
-        val retrofitClient = RetrofitClient.Companion.getInstance(tokenManager)
+        val retrofitClient = RetrofitClient.getInstance(tokenManager)
         val historyRepository = HistoryRepository(retrofitClient.apiService)
         historyViewModel = HistoryViewModel(historyRepository, tokenManager)
 
@@ -66,6 +72,36 @@ class HistoryFragment : Fragment() {
 
         binding.rvHistory.layoutManager = LinearLayoutManager(requireContext())
         binding.rvHistory.adapter = historyAdapter
+
+        binding.searchHistory.setOnQueryTextListener(object: SearchView.OnQueryTextListener {
+            override fun onQueryTextChange(query: String): Boolean {
+                Log.d(TAG, "onQueryTextChange")
+                observeViewModel()
+                historyAdapter.findItem(query)
+                return false
+            }
+
+            override fun onQueryTextSubmit(query: String): Boolean {
+                Log.d(TAG, "onQueryTextSubmit")
+                binding.searchHistory.hideKeyboard()
+                binding.searchHistory.clearFocus()
+                observeViewModel()
+                historyAdapter.findItem(query)
+                return false
+            }
+        })
+
+        binding.root.setOnClickListener {
+            if (binding.searchHistory.hasFocus()) {
+                binding.searchHistory.hideKeyboard()
+                binding.searchHistory.clearFocus()
+            }
+        }
+    }
+
+    fun View.hideKeyboard() {
+        val imm = context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        imm.hideSoftInputFromWindow(windowToken, 0)
     }
 
     private fun observeViewModel() {

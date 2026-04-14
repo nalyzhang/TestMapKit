@@ -148,7 +148,7 @@ class LocationController(private val context: Context) {
     }
 
     // Метод для генерации случайного адреса
-    fun getRandomAddress(circleRadius: Int): LocationData? {
+    fun getRandomAddress(circleRadius: Double): LocationData? {
         lastKnownLocation?.let { location ->
             return searchController.getRandomAddress(
                 longitude = location.position.longitude,

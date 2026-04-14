@@ -1,6 +1,7 @@
 // RetrofitClient.kt - ИСПРАВЛЕННАЯ ВЕРСИЯ
 package com.example.testmapkit.network
 
+import com.example.testmapkit.BASE_URL_IP
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
@@ -10,7 +11,7 @@ import java.util.concurrent.TimeUnit
 class RetrofitClient private constructor(private val tokenManager: TokenManager) {
 
     companion object {
-        private const val BASE_URL = "http://192.168.0.202:8000/"
+        private const val BASE_URL = BASE_URL_IP
 
         @Volatile
         private var instance: RetrofitClient? = null
