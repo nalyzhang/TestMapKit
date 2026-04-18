@@ -22,8 +22,7 @@ class RouteRepository(
 ) {
 
     suspend fun createLocation(
-        location: LocationData,
-        time: String
+        location: LocationData
     ): RouteResult<Location> = withContext(Dispatchers.IO) {
         try {
             Log.d(TAG, "Начинаем создание локации: ${location.getAddress()}")
@@ -33,7 +32,7 @@ class RouteRepository(
                 location.longitude,
                 location.circleRadius,
                 location.getAddress(),
-                time
+                location.getDateTime()
             )
 
             val response = apiService.createLocation(request)

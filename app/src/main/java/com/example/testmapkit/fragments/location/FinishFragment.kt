@@ -15,11 +15,14 @@ import com.example.testmapkit.databinding.FragmentFinishBinding
 import com.example.testmapkit.models.LocationData
 import com.example.testmapkit.network.RetrofitClient
 import com.example.testmapkit.network.TokenManager
-import com.example.testmapkit.repositories.FriendResult
 import com.example.testmapkit.repositories.HistoryRepository
 import com.example.testmapkit.repositories.RouteRepository
 import com.example.testmapkit.repositories.RouteResult
-import com.example.testmapkit.repositories.UserResult
+import com.yandex.mapkit.geometry.Point
+import com.yandex.mapkit.geometry.Polyline
+import com.yandex.mapkit.geometry.geo.PolylineIndex
+import com.yandex.mapkit.geometry.geo.PolylineUtils
+import java.util.Locale
 
 class FinishFragment : Fragment() {
 
@@ -56,7 +59,6 @@ class FinishFragment : Fragment() {
 
     private fun init() {
         setTextViews()
-        saveRoute()
         observeViewModel()
 
 
@@ -66,14 +68,14 @@ class FinishFragment : Fragment() {
     }
 
     private fun setTextViews() {
-        binding.tvFinishRouteStartLocation.text = startLocation?.getAddress()
+        binding.tvFinishRouteStartLocation.text = startLocation?.getStringAddress()
 
-        var time = timeController.extractDateTime(
+        var time = timeController.extractTime(
             startLocation?.getDateTime().toString())
         binding.tvFinishRouteStartTime.text = time
-        binding.tvFinishRouteFinishLocation.text = finishLocation?.getAddress()
+        binding.tvFinishRouteFinishLocation.text = finishLocation?.getStringAddress()
 
-        time = timeController.extractDateTime(
+        time = timeController.extractTime(
             finishLocation?.getDateTime().toString())
         binding.tvFinishRouteFinishTime.text = time
 
@@ -81,20 +83,94 @@ class FinishFragment : Fragment() {
             startLocation?.getDateTime().toString(),
             finishLocation?.getDateTime().toString()
         )
-        binding.tvFinishRouteDistance.text = calculateDistance().toString()
+        binding.tvFinishRouteDate.text = timeController.extractDate(
+            startLocation?.getDateTime().toString())
+        binding.tvFinishRouteDistance.text = stringDistance()
         binding.tvFinishRouteTime.text = time
-        binding.tvFinishRouteRadius.text = startLocation?.circleRadius.toString()
+        binding.tvFinishRouteRadius.text = startLocation?.getStringRadius()
+
+
+        if (startLocation != null && finishLocation != null) {
+            saveLocation()
+        }
     }
 
-    private fun saveRoute() {
-        // TODO сохранение локаций и маршрута
+    private fun saveLocation() {
+        if (tokenManager.hasToken()) {
+            routeViewModel.createLocation(
+                startLocation!!,
+                finishLocation!!
+            )
+        } else {
+            Toast.makeText(
+                requireContext(),
+                "Невозможно сохранить маршрут, пользователь не авторизован",
+                Toast.LENGTH_SHORT
+            ).show()
+            showLoading(false)
+        }
+    }
+
+    private fun saveRoute(startLocationID: Int, finishLocationID: Int) {
+        val distance: Double = calculateDistance()
+        val time = binding.tvFinishRouteTime.text.toString().trim()
+        val date = timeController.formatDateReverse(
+            binding.tvFinishRouteDate.text.toString().trim()
+        )
+
+        routeViewModel.createRoute(
+            startLocationID,
+            finishLocationID,
+            distance,
+            time,
+            date
+        )
+    }
+
+    private fun stringDistance(): String {
+        return "${calculateDistance()} км"
     }
 
     private fun calculateDistance(): Double {
-        // TODO вычисление расстояния
+        if (startLocation != null && finishLocation != null) {
+            val firstPoint = Point(
+                startLocation!!.latitude,
+                startLocation!!.longitude
+            )
+
+            val secondPoint = Point(
+                finishLocation!!.latitude,
+                finishLocation!!.longitude
+            )
+
+            val polyline = Polyline(listOf(firstPoint, secondPoint))
+            val polylineIndex = PolylineUtils.createPolylineIndex(polyline)
+
+            val firstPosition = polylineIndex.closestPolylinePosition(
+                firstPoint,
+                PolylineIndex.Priority.CLOSEST_TO_RAW_POINT,
+                1.0
+            )!!
+            val secondPosition = polylineIndex.closestPolylinePosition(
+                secondPoint,
+                PolylineIndex.Priority.CLOSEST_TO_RAW_POINT,
+                1.0
+            )!!
+
+            val distanceInMeters = PolylineUtils.distanceBetweenPolylinePositions(
+                polyline,
+                firstPosition,
+                secondPosition
+            )
+
+            return String.format(
+                Locale.US,
+                "%.2f",
+                (distanceInMeters / 1000.0)
+            ).toDouble()
+        }
         return 0.0
     }
-
     private fun observeViewModel() {
 
         // Наблюдаем за состоянием загрузки
@@ -104,15 +180,11 @@ class FinishFragment : Fragment() {
 
         // Наблюдаем за состоянием сохранения локации
         routeViewModel.locationCreationState.observe(viewLifecycleOwner) { result ->
-            when (result) {
-                is RouteResult.Loading -> showLoading(true)
-                is RouteResult.Success -> {
-                    Log.d(TAG, "Локация сохранена")
-                }
-                is RouteResult.Error -> {
-                    routeViewModel.clearError()
-                }
-                null -> {}
+            if (result?.get(0)?.id != null) {
+                saveRoute(
+                    result[0].id,
+                    result[1].id
+                )
             }
         }
 

@@ -13,6 +13,7 @@ import com.example.testmapkit.ROUTE_ID
 import com.example.testmapkit.controllers.TimeController
 import com.example.testmapkit.dataModels.Route
 import com.example.testmapkit.databinding.FragmentHistoryDetailBinding
+import com.example.testmapkit.models.LocationData
 import com.example.testmapkit.network.RetrofitClient
 import com.example.testmapkit.network.TokenManager
 import com.example.testmapkit.repositories.HistoryRepository
@@ -111,7 +112,15 @@ class HistoryItemFragment : Fragment() {
 
     private fun updateRoute(route: Route) {
         val tc = TimeController()
-        var temp = "${route.start.address} -> ${route.finish.address}"
+        val startLocation = LocationData(
+            0.0, 0.0
+        )
+        startLocation.setAddress(route.start.address)
+        val finishLocation = LocationData(
+            0.0, 0.0
+        )
+        finishLocation.setAddress(route.finish.address)
+        var temp = "${startLocation.getStringAddress()} -> ${finishLocation.getStringAddress()}"
         binding.tvHistoryRouteName.text = temp
         binding.tvHistoryRouteDate.text = tc.formatDate(route.date)
         temp = "${route.distance} км"
@@ -119,9 +128,9 @@ class HistoryItemFragment : Fragment() {
         temp = "${route.start.radius.toString()} км"
         binding.tvHistoryRouteRadius.text = temp
         binding.tvHistoryRouteTime.text = route.time
-        binding.tvHistoryRouteStartLocation.text = route.start.address
+        binding.tvHistoryRouteStartLocation.text = startLocation.getStringAddress()
         binding.tvHistoryRouteStartTime.text = tc.extractTime(route.start.time)
-        binding.tvHistoryRouteFinishLocation.text = route.finish.address
+        binding.tvHistoryRouteFinishLocation.text = finishLocation.getStringAddress()
         binding.tvHistoryRouteFinishTime.text = tc.extractTime(route.finish.time)
     }
 

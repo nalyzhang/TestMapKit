@@ -8,6 +8,7 @@ import com.example.testmapkit.TAG
 import com.example.testmapkit.controllers.TimeController
 import com.example.testmapkit.dataModels.Route
 import com.example.testmapkit.databinding.ItemHistoryBinding
+import com.example.testmapkit.models.LocationData
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale.getDefault
@@ -29,7 +30,25 @@ class HistoryAdapter(
     }
 
     private fun returnRouteName(route: Route): String {
-        return "${route.start.address} -> ${route.finish.address}"
+        val startLocation = LocationData(
+            0.0, 0.0
+        )
+        startLocation.setAddress(route.start.address)
+        val finishLocation = LocationData(
+            0.0, 0.0
+        )
+        finishLocation.setAddress(route.finish.address)
+        return "${startLocation.getStringAddress()} -> ${finishLocation.getStringAddress()}"
+    }
+
+    private fun returnDateAndTownName(route: Route): String {
+        val startLocation = LocationData(
+            0.0, 0.0
+        )
+        startLocation.setAddress(route.start.address)
+        val timeController = TimeController()
+        val time = timeController.formatDate(route.date)
+        return "$time, ${startLocation.getTown()}"
     }
 
     override fun onBindViewHolder(viewHolder: ViewHolder, position: Int) {
@@ -40,7 +59,7 @@ class HistoryAdapter(
 
             val timeController = TimeController()
 
-            binding.tvRouteDate.text = timeController.formatDate(route.date)
+            binding.tvRouteDate.text = returnDateAndTownName(route)
 
             // Обработка нажатия на элемент
             binding.root.setOnClickListener {

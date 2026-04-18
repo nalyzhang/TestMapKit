@@ -73,6 +73,18 @@ class TimeController {
         }
     }
 
+    // DD.MM.yyyy -> yyy-MM-DD
+    fun formatDateReverse(dateString: String): String {
+        return try {
+            val outputFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+            val inputFormat = SimpleDateFormat("dd.MM.yyyy", Locale.getDefault())
+            val date = inputFormat.parse(dateString)
+            outputFormat.format(date ?: Date())
+        } catch (e: Exception) {
+            dateString
+        }
+    }
+
     fun getTimeDifference(startDateTime: String, endDateTime: String): String {
         return try {
             val formatter = DateTimeFormatter.ofPattern(

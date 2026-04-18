@@ -25,8 +25,8 @@ class RouteViewModel (
     private val tokenManager: TokenManager
 ): ViewModel() {
     // Состояние создания локации
-    private val _locationCreationState = MutableLiveData<RouteResult<Location>?>()
-    val locationCreationState: LiveData<RouteResult<Location>?> = _locationCreationState
+    private val _locationCreationState = MutableLiveData<List<Location>?>()
+    val locationCreationState: LiveData<List<Location>?> = _locationCreationState
 
     // Состояние создания маршрута
     private val _routeCreationState = MutableLiveData<RouteResult<Route>?>()
@@ -53,35 +53,51 @@ class RouteViewModel (
      * Создание новой локации
      */
     fun createLocation(
-        location: LocationData,
-        time: String
+        startLocation: LocationData,
+        finishLocation: LocationData
     ) {
         Log.d(
             TAG,
-            "ViewModel: запуск создания локации для адреса ${location.getAddress()}"
+            "ViewModel: запуск создания локации для адреса ${startLocation.getAddress()}"
         )
 
         _isLoading.value = true
-        _locationCreationState.value = RouteResult.Loading
 
         viewModelScope.launch {
-            val result = routeRepository.createLocation(
-                location, time)
-            Log.d(TAG, "Результат создания локации: $result")
+            val startResult = routeRepository.createLocation(startLocation)
+            val finishResult = routeRepository.createLocation(finishLocation)
+            Log.d(TAG, "Результат создания локаций: $startResult, $finishResult")
 
-            _locationCreationState.value = result
             _isLoading.value = false
 
-            when (result) {
+            when (startResult) {
                 is RouteResult.Success -> {
                     Log.d(
                         TAG,
-                        "Локация создана успешна, адрес: ${result.data.address}")
+                        "Локация создана успешна, адрес: ${startResult.data.address}")
                     _errorMessage.value = null
+                    when (finishResult) {
+                        is RouteResult.Success -> {
+                            Log.d(
+                                TAG,
+                                "Локация создана успешна, адрес: ${finishResult.data.address}")
+                            _errorMessage.value = null
+
+                            _locationCreationState.value = listOf(
+                                startResult.data,
+                                finishResult.data
+                            )
+                        }
+                        is RouteResult.Error -> {
+                            Log.e(TAG, "Ошибка создания локации: ${finishResult.message}")
+                            _errorMessage.value = finishResult.message
+                        }
+                        else -> {}
+                    }
                 }
                 is RouteResult.Error -> {
-                    Log.e(TAG, "Ошибка создания локации: ${result.message}")
-                    _errorMessage.value = result.message
+                    Log.e(TAG, "Ошибка создания локации: ${startResult.message}")
+                    _errorMessage.value = startResult.message
                 }
                 else -> {}
             }
@@ -149,10 +165,17 @@ class RouteViewModel (
         _isLoading.value = true
 
         viewModelScope.launch {
-            val result = listOf(
+            var result = listOf(
                 searchController.getCurrentAddress(point, radius),
                 searchController.getRandomAddress(point, radius)
             )
+            while (validateAddress()) {
+                result = listOf(
+                    searchController.getCurrentAddress(point, radius),
+                    searchController.getRandomAddress(point, radius)
+                )
+            }
+
             Log.d(TAG, "Результат поиска текущей локации: ${result[0]?.getAddress()}")
             Log.d(TAG, "Результат поиска рандомной локации: ${result[1]?.getAddress()}")
 
@@ -167,6 +190,23 @@ class RouteViewModel (
                 Log.d(TAG, "Не удалось найти валидный адрес")
             }
         }
+    }
+
+    private fun validateAddress(): Boolean {
+        if (_currentAddressState.value?.size != 2) return false
+        val location = _currentAddressState.value?.get(1) ?: return false
+        getMyRoutes(location.getAddress())
+        if (_routeAddressState.value?.size != 0) {
+            Log.d(TAG, "Выданный адрес: ${location.getAddress()}")
+            Log.d(
+                TAG,
+                "Найден адрес: ${_routeAddressState.value?.get(0)?.finish?.address}"
+            )
+            return false
+        }
+        return (
+                location.getAddress() != _currentAddressState.value?.get(0)?.getAddress()
+                )
     }
 
     /**

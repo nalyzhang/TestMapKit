@@ -106,7 +106,7 @@ class WalkFragment : Fragment() {
     }
 
     private fun setAddress() {
-        binding.textAddress.text = finishLocation?.getAddress()
+        binding.textAddress.text = finishLocation?.getStringAddress()
     }
 
     private fun updateTimeDisplay(timeInMillis: Long) {
