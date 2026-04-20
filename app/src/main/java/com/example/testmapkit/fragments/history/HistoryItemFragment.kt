@@ -119,9 +119,22 @@ class HistoryItemFragment : Fragment() {
         val finishLocation = LocationData(
             0.0, 0.0
         )
-        finishLocation.setAddress(route.finish.address)
-        var temp = "${startLocation.getStringAddress()} -> ${finishLocation.getStringAddress()}"
+
+        val stopLocation = LocationData(
+            0.0, 0.0
+        )
+
+        if (route.stop?.address != null) {
+            finishLocation.setAddress(route.finish.address)
+            stopLocation.setAddress(route.stop.address)
+        }
+        else {
+            finishLocation.setAddress(route.finish.address)
+            stopLocation.setAddress(route.finish.address)
+        }
+        var temp = "${startLocation.getStringAddress()} -> ${stopLocation.getStringAddress()}"
         binding.tvHistoryRouteName.text = temp
+        binding.tvHistoryRouteDestination.text = finishLocation.getStringAddress()
         binding.tvHistoryRouteDate.text = tc.formatDate(route.date)
         temp = "${route.distance} км"
         binding.tvHistoryRouteDistance.text = temp
@@ -130,7 +143,7 @@ class HistoryItemFragment : Fragment() {
         binding.tvHistoryRouteTime.text = route.time
         binding.tvHistoryRouteStartLocation.text = startLocation.getStringAddress()
         binding.tvHistoryRouteStartTime.text = tc.extractTime(route.start.time)
-        binding.tvHistoryRouteFinishLocation.text = finishLocation.getStringAddress()
+        binding.tvHistoryRouteFinishLocation.text = stopLocation.getStringAddress()
         binding.tvHistoryRouteFinishTime.text = tc.extractTime(route.finish.time)
     }
 

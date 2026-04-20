@@ -4,6 +4,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.example.testmapkit.R
 import com.example.testmapkit.TAG
 import com.example.testmapkit.controllers.TimeController
 import com.example.testmapkit.dataModels.Route
@@ -37,7 +38,10 @@ class HistoryAdapter(
         val finishLocation = LocationData(
             0.0, 0.0
         )
-        finishLocation.setAddress(route.finish.address)
+        if (route.stop?.address != null)
+            finishLocation.setAddress(route.stop.address)
+        else
+            finishLocation.setAddress(route.finish.address)
         return "${startLocation.getStringAddress()} -> ${finishLocation.getStringAddress()}"
     }
 
@@ -57,9 +61,12 @@ class HistoryAdapter(
         with(viewHolder) {
             binding.tvRouteName.text = returnRouteName(route)
 
-            val timeController = TimeController()
-
             binding.tvRouteDate.text = returnDateAndTownName(route)
+
+            if (route.stop?.address != null)
+                binding.imgHistoryList.setImageResource(R.drawable.ic_not_done)
+            else
+                binding.imgHistoryList.setImageResource(R.drawable.ic_done)
 
             // Обработка нажатия на элемент
             binding.root.setOnClickListener {

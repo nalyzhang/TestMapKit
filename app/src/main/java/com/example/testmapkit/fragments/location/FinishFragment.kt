@@ -29,6 +29,7 @@ class FinishFragment : Fragment() {
     private lateinit var binding: FragmentFinishBinding
     private var startLocation: LocationData? = null
     private var finishLocation: LocationData? = null
+    private var stopLocation: LocationData? = null
     private val timeController = TimeController()
 
     private lateinit var routeViewModel: RouteViewModel
@@ -42,6 +43,7 @@ class FinishFragment : Fragment() {
             layoutInflater, container, false)
         startLocation = arguments?.getSerializable("start_location") as LocationData
         finishLocation = arguments?.getSerializable("finish_location") as LocationData
+        stopLocation = arguments?.getSerializable("stop_location") as LocationData
         return binding.root
     }
 
@@ -73,7 +75,6 @@ class FinishFragment : Fragment() {
         var time = timeController.extractTime(
             startLocation?.getDateTime().toString())
         binding.tvFinishRouteStartTime.text = time
-        binding.tvFinishRouteFinishLocation.text = finishLocation?.getStringAddress()
 
         time = timeController.extractTime(
             finishLocation?.getDateTime().toString())
@@ -83,11 +84,21 @@ class FinishFragment : Fragment() {
             startLocation?.getDateTime().toString(),
             finishLocation?.getDateTime().toString()
         )
+        binding.tvFinishRouteDestination.text = finishLocation?.getStringAddress()
+
         binding.tvFinishRouteDate.text = timeController.extractDate(
             startLocation?.getDateTime().toString())
-        binding.tvFinishRouteDistance.text = stringDistance()
         binding.tvFinishRouteTime.text = time
         binding.tvFinishRouteRadius.text = startLocation?.getStringRadius()
+        if (stopLocation?.getAddress() != null) {
+            binding.tvFinishMain.text = "Маршрут не пройден"
+            binding.tvFinishRouteDistance.text = stringDistance(startLocation, stopLocation)
+            binding.tvFinishRouteFinishLocation.text = stopLocation?.getStringAddress()
+        } else {
+            binding.tvFinishMain.text = "Маршрут пройден!"
+            binding.tvFinishRouteDistance.text = stringDistance(startLocation, finishLocation)
+            binding.tvFinishRouteFinishLocation.text = finishLocation?.getStringAddress()
+        }
 
 
         if (startLocation != null && finishLocation != null) {
@@ -111,8 +122,13 @@ class FinishFragment : Fragment() {
         }
     }
 
-    private fun saveRoute(startLocationID: Int, finishLocationID: Int) {
-        val distance: Double = calculateDistance()
+    private fun saveRoute(startLocationID: Int,
+                          finishLocationID: Int,
+                          stopLocationID: Int? = null) {
+        val distance = if (stopLocation?.getAddress() != null)
+            calculateDistance(startLocation, stopLocation)
+        else
+            calculateDistance(startLocation, finishLocation)
         val time = binding.tvFinishRouteTime.text.toString().trim()
         val date = timeController.formatDateReverse(
             binding.tvFinishRouteDate.text.toString().trim()
@@ -121,26 +137,29 @@ class FinishFragment : Fragment() {
         routeViewModel.createRoute(
             startLocationID,
             finishLocationID,
+            stopLocationID,
             distance,
             time,
             date
         )
     }
 
-    private fun stringDistance(): String {
-        return "${calculateDistance()} км"
+    private fun stringDistance(firstLocation: LocationData?,
+                               secondLocation: LocationData?): String {
+        return "${calculateDistance(firstLocation, secondLocation)} км"
     }
 
-    private fun calculateDistance(): Double {
+    private fun calculateDistance(firstLocation: LocationData?,
+                                  secondLocation: LocationData?): Double {
         if (startLocation != null && finishLocation != null) {
             val firstPoint = Point(
-                startLocation!!.latitude,
-                startLocation!!.longitude
+                firstLocation!!.latitude,
+                firstLocation.longitude
             )
 
             val secondPoint = Point(
-                finishLocation!!.latitude,
-                finishLocation!!.longitude
+                secondLocation!!.latitude,
+                secondLocation.longitude
             )
 
             val polyline = Polyline(listOf(firstPoint, secondPoint))
@@ -181,10 +200,32 @@ class FinishFragment : Fragment() {
         // Наблюдаем за состоянием сохранения локации
         routeViewModel.locationCreationState.observe(viewLifecycleOwner) { result ->
             if (result?.get(0)?.id != null) {
-                saveRoute(
-                    result[0].id,
-                    result[1].id
-                )
+                if (stopLocation?.getAddress() == null) {
+                    saveRoute(
+                        result[0].id,
+                        result[1].id,
+                        null
+                    )
+                } else {
+                    startLocation?.setID(result[0].id)
+                    finishLocation?.setID(result[1].id)
+                    routeViewModel.createStopLocation(stopLocation!!)
+                }
+            }
+        }
+
+        routeViewModel.stopLocationCreationState.observe(viewLifecycleOwner) { result ->
+            if (result?.id != null) {
+                val startLocationID = startLocation?.getID()
+                val finishLocationID = finishLocation?.getID()
+                Log.d(TAG, "ID $startLocationID $finishLocationID")
+                if (startLocationID != null && finishLocationID != null) {
+                    saveRoute(
+                        startLocationID,
+                        finishLocationID,
+                        result.id
+                    )
+                }
             }
         }
 

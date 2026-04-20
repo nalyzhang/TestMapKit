@@ -56,6 +56,7 @@ class RouteRepository(
     suspend fun createRoute(
         startLocationID: Int,
         finishLocationID: Int,
+        stopLocationID: Int? = null,
         distance: Double,
         time: String,
         date: String
@@ -66,6 +67,7 @@ class RouteRepository(
             val request = RouteCreateRequest(
                 startLocationID,
                 finishLocationID,
+                stopLocationID,
                 distance,
                 time,
                 date

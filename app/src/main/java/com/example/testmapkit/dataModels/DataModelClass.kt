@@ -77,6 +77,7 @@ data class Route(
     @SerializedName("id") val id: Int,
     @SerializedName("start") val start: Location,
     @SerializedName("finish") val finish: Location,
+    @SerializedName("stop") val stop: Location? = null,
     @SerializedName("distance") val distance: Double,
     @SerializedName("time") val time: String, // Формат "HH:MM:SS"
     @SerializedName("date") val date: String  // Формат "YYYY-MM-DD"
@@ -86,6 +87,7 @@ data class Route(
 data class RouteCreateRequest(
     @SerializedName("start_id") val startId: Int,
     @SerializedName("finish_id") val finishId: Int,
+    @SerializedName("stop_id") val stop: Int? = null,
     @SerializedName("distance") val distance: Double,
     @SerializedName("time") val time: String,
     @SerializedName("date") val date: String

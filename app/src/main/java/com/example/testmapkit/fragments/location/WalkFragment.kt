@@ -1,6 +1,7 @@
 package com.example.testmapkit.fragments.location
 
 import android.annotation.SuppressLint
+import android.app.AlertDialog
 import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
@@ -12,11 +13,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.compose.ui.platform.LocalAutofill
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.example.testmapkit.ADDRESS
 import com.example.testmapkit.MainActivity
+import com.example.testmapkit.PROCESSING
 import com.example.testmapkit.R
 import com.example.testmapkit.TAG
 import com.example.testmapkit.databinding.FragmentWalkBinding
@@ -26,8 +29,12 @@ import com.example.testmapkit.network.TokenManager
 import com.example.testmapkit.repositories.HistoryRepository
 import com.example.testmapkit.repositories.RouteRepository
 import com.example.testmapkit.services.ChronometerService
+import com.example.testmapkit.services.LocationService
+import com.yandex.mapkit.location.Location
+import com.yandex.mapkit.user_location.UserLocationLayer
 import java.util.Locale
 import kotlin.getValue
+import kotlin.io.path.Path
 
 class WalkFragment : Fragment() {
 
@@ -35,6 +42,10 @@ class WalkFragment : Fragment() {
     private var chronometerService: ChronometerService? = null
     private var startLocation: LocationData? = null
     private var finishLocation: LocationData? = null
+    private var stopLocation: LocationData? = null
+    private var currentLocation: Location? = null
+    private var locationService: LocationService? = null
+    private var userLocationLayer: UserLocationLayer? = null
 
     private lateinit var routeViewModel: RouteViewModel
     private lateinit var tokenManager: TokenManager
@@ -66,6 +77,11 @@ class WalkFragment : Fragment() {
         val routeRepository = RouteRepository(retrofitClient.apiService)
         val historyRepository = HistoryRepository(retrofitClient.apiService)
         routeViewModel = RouteViewModel(routeRepository, historyRepository, tokenManager)
+        // Получаем сервис из Activity
+        locationService = (requireActivity() as MainActivity).getLocationService()
+
+        // Устанавливаем слушатель
+        (requireActivity() as MainActivity).setLocationUpdateListener(serviceListener)
 
         observeViewModel()
 
@@ -101,7 +117,17 @@ class WalkFragment : Fragment() {
         if (dateTime != null) startLocation?.setDateTime(dateTime)
 
         binding.btnEnd.setOnClickListener {
-            finishRoute()
+            showFinishConfirmationDialog()
+        }
+
+        locationService?.getCurrentLocation()?.let { location ->
+            currentLocation = location
+        }
+    }
+
+    private val serviceListener = object : LocationService.LocationUpdateListener {
+        override fun onLocationUpdated(location: Location) {
+            currentLocation = location
         }
     }
 
@@ -126,9 +152,77 @@ class WalkFragment : Fragment() {
         Log.d(TAG, "WalkFragment destroyed")
     }
 
+    private fun showFinishConfirmationDialog() {
+        AlertDialog.Builder(requireContext())
+            .setTitle("Завершение маршрута")
+            .setMessage("Вы уверены, что хотите завершить маршрут?")
+            .setPositiveButton("Да") { _, _ ->
+                checkCurrentLocation()
+            }
+            .setNegativeButton("Нет", null)
+            .show()
+    }
+
+    private fun checkCurrentLocation() {
+        showLoading(true)
+        val radius = startLocation?.circleRadius
+        currentLocation?.let { _ ->
+            if (currentLocation != null && radius != null) {
+
+                routeViewModel.getCurrentAddress(
+                    currentLocation!!.position,
+                    radius)
+            }
+            else {
+                Toast.makeText(
+                    requireContext(),
+                    "Не удалось определить местоположение",
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
+        }
+    }
+
+    private fun confirmCurrentLocation() {
+        showLoading(false)
+        if (stopLocation?.getAddress() == null) {
+            finishRoute()
+        } else {
+            AlertDialog.Builder(requireContext())
+                .setTitle(
+                    "Ваше местоположение не совпадает с целью, хотите завершить маршрут?"
+                )
+                .setMessage(
+                    "Ваш текущий адрес: ${
+                        stopLocation?.getAddress()
+                    }, цель: ${
+                        finishLocation?.getAddress()
+                    }")
+                .setPositiveButton("Да") { _, _ ->
+                    finishRoute()
+                }
+                .setNegativeButton("Нет", null)
+                .show()
+        }
+    }
+
+    private fun showLoading(isLoading: Boolean) {
+        if (isLoading) {
+            binding.pbWalk.visibility = View.VISIBLE
+            binding.mainWalk.visibility = View.GONE
+        } else {
+            binding.pbWalk.visibility = View.GONE
+            binding.mainWalk.visibility = View.VISIBLE
+        }
+    }
+
     private fun finishRoute() {
         val dateTime = chronometerService?.stopChronometer()
-        if (dateTime != null) finishLocation?.setDateTime(dateTime)
+        if (dateTime != null) {
+            finishLocation?.setDateTime(dateTime)
+            if (stopLocation?.getAddress() != null)
+                stopLocation?.setDateTime(dateTime)
+        }
         Log.d(TAG, "Завершение прогулки")
         if (startLocation == null || finishLocation == null) return
         val bundle = Bundle().apply {
@@ -136,8 +230,8 @@ class WalkFragment : Fragment() {
             putSerializable("start_location", startLocation)
             // Передаем конечную локацию
             putSerializable("finish_location", finishLocation)
-            // Или передаем список
-            putSerializable("locations", arrayListOf(startLocation, finishLocation))
+            // Передаем локацию остановки
+            putSerializable("stop_location", stopLocation)
         }
         findNavController().navigate(
             R.id.action_walkFragment_to_finishFragment,
@@ -155,6 +249,12 @@ class WalkFragment : Fragment() {
             finishLocation = location
             setAddress()
             Log.d(TAG, "Finish location updated: ${location?.getAddress()}")
+        }
+
+        routeViewModel.currentAddressState.observe(viewLifecycleOwner) { result ->
+            stopLocation = result
+            confirmCurrentLocation()
+            Log.d(TAG, "Stop location observed")
         }
     }
 }

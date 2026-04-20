@@ -1,11 +1,7 @@
 package com.example.testmapkit.fragments.location
 
-import android.content.ComponentName
-import android.content.Context
 import android.content.Intent
-import android.content.ServiceConnection
 import android.os.Bundle
-import android.os.IBinder
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -15,8 +11,6 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
-import androidx.work.impl.utils.INITIAL_ID
-import com.example.testmapkit.ADDRESS
 import com.example.testmapkit.DEFAULT_RADIUS_KM
 import com.example.testmapkit.MAIN
 import com.example.testmapkit.MAX_RADIUS_KM
@@ -242,7 +236,7 @@ class LocationFragment : Fragment() {
             showLoading(isLoading)
         }
 
-        routeViewModel.currentAddressState.observe(viewLifecycleOwner) { location ->
+        routeViewModel.randomAddressState.observe(viewLifecycleOwner) { location ->
             if (location[0] != null && location[1] != null) {
                 showLoading(false)
 
