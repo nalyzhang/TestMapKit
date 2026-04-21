@@ -58,6 +58,7 @@ class HistoryItemFragment : Fragment() {
         binding.btnDeleteHistoryItem.setOnClickListener {
             if (routeID != null) showUpdateConfirmationDialog(routeID)
         }
+        showLoading(true)
     }
 
     private fun observeViewModel() {

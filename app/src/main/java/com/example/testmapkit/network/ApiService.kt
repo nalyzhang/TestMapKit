@@ -47,13 +47,23 @@ interface ApiService {
 
     // Статистика
     @GET("api/v1/users/{id}/statistic/")
-    suspend fun getUserStatistic(@Path("id") userId: Int): Response<UserStatistic>
+    suspend fun getUserStatistic(
+        @Path("id") userId: Int,
+        @Query("date_from") dateFrom: String? = null,
+        @Query("date_to") dateTo: String? = null
+    ): Response<UserStatistic>
 
     @GET("api/v1/users/me/statistic/")
-    suspend fun getMyStatistic(): Response<UserStatistic>
+    suspend fun getMyStatistic(
+        @Query("date_from") dateFrom: String? = null,
+        @Query("date_to") dateTo: String? = null
+    ): Response<UserStatistic>
 
     @GET("api/v1/users/statistics/")
-    suspend fun getFriendsStatistics(): Response<FriendsStatisticsResponse>
+    suspend fun getFriendsStatistics(
+        @Query("date_from") dateFrom: String? = null,
+        @Query("date_to") dateTo: String? = null
+    ): Response<FriendsStatisticsResponse>
 
     // Аватар
     @PUT("api/v1/users/me/avatar/")
@@ -69,8 +79,7 @@ interface ApiService {
     // ========== Маршруты ==========
     @GET("api/v1/routes/")
     suspend fun getMyRoutes(
-        @Query("address") address: String? = null,
-        @Query("active") active: Boolean? = null
+        @Query("address") address: String? = null
     ): Response<PaginatedResponse<Route>>
 
     @GET("api/v1/routes/{id}/")

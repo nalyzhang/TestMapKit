@@ -7,6 +7,10 @@ import com.example.testmapkit.dataModels.UserStatistic
 import com.example.testmapkit.network.ApiService
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import retrofit2.Response
+import retrofit2.http.GET
+import retrofit2.http.Path
+import retrofit2.http.Query
 
 sealed class StatisticResult<out T> {
     data class Success<T>(val data: T) : StatisticResult<T>()
@@ -19,12 +23,14 @@ class StatisticRepository(
 ) {
 
     suspend fun getUserStatistic(
-        userID: Int
+        userID: Int,
+        dateFrom: String? = null,
+        dateTo: String? = null
     ): StatisticResult<UserStatistic> = withContext(Dispatchers.IO) {
         try {
             Log.d(TAG, "Начинаем получение статистики по ID пользователя $userID")
 
-            val response = apiService.getUserStatistic(userID)
+            val response = apiService.getUserStatistic(userID, dateFrom, dateTo)
 
             if (response.isSuccessful && response.body() != null) {
                 Log.d(
@@ -56,11 +62,13 @@ class StatisticRepository(
     }
 
     suspend fun getMyStatistic(
+        dateFrom: String? = null,
+        dateTo: String? = null
     ): StatisticResult<UserStatistic> = withContext(Dispatchers.IO) {
         try {
             Log.d(TAG, "Начинаем получение статистики текущего пользователя")
 
-            val response = apiService.getMyStatistic()
+            val response = apiService.getMyStatistic(dateFrom, dateTo)
 
             if (response.isSuccessful && response.body() != null) {
                 Log.d(
@@ -92,11 +100,13 @@ class StatisticRepository(
     }
 
     suspend fun getFriendsStatistics(
+        dateFrom: String? = null,
+        dateTo: String? = null
     ): StatisticResult<FriendsStatisticsResponse> = withContext(Dispatchers.IO) {
         try {
             Log.d(TAG, "Начинаем получение статистик друзей пользователя")
 
-            val response = apiService.getFriendsStatistics()
+            val response = apiService.getFriendsStatistics(dateFrom, dateTo)
 
             if (response.isSuccessful && response.body() != null) {
                 Log.d(

@@ -26,258 +26,270 @@
             android:layout_margin="15dp"
             android:textSize="@dimen/text_title_extra"/>
 
-        <TextView
+        <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="10dp"
-            android:textSize="@dimen/text_title"
-            android:text="Начало пути"
-            android:gravity="center"/>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <TextView
-                android:layout_width="@dimen/text_view_width_extra"
-                android:layout_height="wrap_content"
-                android:layout_margin="5dp"
-                android:gravity="center_vertical"
-                android:text="Начальная локация"
-                android:textSize="@dimen/text_normal" />
-
-            <TextView
-                android:id="@+id/tv_finish_route_start_location"
+            android:layout_height="wrap_content">
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="5dp"
-                android:layout_gravity="center"
-                android:textSize="@dimen/text_normal"
-                android:text="Location" />
+                android:orientation="vertical"
+                android:gravity="center">
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10dp"
+                    android:textSize="@dimen/text_title"
+                    android:text="Начало пути"
+                    android:gravity="center"/>
 
-        </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
+                    <TextView
+                        android:layout_width="@dimen/text_view_width_extra"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="5dp"
+                        android:gravity="center_vertical"
+                        android:text="Начальная локация"
+                        android:textSize="@dimen/text_normal" />
 
-            <TextView
-                android:layout_width="@dimen/text_view_width_extra"
-                android:layout_height="wrap_content"
-                android:layout_margin="5dp"
-                android:textSize="@dimen/text_normal"
-                android:text="Время начала"
-                android:gravity="center_vertical"/>
+                    <TextView
+                        android:id="@+id/tv_finish_route_start_location"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="5dp"
+                        android:layout_gravity="center"
+                        android:textSize="@dimen/text_normal"
+                        android:text="Location" />
 
-            <TextView
-                android:id="@+id/tv_finish_route_start_time"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="5dp"
-                android:layout_gravity="center"
-                android:textSize="@dimen/text_normal"
-                android:text="Time" />
+                </LinearLayout>
 
-        </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="10dp"
-            android:textSize="@dimen/text_title"
-            android:text="Конец пути"
-            android:gravity="center"/>
+                    <TextView
+                        android:layout_width="@dimen/text_view_width_extra"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="5dp"
+                        android:textSize="@dimen/text_normal"
+                        android:text="Время начала"
+                        android:gravity="center_vertical"/>
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
+                    <TextView
+                        android:id="@+id/tv_finish_route_start_time"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="5dp"
+                        android:layout_gravity="center"
+                        android:textSize="@dimen/text_normal"
+                        android:text="Time" />
 
-            <TextView
-                android:layout_width="@dimen/text_view_width_extra"
-                android:layout_height="wrap_content"
-                android:layout_margin="5dp"
-                android:textSize="@dimen/text_normal"
-                android:text="Конечная локация"
-                android:gravity="center_vertical"/>
+                </LinearLayout>
 
-            <TextView
-                android:id="@+id/tv_finish_route_finish_location"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="5dp"
-                android:layout_gravity="center"
-                android:textSize="@dimen/text_normal"
-                android:text="Location" />
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10dp"
+                    android:textSize="@dimen/text_title"
+                    android:text="Конец пути"
+                    android:gravity="center"/>
 
-        </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
+                    <TextView
+                        android:layout_width="@dimen/text_view_width_extra"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="5dp"
+                        android:textSize="@dimen/text_normal"
+                        android:text="Конечная локация"
+                        android:gravity="center_vertical"/>
 
-            <TextView
-                android:layout_width="@dimen/text_view_width_extra"
-                android:layout_height="wrap_content"
-                android:layout_margin="5dp"
-                android:textSize="@dimen/text_normal"
-                android:text="Время завершения"
-                android:gravity="center_vertical"/>
+                    <TextView
+                        android:id="@+id/tv_finish_route_finish_location"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="5dp"
+                        android:layout_gravity="center"
+                        android:textSize="@dimen/text_normal"
+                        android:text="Location" />
 
-            <TextView
-                android:id="@+id/tv_finish_route_finish_time"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="5dp"
-                android:layout_gravity="center"
-                android:textSize="@dimen/text_normal"
-                android:text="Time" />
+                </LinearLayout>
 
-        </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
 
+                    <TextView
+                        android:layout_width="@dimen/text_view_width_extra"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="5dp"
+                        android:textSize="@dimen/text_normal"
+                        android:text="Время завершения"
+                        android:gravity="center_vertical"/>
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="10dp"
-            android:textSize="@dimen/text_title"
-            android:text="Итоги маршрута"
-            android:gravity="center"/>
+                    <TextView
+                        android:id="@+id/tv_finish_route_finish_time"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="5dp"
+                        android:layout_gravity="center"
+                        android:textSize="@dimen/text_normal"
+                        android:text="Time" />
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <TextView
-                android:layout_width="@dimen/text_view_width_extra"
-                android:layout_height="wrap_content"
-                android:layout_margin="5dp"
-                android:textSize="@dimen/text_normal"
-                android:text="Цель"
-                android:gravity="center_vertical"/>
-
-            <TextView
-                android:id="@+id/tv_finish_route_destination"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="5dp"
-                android:layout_gravity="center"
-                android:textSize="@dimen/text_normal"
-                android:text="Destination" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <TextView
-                android:layout_width="@dimen/text_view_width_extra"
-                android:layout_height="wrap_content"
-                android:layout_margin="5dp"
-                android:textSize="@dimen/text_normal"
-                android:text="Дата маршрута"
-                android:gravity="center_vertical"/>
-
-            <TextView
-                android:id="@+id/tv_finish_route_date"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="5dp"
-                android:layout_gravity="center"
-                android:textSize="@dimen/text_normal"
-                android:text="Date" />
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <TextView
-                android:layout_width="@dimen/text_view_width_extra"
-                android:layout_height="wrap_content"
-                android:layout_margin="5dp"
-                android:textSize="@dimen/text_normal"
-                android:text="Радиус поиска"
-                android:gravity="center_vertical"/>
-
-            <TextView
-                android:id="@+id/tv_finish_route_radius"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="5dp"
-                android:layout_gravity="center"
-                android:textSize="@dimen/text_normal"
-                android:text="Distance" />
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <TextView
-                android:layout_width="@dimen/text_view_width_extra"
-                android:layout_height="wrap_content"
-                android:layout_margin="5dp"
-                android:textSize="@dimen/text_normal"
-                android:text="Время в пути"
-                android:gravity="center_vertical"/>
-
-            <TextView
-                android:id="@+id/tv_finish_route_time"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="5dp"
-                android:layout_gravity="center"
-                android:textSize="@dimen/text_normal"
-                android:text="Time" />
-
-        </LinearLayout>
+                </LinearLayout>
 
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10dp"
+                    android:textSize="@dimen/text_title"
+                    android:text="Итоги маршрута"
+                    android:gravity="center"/>
 
-            <TextView
-                android:layout_width="@dimen/text_view_width_extra"
-                android:layout_height="wrap_content"
-                android:layout_margin="5dp"
-                android:textSize="@dimen/text_normal"
-                android:text="Расстояние"
-                android:gravity="center_vertical"/>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
 
-            <TextView
-                android:id="@+id/tv_finish_route_distance"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="5dp"
-                android:layout_gravity="center"
-                android:textSize="@dimen/text_normal"
-                android:text="Distance" />
+                    <TextView
+                        android:layout_width="@dimen/text_view_width_extra"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="5dp"
+                        android:textSize="@dimen/text_normal"
+                        android:text="Цель"
+                        android:gravity="center_vertical"/>
 
-        </LinearLayout>
+                    <TextView
+                        android:id="@+id/tv_finish_route_destination"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="5dp"
+                        android:layout_gravity="center"
+                        android:textSize="@dimen/text_normal"
+                        android:text="Destination" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="@dimen/text_view_width_extra"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="5dp"
+                        android:textSize="@dimen/text_normal"
+                        android:text="Дата маршрута"
+                        android:gravity="center_vertical"/>
+
+                    <TextView
+                        android:id="@+id/tv_finish_route_date"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="5dp"
+                        android:layout_gravity="center"
+                        android:textSize="@dimen/text_normal"
+                        android:text="Date" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="@dimen/text_view_width_extra"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="5dp"
+                        android:textSize="@dimen/text_normal"
+                        android:text="Радиус поиска"
+                        android:gravity="center_vertical"/>
+
+                    <TextView
+                        android:id="@+id/tv_finish_route_radius"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="5dp"
+                        android:layout_gravity="center"
+                        android:textSize="@dimen/text_normal"
+                        android:text="Distance" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="@dimen/text_view_width_extra"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="5dp"
+                        android:textSize="@dimen/text_normal"
+                        android:text="Время в пути"
+                        android:gravity="center_vertical"/>
+
+                    <TextView
+                        android:id="@+id/tv_finish_route_time"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="5dp"
+                        android:layout_gravity="center"
+                        android:textSize="@dimen/text_normal"
+                        android:text="Time" />
+
+                </LinearLayout>
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="@dimen/text_view_width_extra"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="5dp"
+                        android:textSize="@dimen/text_normal"
+                        android:text="Расстояние"
+                        android:gravity="center_vertical"/>
+
+                    <TextView
+                        android:id="@+id/tv_finish_route_distance"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="5dp"
+                        android:layout_gravity="center"
+                        android:textSize="@dimen/text_normal"
+                        android:text="Distance" />
+
+                </LinearLayout>
+
+                <Button
+                    android:id="@+id/btn_finish"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="20dp"
+                    android:text="Завершить"
+                    android:textSize="@dimen/text_normal"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/ll_finish"/>
+            </LinearLayout>
+        </ScrollView>
     </LinearLayout>
 
-    <Button
-        android:id="@+id/btn_finish"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="20dp"
-        android:text="Завершить"
-        android:textSize="@dimen/text_normal"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/ll_finish"/>
+
 
     <ProgressBar
         android:id="@+id/pb_finish"

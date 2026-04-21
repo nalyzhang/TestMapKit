@@ -10,7 +10,7 @@ import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
 import java.util.Date
 import java.util.Locale
-import java.time.Duration
+import java.time.LocalDate
 
 class TimeController {
 
@@ -111,6 +111,18 @@ class TimeController {
             Locale.getDefault(),
             "%02d:%02d:%02d",
             hours, minutes, seconds)
+    }
+
+    fun formatMonth(date: LocalDate): String {
+        return date.format(DateTimeFormatter.ofPattern(
+            "MMM yyyy", Locale.getDefault()
+        ))
+    }
+
+    fun formatYear(date: LocalDate): String {
+        return date.format(DateTimeFormatter.ofPattern(
+            "yyyy", Locale.getDefault()
+        ))
     }
 
 }

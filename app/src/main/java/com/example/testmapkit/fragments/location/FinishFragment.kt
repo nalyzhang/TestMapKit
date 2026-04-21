@@ -70,6 +70,8 @@ class FinishFragment : Fragment() {
     }
 
     private fun setTextViews() {
+
+        showLoading(true)
         binding.tvFinishRouteStartLocation.text = startLocation?.getStringAddress()
 
         var time = timeController.extractTime(
@@ -104,6 +106,7 @@ class FinishFragment : Fragment() {
         if (startLocation != null && finishLocation != null) {
             saveLocation()
         }
+        showLoading(false)
     }
 
     private fun saveLocation() {

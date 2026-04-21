@@ -56,6 +56,8 @@ class FriendFragment : Fragment() {
         binding.btnRemoveFriend.setOnClickListener {
             if (userID != null) showUpdateConfirmationDialog(userID)
         }
+
+        showLoading(true)
     }
 
     private fun observeViewModel() {

@@ -38,7 +38,10 @@ class StatisticViewModel (
      * Получение статистики друзей текущего пользователя (асинхронно)
      * Результат придет в LiveData currentUser
      */
-    fun getFriendsList() {
+    fun getFriendsStatistics(
+        dateFrom: String? = null,
+        dateTo: String? = null
+    ) {
         Log.d(TAG, "ViewModel: получение статистики друзей")
 
         // Проверяем, есть ли токен
@@ -53,7 +56,7 @@ class StatisticViewModel (
 
         viewModelScope.launch {
             try {
-                val result = statisticRepository.getFriendsStatistics()
+                val result = statisticRepository.getFriendsStatistics(dateFrom, dateTo)
                 Log.d(TAG, "Результат получения статистику друзей: $result")
                 _isLoading.value = false
 
@@ -81,8 +84,10 @@ class StatisticViewModel (
     /**
      * Получение статистики пользователя по ID
      */
-    fun getUserByID(
-        userID: Int
+    fun getUserStatistic(
+        userID: Int,
+        dateFrom: String? = null,
+        dateTo: String? = null
     ) {
         Log.d(TAG, "ViewModel: получение статистики пользователя $userID")
 
@@ -95,7 +100,7 @@ class StatisticViewModel (
 
         viewModelScope.launch {
             try {
-                val result = statisticRepository.getUserStatistic(userID)
+                val result = statisticRepository.getUserStatistic(userID, dateFrom, dateTo)
                 Log.d(TAG, "Результат получения статистики пользователя $userID: $result")
 
                 when (result) {
@@ -128,6 +133,8 @@ class StatisticViewModel (
      * Получение статистики текущего пользователя
      */
     fun getMyStatistic(
+        dateFrom: String? = null,
+        dateTo: String? = null
     ) {
         Log.d(TAG, "ViewModel: получение статистики текущего пользователя")
 
@@ -140,7 +147,7 @@ class StatisticViewModel (
 
         viewModelScope.launch {
             try {
-                val result = statisticRepository.getMyStatistic()
+                val result = statisticRepository.getMyStatistic(dateFrom, dateTo)
                 Log.d(TAG, "Результат получения статистики текущего пользователя: $result")
 
                 when (result) {
@@ -167,5 +174,30 @@ class StatisticViewModel (
                 _myStatistic.value = null
             }
         }
+    }
+
+    /**
+     * Очистка ресурсов при уничтожении ViewModel
+     */
+    override fun onCleared() {
+        super.onCleared()
+        Log.d(TAG, "UserViewModel уничтожен, ресурсы очищены")
+        resetStates()
+    }
+
+    /**
+     * Очистить сообщение об ошибке
+     */
+    fun clearError() {
+        _errorMessage.value = null
+    }
+
+    /**
+     * Сброс состояний (использовать при уходе с экрана)
+     */
+    fun resetStates() {
+        Log.d(TAG, "Сброс состояний ViewModel")
+        _errorMessage.value = null
+        _isLoading.value = false
     }
 }

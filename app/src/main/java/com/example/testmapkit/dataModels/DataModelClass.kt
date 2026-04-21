@@ -98,6 +98,7 @@ data class UserStatistic(
     @SerializedName("user") val user: User,
     @SerializedName("routes") val routes: List<Route>,
     @SerializedName("routes_count") val routesCount: Int,
+    @SerializedName("completed_routes_count") val completedRoutesCount: Int,
     @SerializedName("average_radius") val averageRadius: Double
 )
 
@@ -110,7 +111,8 @@ data class FriendsStatisticsResponse(
 data class FriendStatistic(
     @SerializedName("user") val user: User,
     @SerializedName("routes") val routes: List<Route>,
-    @SerializedName("routes_count") val routesCount: Int
+    @SerializedName("routes_count") val routesCount: Int,
+    @SerializedName("completed_routes_count") val completedRoutesCount: Int
 )
 
 // Request для установки аватара

@@ -190,18 +190,24 @@ class WalkFragment : Fragment() {
         } else {
             AlertDialog.Builder(requireContext())
                 .setTitle(
-                    "Ваше местоположение не совпадает с целью, хотите завершить маршрут?"
+                    "Местоположение не совпадает с целью, сохранить маршрут?"
                 )
                 .setMessage(
                     "Ваш текущий адрес: ${
-                        stopLocation?.getAddress()
+                        stopLocation?.getStringAddress()
                     }, цель: ${
-                        finishLocation?.getAddress()
+                        finishLocation?.getStringAddress()
                     }")
-                .setPositiveButton("Да") { _, _ ->
+                .setPositiveButton("Сохранить") { _, _ ->
                     finishRoute()
                 }
-                .setNegativeButton("Нет", null)
+                .setNegativeButton("Не сохранять"){_, _ ->
+                    findNavController().navigate(
+                        R.id.action_walkFragment_to_locationFragment)
+                }
+                .setNeutralButton("Отмена") {_, _ ->
+                    stopLocation = null
+                }
                 .show()
         }
     }
