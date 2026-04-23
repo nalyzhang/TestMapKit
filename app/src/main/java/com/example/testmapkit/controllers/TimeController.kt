@@ -11,6 +11,8 @@ import java.time.format.DateTimeFormatter
 import java.util.Date
 import java.util.Locale
 import java.time.LocalDate
+import java.time.Month
+import java.time.format.TextStyle
 
 class TimeController {
 
@@ -117,6 +119,23 @@ class TimeController {
         return date.format(DateTimeFormatter.ofPattern(
             "MMM yyyy", Locale.getDefault()
         ))
+    }
+
+    fun getMonths(date: LocalDate): ArrayList<String> {
+        val listOfMonths = ArrayList<String>()
+        val year = date.year
+
+        for (month in 1..12) {
+            val monthDate = LocalDate.of(year, month, 1)
+            listOfMonths.add(
+                monthDate.month.getDisplayName(
+                    TextStyle.FULL_STANDALONE,
+                    Locale.getDefault()
+                )
+            )
+        }
+
+        return listOfMonths
     }
 
     fun formatYear(date: LocalDate): String {

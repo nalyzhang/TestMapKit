@@ -97,8 +97,8 @@ data class RouteCreateRequest(
 data class UserStatistic(
     @SerializedName("user") val user: User,
     @SerializedName("routes") val routes: List<Route>,
-    @SerializedName("routes_count") val routesCount: Int,
-    @SerializedName("completed_routes_count") val completedRoutesCount: Int,
+    @SerializedName("routes_count") val routesCount: List<Int>,
+    @SerializedName("completed_routes_count") val completedRoutesCount: List<Int>,
     @SerializedName("average_radius") val averageRadius: Double
 )
 

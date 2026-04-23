@@ -49,14 +49,15 @@ class ProfileFragment : Fragment() {
                 R.id.action_profileFragment_to_settingFragment)
         }
 
-        binding.btnChangePass.setOnClickListener {
-            findNavController().navigate(
-                R.id.action_profileFragment_to_changePasswordFragment)
-        }
-
         binding.btnEditProfile.setOnClickListener {
             findNavController().navigate(
                 R.id.action_profileFragment_to_editProfileFragment
+            )
+        }
+
+        binding.btnUserStatisticProfile.setOnClickListener {
+            findNavController().navigate(
+                R.id.action_profileFragment_to_userStatisticFragment
             )
         }
 

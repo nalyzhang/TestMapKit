@@ -39,7 +39,8 @@ class FriendsListFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = FragmentFriendsListBinding.inflate(layoutInflater, container, false)
+        binding = FragmentFriendsListBinding.inflate(
+            layoutInflater, container, false)
         return binding.root
     }
 
@@ -63,7 +64,8 @@ class FriendsListFragment : Fragment() {
     private fun init() {
 
         binding.btnBackFriendList.setOnClickListener {
-            findNavController().navigate(R.id.action_friendsListFragment_to_settingFragment)
+            findNavController().navigate(
+                R.id.action_friendsListFragment_to_settingFragment)
         }
 
         binding.btnAddFriend.setOnClickListener {
@@ -75,6 +77,9 @@ class FriendsListFragment : Fragment() {
             val bundle = Bundle().apply {
                 putInt(FRIEND_ID, userId)
             }
+
+            // TODO statistic or friend
+
             findNavController().navigate(
                 R.id.action_friendsListFragment_to_friendFragment,
                 bundle

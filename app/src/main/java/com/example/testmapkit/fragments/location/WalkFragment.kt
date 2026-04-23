@@ -1,25 +1,16 @@
 package com.example.testmapkit.fragments.location
 
-import android.annotation.SuppressLint
 import android.app.AlertDialog
-import android.content.ComponentName
-import android.content.Context
-import android.content.Intent
-import android.content.ServiceConnection
 import android.os.Bundle
-import android.os.IBinder
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.compose.ui.platform.LocalAutofill
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
-import com.example.testmapkit.ADDRESS
 import com.example.testmapkit.MainActivity
-import com.example.testmapkit.PROCESSING
 import com.example.testmapkit.R
 import com.example.testmapkit.TAG
 import com.example.testmapkit.databinding.FragmentWalkBinding
@@ -34,7 +25,6 @@ import com.yandex.mapkit.location.Location
 import com.yandex.mapkit.user_location.UserLocationLayer
 import java.util.Locale
 import kotlin.getValue
-import kotlin.io.path.Path
 
 class WalkFragment : Fragment() {
 

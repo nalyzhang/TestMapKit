@@ -7,7 +7,7 @@ const val DEFAULT_RADIUS_KM = 40
 const val RADIUS_TEXT = "Радиус поиска %.1f км"
 const val RADIUS_SCALE_FACTOR = 0.1f
 const val EARTH_RADIUS = 6378
-const val ADDRESS = "ADDRESS"
+var STATISTIC = false
 
 var PROCESSING = false
 const val TAG: String = "Android DRF debug"

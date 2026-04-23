@@ -10,6 +10,7 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.example.testmapkit.R
+import com.example.testmapkit.STATISTIC
 import com.example.testmapkit.databinding.FragmentSettingBinding
 import com.example.testmapkit.fragments.setting.user.UserViewModel
 import com.example.testmapkit.network.RetrofitClient
@@ -38,6 +39,8 @@ class SettingFragment : Fragment() {
         val retrofitClient = RetrofitClient.getInstance(tokenManager)
         val userRepository = UserRepository(retrofitClient.apiService)
         userViewModel = UserViewModel(userRepository, tokenManager)
+
+        STATISTIC = false
 
         init()
 

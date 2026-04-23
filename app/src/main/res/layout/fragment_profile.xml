@@ -280,23 +280,12 @@
             android:layout_height="wrap_content"
             app:icon="@drawable/ic_edit"
             app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
             android:layout_margin="5dp"
             android:text=""
             android:textSize="@dimen/text_normal"/>
-
-        <Button
-            android:id="@+id/btn_change_pass"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Изменить пароль"
-            android:layout_margin="10dp"
-            android:textSize="@dimen/text_normal"
-
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"/>
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <ProgressBar

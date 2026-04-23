@@ -46,7 +46,7 @@ class ChangePasswordFragment : Fragment() {
     private fun init() {
         binding.btnBackChange.setOnClickListener {
             findNavController().navigate(
-                R.id.action_changePasswordFragment_to_profileFragment)
+                R.id.action_changePasswordFragment_to_editProfileFragment)
         }
 
         binding.btnChangePass.setOnClickListener {
@@ -70,7 +70,7 @@ class ChangePasswordFragment : Fragment() {
                     showLoading(false)
                     showToast("Пароль изменен")
                     findNavController().navigate(
-                        R.id.action_changePasswordFragment_to_profileFragment)
+                        R.id.action_changePasswordFragment_to_editProfileFragment)
                 }
                 is UserResult.Error -> {
                     showLoading(false)

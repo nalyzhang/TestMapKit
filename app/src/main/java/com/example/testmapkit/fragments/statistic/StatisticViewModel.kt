@@ -57,7 +57,7 @@ class StatisticViewModel (
         viewModelScope.launch {
             try {
                 val result = statisticRepository.getFriendsStatistics(dateFrom, dateTo)
-                Log.d(TAG, "Результат получения статистику друзей: $result")
+                Log.d(TAG, "Результат получения статистики друзей: $result")
                 _isLoading.value = false
 
                 when (result) {

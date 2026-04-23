@@ -40,48 +40,54 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <androidx.cardview.widget.CardView
-        android:id="@+id/cv_img_user_statistic"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:id="@+id/ll_user_statistic_user_detail"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:cardElevation="5dp"
-        app:cardCornerRadius="180dp"
+        android:orientation="horizontal"
+        android:gravity="center"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/cl_btn_user_statistic"
         android:layout_margin="20dp">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cv_img_user_statistic"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            app:cardElevation="5dp"
+            app:cardCornerRadius="180dp"
+            android:layout_margin="10dp">
 
-            <ImageView
-                android:id="@+id/img_user_statistic"
-                android:layout_width="@dimen/text_view_width_extra"
-                android:layout_height="@dimen/text_view_width_extra"
-                android:background="@color/light_blue"
-                android:contentDescription="User avatar"
-                android:src="@drawable/ic_profile"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
 
-        </androidx.constraintlayout.widget.ConstraintLayout>
+                <ImageView
+                    android:id="@+id/img_user_statistic"
+                    android:layout_width="70dp"
+                    android:layout_height="70dp"
+                    android:background="@color/light_blue"
+                    android:contentDescription="User avatar"
+                    android:src="@drawable/ic_profile"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
-    </androidx.cardview.widget.CardView>
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <TextView
-        android:id="@+id/tv_user_statistic_username"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Ник"
-        android:textSize="@dimen/text_title"
-        android:gravity="center"
-        android:layout_margin="20dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/cv_img_user_statistic"
-        app:layout_constraintStart_toStartOf="parent"/>
+        </androidx.cardview.widget.CardView>
+
+        <TextView
+            android:id="@+id/tv_user_statistic_username"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Ник"
+            android:textSize="@dimen/text_title"
+            android:layout_margin="20dp"/>
+
+    </LinearLayout>
 
     <LinearLayout
         android:id="@+id/ll_user_statistic_type"
@@ -91,20 +97,10 @@
         android:layout_margin="5dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tv_user_statistic_username">
+        app:layout_constraintTop_toBottomOf="@id/ll_user_statistic_user_detail">
 
         <Button
-            android:id="@+id/btn_statistic_day"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="День"
-            android:background="@drawable/button_background"
-            android:shadowRadius="20"
-            android:textSize="@dimen/text_normal"
-            />
-
-        <Button
-            android:id="@+id/btn_statistic_week"
+            android:id="@+id/btn_user_statistic_week"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@drawable/button_background"
@@ -112,7 +108,7 @@
             android:textSize="@dimen/text_normal" />
 
         <Button
-            android:id="@+id/btn_statistic_month"
+            android:id="@+id/btn_user_statistic_month"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Мес"
@@ -121,7 +117,7 @@
             />
 
         <Button
-            android:id="@+id/btn_statistic_year"
+            android:id="@+id/btn_user_statistic_year"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Год"
@@ -148,7 +144,7 @@
             app:cardCornerRadius="180dp">
 
             <ImageButton
-                android:id="@+id/btn_statistic_back_arrow"
+                android:id="@+id/btn_user_statistic_back_arrow"
                 android:contentDescription="Назад"
                 android:background="@color/purple_500"
                 android:src="@drawable/ic_arrow_back"
@@ -158,7 +154,7 @@
         </androidx.cardview.widget.CardView>
 
         <TextView
-            android:id="@+id/tv_statistic_period"
+            android:id="@+id/tv_user_statistic_period"
             android:layout_width="150dp"
             android:layout_height="wrap_content"
             android:text="dd.MM.yyy"
@@ -173,7 +169,7 @@
             app:cardCornerRadius="180dp">
 
             <ImageButton
-                android:id="@+id/btn_statistic_forward_arrow"
+                android:id="@+id/btn_user_statistic_forward_arrow"
                 android:contentDescription="Назад"
                 android:background="@color/purple_500"
                 android:src="@drawable/ic_arrow_forward"
@@ -188,7 +184,7 @@
             app:cardCornerRadius="180dp">
 
             <ImageButton
-                android:id="@+id/btn_statistic_today"
+                android:id="@+id/btn_user_statistic_today"
                 android:contentDescription="Назад"
                 android:background="@color/purple_500"
                 android:src="@drawable/ic_today"
@@ -202,11 +198,13 @@
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         android:scrollbars="vertical"
+        android:fillViewport="true"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/ll_user_statistic_period"
-        app:layout_constraintStart_toStartOf="parent">
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent">
 
         <LinearLayout
             android:id="@+id/ll_user_statistic_detail"
@@ -214,6 +212,16 @@
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:layout_margin="20dp">
+
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginEnd="30dp"
+                android:layout_marginStart="30dp"
+                android:textSize="@dimen/text_normal"
+                android:text="Статистика прохождения маршрутов"
+                android:gravity="center" />
 
             <com.github.mikephil.charting.charts.BarChart
                 android:id="@+id/bc_statistic_count"
@@ -305,16 +313,36 @@
 
             </LinearLayout>
 
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="30dp"
+                android:layout_marginEnd="30dp"
+                android:layout_marginStart="30dp"
+                android:textSize="@dimen/text_normal"
+                android:text="Статистика времени прохождения маршрутов"
+                android:gravity="center" />
+
             <com.github.mikephil.charting.charts.BarChart
                 android:id="@+id/bc_statistic_time"
                 android:layout_width="match_parent"
                 android:layout_height="300dp"
                 android:layout_margin="20dp"/>
 
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="30dp"
+                android:layout_marginEnd="30dp"
+                android:layout_marginStart="30dp"
+                android:textSize="@dimen/text_normal"
+                android:text="Распределение выбора радиуса поиска"
+                android:gravity="center" />
+
             <com.github.mikephil.charting.charts.BarChart
                 android:id="@+id/bc_statistic_radius"
                 android:layout_width="match_parent"
-                android:layout_height="300dp"
+                android:layout_height="250dp"
                 android:layout_margin="20dp"/>
 
             <LinearLayout
@@ -345,19 +373,24 @@
 
             </LinearLayout>
 
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="100dp"/>
+
+
+
+            <ProgressBar
+                android:id="@+id/pb_user_statistic"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:visibility="gone"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
         </LinearLayout>
     </ScrollView>
-
-    <ProgressBar
-        android:id="@+id/pb_user_statistic"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

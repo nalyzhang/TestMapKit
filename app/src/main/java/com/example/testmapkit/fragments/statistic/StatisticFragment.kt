@@ -7,6 +7,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
+import com.example.testmapkit.R
+import com.example.testmapkit.STATISTIC
 import com.example.testmapkit.TAG
 import com.example.testmapkit.controllers.TimeController
 import com.example.testmapkit.dataModels.FriendStatistic
@@ -56,6 +59,7 @@ class StatisticFragment : Fragment() {
         val statisticRepository = StatisticRepository(retrofitClient.apiService)
         statisticViewModel = StatisticViewModel(statisticRepository, tokenManager)
 
+        STATISTIC = true
 
         init()
     }
@@ -101,6 +105,15 @@ class StatisticFragment : Fragment() {
 
         binding.btnStatisticForwardArrow.setOnClickListener {
             getNextPeriod()
+        }
+
+        binding.btnMyStatistic.setOnClickListener {
+
+            // TODO bundle
+
+            findNavController().navigate(
+                R.id.action_statisticFragment_to_userStatisticFragment
+            )
         }
     }
 

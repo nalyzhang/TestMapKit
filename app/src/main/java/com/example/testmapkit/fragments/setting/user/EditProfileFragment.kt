@@ -74,6 +74,11 @@ class EditProfileFragment : Fragment() {
         binding.btnEditAvatar.setOnClickListener {
             showEditAvatarDialog()
         }
+
+        binding.btnChangePass.setOnClickListener {
+            findNavController().navigate(
+                R.id.action_editProfileFragment_to_changePasswordFragment)
+        }
     }
 
     private fun registerImagePickers() {

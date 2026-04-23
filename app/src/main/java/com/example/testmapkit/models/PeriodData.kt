@@ -20,6 +20,11 @@ class PeriodData(
     var periodType: PeriodType?
 ) {
 
+    fun isLeapYear(date: LocalDate): Boolean {
+        val year = date.year
+        return (year % 4 == 0 && year % 100 != 0) || (year % 400 == 0)
+    }
+
     fun setDay(date: LocalDate) {
         dateFrom = date
         dateTo = date
@@ -44,8 +49,7 @@ class PeriodData(
         else if (monthDay in listOf(4,6,9,11))
             lastDay = date.with(ChronoField.DAY_OF_MONTH, 30)
         else {
-            val year = Year.now().value
-            if ((year % 4 == 0 && year % 100 != 0) || (year % 400 == 0))
+            if (isLeapYear(date))
                 lastDay = date.with(ChronoField.DAY_OF_MONTH, 29)
             else
                 lastDay = date.with(ChronoField.DAY_OF_MONTH, 28)
@@ -59,8 +63,7 @@ class PeriodData(
     fun setYear(date: LocalDate) {
         val firstDay = date.with(ChronoField.DAY_OF_YEAR, 1)
         val lastDay: LocalDate
-        val year = date.year
-        if ((year % 4 == 0 && year % 100 != 0) || (year % 400 == 0))
+        if (isLeapYear(date))
             lastDay = date.with(ChronoField.DAY_OF_YEAR, 366)
         else
             lastDay = date.with(ChronoField.DAY_OF_YEAR, 365)
@@ -99,8 +102,7 @@ class PeriodData(
             lastDay = date.minusMonths(
                 1).with(ChronoField.DAY_OF_MONTH, 30)
         else {
-            val year = firstDay.year
-            if ((year % 4 == 0 && year % 100 != 0) || (year % 400 == 0))
+            if (isLeapYear(date))
                 lastDay = date.minusMonths(
                     1).with(ChronoField.DAY_OF_MONTH, 29)
             else
@@ -117,8 +119,7 @@ class PeriodData(
         val firstDay = date.minusYears(
             1).with(ChronoField.DAY_OF_YEAR, 1)
         val lastDay: LocalDate
-        val year = firstDay.year
-        if ((year % 4 == 0 && year % 100 != 0) || (year % 400 == 0))
+        if (isLeapYear(date))
             lastDay = date.minusYears(
                 1).with(ChronoField.DAY_OF_YEAR, 366)
         else
@@ -159,8 +160,7 @@ class PeriodData(
             lastDay = date.plusMonths(
                 1).with(ChronoField.DAY_OF_MONTH, 30)
         else {
-            val year = firstDay.year
-            if ((year % 4 == 0 && year % 100 != 0) || (year % 400 == 0))
+            if (isLeapYear(date))
                 lastDay = date.plusMonths(
                     1).with(ChronoField.DAY_OF_MONTH, 29)
             else
@@ -177,8 +177,7 @@ class PeriodData(
         val firstDay = date.plusYears(
             1).with(ChronoField.DAY_OF_YEAR, 1)
         val lastDay: LocalDate
-        val year = firstDay.year
-        if ((year % 4 == 0 && year % 100 != 0) || (year % 400 == 0))
+        if (isLeapYear(date))
             lastDay = date.plusYears(
                 1).with(ChronoField.DAY_OF_YEAR, 366)
         else
