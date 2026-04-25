@@ -11,6 +11,7 @@ import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.example.testmapkit.FRIEND_ID
 import com.example.testmapkit.R
+import com.example.testmapkit.STATISTIC
 import com.example.testmapkit.dataModels.UserWithStatistic
 import com.example.testmapkit.databinding.FragmentFriendBinding
 import com.example.testmapkit.network.RetrofitClient
@@ -50,11 +51,32 @@ class FriendFragment : Fragment() {
 
     private fun init(userID: Int?) {
         binding.btnBackFriend.setOnClickListener {
-            findNavController().navigate(R.id.action_friendFragment_to_friendsListFragment)
+            if (STATISTIC) {
+                val bundle = Bundle().apply {
+                    putInt(FRIEND_ID, userID!!)
+                }
+                findNavController().navigate(
+                    R.id.action_friendFragment_to_userStatisticFragment2,
+                    bundle
+                )
+            }
+            else
+                findNavController().navigate(
+                    R.id.action_friendFragment_to_friendsListFragment)
         }
 
         binding.btnRemoveFriend.setOnClickListener {
             if (userID != null) showUpdateConfirmationDialog(userID)
+        }
+
+        binding.btnUserStatisticFriend.setOnClickListener {
+            val bundle = Bundle().apply {
+                putInt(FRIEND_ID, userID!!)
+            }
+            findNavController().navigate(
+                R.id.action_friendFragment_to_userStatisticFragment2,
+                bundle
+            )
         }
 
         showLoading(true)

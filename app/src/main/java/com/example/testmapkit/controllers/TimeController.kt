@@ -11,6 +11,7 @@ import java.time.format.DateTimeFormatter
 import java.util.Date
 import java.util.Locale
 import java.time.LocalDate
+import java.time.LocalTime
 import java.time.Month
 import java.time.format.TextStyle
 
@@ -143,5 +144,20 @@ class TimeController {
             "yyyy", Locale.getDefault()
         ))
     }
+
+    fun parseTimeToHours(timeString: String): Float {
+        return try {
+            // Форматы: "01:30:45", "1:30:45", "01:30", "1.5"
+            val parts = timeString.split(":")
+            val hours = parts[0].toFloat()
+            val minutes = parts[1].toFloat()
+            val seconds = parts[2].toFloat()
+            hours + (minutes / 60f) + (seconds / 3600f)
+        } catch (e: Exception) {
+            Log.e(TAG, "Ошибка парсинга времени: $timeString", e)
+            0f
+        }
+    }
+
 
 }

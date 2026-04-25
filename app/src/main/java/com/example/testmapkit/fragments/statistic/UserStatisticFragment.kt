@@ -9,9 +9,11 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
+import com.example.testmapkit.FRIEND_ID
 import com.example.testmapkit.MAX_RADIUS_KM
 import com.example.testmapkit.MIN_RADIUS_KM
 import com.example.testmapkit.R
+import com.example.testmapkit.STATISTIC
 import com.example.testmapkit.TAG
 import com.example.testmapkit.controllers.TimeController
 import com.example.testmapkit.dataModels.UserStatistic
@@ -22,15 +24,20 @@ import com.example.testmapkit.network.RetrofitClient
 import com.example.testmapkit.network.TokenManager
 import com.example.testmapkit.repositories.StatisticRepository
 import com.github.mikephil.charting.charts.BarChart
+import com.github.mikephil.charting.charts.LineChart
 import com.github.mikephil.charting.components.XAxis
 import com.github.mikephil.charting.data.BarData
 import com.github.mikephil.charting.data.BarDataSet
 import com.github.mikephil.charting.data.BarEntry
+import com.github.mikephil.charting.data.Entry
+import com.github.mikephil.charting.data.LineData
+import com.github.mikephil.charting.data.LineDataSet
 import com.github.mikephil.charting.formatter.IndexAxisValueFormatter
 import com.github.mikephil.charting.formatter.ValueFormatter
 import java.time.LocalDate
 import java.time.ZoneId
 import java.util.Locale
+import kotlin.math.roundToInt
 
 class UserStatisticFragment : Fragment() {
     private lateinit var binding: FragmentUserStatisticBinding
@@ -38,18 +45,14 @@ class UserStatisticFragment : Fragment() {
     private lateinit var tokenManager: TokenManager
 
     private lateinit var barChart1: BarChart
-    private lateinit var barChart2: BarChart
+    private lateinit var lineChart2: LineChart
     private lateinit var barChart3: BarChart
-    private lateinit var barDataSet11: BarDataSet
-    private lateinit var barDataSet12: BarDataSet
-    private lateinit var barDataSet2: BarDataSet
-    private lateinit var barDataSet3: BarDataSet
-    lateinit var barData3: BarData
-    private var barEntriesList: ArrayList<BarEntry> = ArrayList()
 
     private lateinit var date: LocalDate
     private lateinit var periodData: PeriodData
     private val timeController = TimeController()
+
+    private var userID: Int? = null
 
     private var gotUserNameAndAvatar: Boolean = false
 
@@ -75,26 +78,32 @@ class UserStatisticFragment : Fragment() {
         val retrofitClient = RetrofitClient.Companion.getInstance(tokenManager)
         val statisticRepository = StatisticRepository(retrofitClient.apiService)
         statisticViewModel = StatisticViewModel(statisticRepository, tokenManager)
+        userID = arguments?.getInt(FRIEND_ID)
 
 
         init()
     }
-
-    // TODO arguments, getStatisticByUserID
     private fun init () {
         date = LocalDate.now(ZoneId.of("Europe/Moscow"))
         periodData = PeriodData(
             date, date, PeriodType.WEEK
         )
         periodData.setWeek(date)
-        statisticViewModel.getMyStatistic(
-            periodData.dateFrom.toString(),
-            periodData.dateTo.toString()
-        )
+        if (userID == null)
+            statisticViewModel.getMyStatistic(
+                periodData.dateFrom.toString(),
+                periodData.dateTo.toString()
+            )
+        else
+            statisticViewModel.getUserStatistic(
+                userID!!,
+                periodData.dateFrom.toString(),
+                periodData.dateTo.toString()
+            )
 
 
         barChart1 = binding.bcStatisticCount
-        barChart2 = binding.bcStatisticTime
+        lineChart2 = binding.lcStatisticTime
         barChart3 = binding.bcStatisticRadius
         showLoading(true)
         performWeek()
@@ -125,14 +134,46 @@ class UserStatisticFragment : Fragment() {
         }
 
         binding.btnProfileUserStatistic.setOnClickListener {
-            findNavController().navigate(
-                R.id.action_userStatisticFragment_to_profileFragment)
+            if (userID == null)
+                findNavController().navigate(
+                    R.id.action_userStatisticFragment_to_profileFragment)
+            else {
+                val bundle = Bundle().apply {
+                    putInt(FRIEND_ID, userID!!)
+                }
+                findNavController().navigate(
+                    R.id.action_userStatisticFragment_to_friendFragment,
+                    bundle
+                )
+            }
         }
 
         binding.btnBackUserStatistic.setOnClickListener {
-            findNavController().navigate(
-                R.id.action_userStatisticFragment_to_statisticFragment
-            )
+            if (userID == null) {
+                if (STATISTIC)
+                    findNavController().navigate(
+                        R.id.action_userStatisticFragment_to_statisticFragment
+                    )
+                else {findNavController().navigate(
+                        R.id.action_userStatisticFragment_to_profileFragment
+                    )
+                }
+            }
+            else {
+                if (STATISTIC)
+                    findNavController().navigate(
+                        R.id.action_userStatisticFragment_to_friendsListFragment
+                    )
+                else {
+                    val bundle = Bundle().apply {
+                        putInt(FRIEND_ID, userID!!)
+                    }
+                    findNavController().navigate(
+                        R.id.action_userStatisticFragment_to_friendFragment,
+                        bundle
+                    )
+                }
+            }
         }
     }
 
@@ -170,12 +211,11 @@ class UserStatisticFragment : Fragment() {
         binding.tvUserStatisticPeriod.text = setTextYear()
     }
 
-
     private fun getBarEntriesPeriod(
         statistic: UserStatistic,
         completed: Boolean
     ): ArrayList<BarEntry> {
-        barEntriesList = ArrayList()
+        val barEntriesList: ArrayList<BarEntry> = ArrayList()
 
         if (periodData.periodType == PeriodType.YEAR) {
             return aggregateDaysToMonths(
@@ -217,7 +257,7 @@ class UserStatisticFragment : Fragment() {
             listOf(31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31)
         }
 
-        barEntriesList = ArrayList()
+        val barEntriesList: ArrayList<BarEntry> = ArrayList()
         var dayIndex = 0
         var i = 1f
 
@@ -353,10 +393,17 @@ class UserStatisticFragment : Fragment() {
         Log.d(TAG, date.toString())
         setEnabled()
 
-        statisticViewModel.getMyStatistic(
-            periodData.dateFrom.toString(),
-            periodData.dateTo.toString()
-        )
+        if (userID == null)
+            statisticViewModel.getMyStatistic(
+                periodData.dateFrom.toString(),
+                periodData.dateTo.toString()
+            )
+        else
+            statisticViewModel.getUserStatistic(
+                userID!!,
+                periodData.dateFrom.toString(),
+                periodData.dateTo.toString()
+            )
     }
 
     private fun setEnabled() {
@@ -383,12 +430,17 @@ class UserStatisticFragment : Fragment() {
 
         val routesCount = statistic.routesCount.sum()
         val completedRoutesCount = statistic.completedRoutesCount.sum()
-        val completedRoutesPercent = "${
-            (completedRoutesCount / routesCount * 100)
-        } %"
         binding.tvUserStatisticStatCount.text = routesCount.toString()
         binding.tvUserStatisticCompletedCount.text = completedRoutesCount.toString()
-        binding.tvUserStatisticCompletedPer.text = completedRoutesPercent
+        if (routesCount == 0){
+            binding.llUserStatisticCompletedPer.visibility = View.GONE
+        }
+        else {
+            val completedRoutesPercent = "${
+                ((completedRoutesCount.toFloat() / routesCount) * 100)
+            } %"
+            binding.tvUserStatisticCompletedPer.text = completedRoutesPercent
+        }
         val averageRadius = "${statistic.averageRadius} км"
         binding.tvUserStatisticRadius.text = averageRadius
 
@@ -400,7 +452,7 @@ class UserStatisticFragment : Fragment() {
     }
 
     private fun initPeriodStatistic(statistic: UserStatistic) {
-        barDataSet11 = BarDataSet(
+        val barDataSet11 = BarDataSet(
             getBarEntriesPeriod(statistic, true),
             "Кол-во завершенных маршрутов"
         ).apply {
@@ -414,7 +466,7 @@ class UserStatisticFragment : Fragment() {
             }
         }
 
-        barDataSet12 = BarDataSet(
+        val barDataSet12 = BarDataSet(
             getBarEntriesPeriod(statistic, false),
             "Кол-во незавершенных маршрутов"
         ).apply {
@@ -528,13 +580,125 @@ class UserStatisticFragment : Fragment() {
     }
 
     private fun initTimeStatistic(statistic: UserStatistic) {
+        val lineDataSet21 = LineDataSet(
+            getTimesList(statistic, TimeType.MIN),
+            "Минимальное время прохождения"
+        ).apply {
+            color = Color.GREEN
+            lineWidth = 2f
+            circleRadius = 3f
+            circleHoleColor = Color.GREEN
+            setDrawCircleHole(false)
+            valueTextSize = 10f
+            valueTextColor = Color.BLACK
+            setDrawValues(false)
+            mode = LineDataSet.Mode.CUBIC_BEZIER
+        }
 
+        val lineDataSet22 = LineDataSet(
+            getTimesList(statistic, TimeType.MAX),
+            "Максимальное время прохождения"
+        ).apply {
+            color = Color.RED
+            lineWidth = 2f
+            circleRadius = 3f
+            circleHoleColor = Color.RED
+            setDrawCircleHole(false)
+            valueTextSize = 10f
+            valueTextColor = Color.BLACK
+            setDrawValues(false)
+            mode = LineDataSet.Mode.CUBIC_BEZIER
+        }
+
+        val lineDataSet23 = LineDataSet(
+            getTimesList(statistic, TimeType.AVG),
+            "Среднее время прохождения"
+        ).apply {
+            color = Color.BLUE
+            lineWidth = 2f
+            circleRadius = 3f
+            circleHoleColor = Color.BLUE
+            setDrawCircleHole(false)
+            valueTextSize = 10f
+            valueTextColor = Color.BLACK
+            setDrawValues(false)
+            mode = LineDataSet.Mode.CUBIC_BEZIER
+        }
+
+        val data = LineData(lineDataSet21, lineDataSet22, lineDataSet23)
+        lineChart2.data = data
+        lineChart2.apply {
+            description.isEnabled = false
+            isDragEnabled = true
+            setScaleEnabled(true)
+            setPinchZoom(true)
+            isDoubleTapToZoomEnabled = true
+            setVisibleXRangeMaximum(7f)
+            setVisibleXRangeMinimum(3f)
+            setExtraOffsets(10f, 10f, 10f, 10f)
+
+            legend.apply {
+                isEnabled = true
+                textSize = 10f
+                formSize = 10f
+                xEntrySpace = 5f
+                verticalAlignment = com.github.mikephil.charting.components.Legend.LegendVerticalAlignment.BOTTOM
+                horizontalAlignment = com.github.mikephil.charting.components.Legend.LegendHorizontalAlignment.CENTER
+                orientation = com.github.mikephil.charting.components.Legend.LegendOrientation.HORIZONTAL
+                yOffset = 10f
+                isWordWrapEnabled = true
+                maxSizePercent = 0.8f
+            }
+
+            isDragDecelerationEnabled = true
+            dragDecelerationFrictionCoef = 0.9f
+            isHighlightPerDragEnabled = true
+        }
+
+        val xLabels = ArrayList<String>()
+        xLabels.add("")
+        for (i in MIN_RADIUS_KM / 10..MAX_RADIUS_KM / 10) {
+            xLabels.add("$i км")
+        }
+
+        val xAxis: XAxis = lineChart2.xAxis
+        xAxis.apply {
+            position = XAxis.XAxisPosition.BOTTOM
+            valueFormatter = IndexAxisValueFormatter(xLabels)
+            granularity = 1f
+            isGranularityEnabled = true
+            textSize = 11f
+            labelRotationAngle = 30f
+            setCenterAxisLabels(true)
+            setAvoidFirstLastClipping(true)
+            labelCount = xLabels.size
+        }
+
+        lineChart2.axisLeft.apply {
+            axisMinimum = 0f
+            setDrawGridLines(true)
+            gridLineWidth = 0.5f
+            gridColor = Color.LTGRAY
+            textSize = 12f
+            valueFormatter = object : ValueFormatter() {
+                override fun getFormattedValue(value: Float): String {
+                    return String.format(
+                        Locale.getDefault(),
+                        "%.1f ч", value)
+                }
+            }
+        }
+
+        lineChart2.axisRight.isEnabled = false
+
+        lineChart2.animateY(1000)
+        lineChart2.invalidate()
     }
 
     private fun initRadiusStatistic(statistic: UserStatistic) {
         val barEntriesList = getRadiusList(statistic)
 
-        val barDataSet = BarDataSet(
+        val barDataSet3 = BarDataSet(
             barEntriesList,
             "Распределение радиусов"
         ).apply {
@@ -548,8 +712,8 @@ class UserStatisticFragment : Fragment() {
             }
         }
 
-        val barData = BarData(barDataSet)
-        barChart3.data = barData
+        val barData3 = BarData(barDataSet3)
+        barChart3.data = barData3
 
         barChart3.apply {
             legend.isEnabled = false
@@ -609,7 +773,7 @@ class UserStatisticFragment : Fragment() {
 
         barChart3.axisRight.isEnabled = false
 
-        barData.barWidth = 0.6f
+        barData3.barWidth = 0.6f
 
         barChart3.animateY(800)
 
@@ -642,10 +806,77 @@ class UserStatisticFragment : Fragment() {
                 )
             )
 
-            Log.d(TAG, "Радиус ${key / 10.0} км: $value маршрутов")
+            Log.d(TAG, "Радиус $key км: $value маршрутов")
         }
 
         return barEntriesList
+    }
+
+    private enum class TimeType {
+        MIN,
+        MAX,
+        AVG
+    }
+
+    private fun getTimesList
+                (statistic: UserStatistic,
+                 timeType: TimeType
+    ): ArrayList<Entry> {
+        val timeMap: MutableMap<Float, ArrayList<Float>> = LinkedHashMap()
+
+        var radius = (MIN_RADIUS_KM / 10).toFloat()
+        while (radius <= (MAX_RADIUS_KM / 10)) {
+            timeMap[radius] = ArrayList()
+            radius += 0.5f
+        }
+
+        for (route in statistic.routes) {
+            route.distance.let { distanceValue ->
+                val groupedDistance = (distanceValue / 0.5).roundToInt() * 0.5f
+
+                if (groupedDistance in (
+                            MIN_RADIUS_KM / 10
+                        ).toFloat()..(
+                            MAX_RADIUS_KM / 10
+                                ).toFloat()) {
+                    timeMap[groupedDistance]!!.add(
+                        timeController.parseTimeToHours(route.time))
+                }
+            }
+        }
+
+        val entriesList = ArrayList<Entry>()
+        entriesList.add(
+            Entry(
+                0f,
+                0f
+            )
+        )
+        for ((key, value) in timeMap.entries) {
+            val valueHours = returnHours(timeType, value)
+            entriesList.add(
+                Entry(
+                    key,
+                    valueHours
+                )
+            )
+            Log.d(TAG, "Расстояние $key, время: $valueHours, тип $timeType")
+        }
+
+        return entriesList
+    }
+
+    private fun returnHours(
+        timeType: TimeType,
+        value: ArrayList<Float>): Float {
+        if (value.isEmpty()) return 0f
+        var time: Float = 0f
+        time = when(timeType) {
+            (TimeType.MIN) -> value.min()
+            (TimeType.MAX) -> value.max()
+            (TimeType.AVG) -> value.sum() / value.size
+        }
+        return time
     }
 
     private fun getListOfDates(): ArrayList<String> {

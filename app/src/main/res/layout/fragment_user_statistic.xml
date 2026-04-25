@@ -226,7 +226,7 @@
             <com.github.mikephil.charting.charts.BarChart
                 android:id="@+id/bc_statistic_count"
                 android:layout_width="match_parent"
-                android:layout_height="300dp"
+                android:layout_height="250dp"
                 android:layout_margin="20dp"/>
 
             <LinearLayout
@@ -286,6 +286,7 @@
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/ll_user_statistic_completed_per"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
@@ -323,16 +324,16 @@
                 android:text="Статистика времени прохождения маршрутов"
                 android:gravity="center" />
 
-            <com.github.mikephil.charting.charts.BarChart
-                android:id="@+id/bc_statistic_time"
+            <com.github.mikephil.charting.charts.LineChart
+                android:id="@+id/lc_statistic_time"
                 android:layout_width="match_parent"
-                android:layout_height="300dp"
+                android:layout_height="250dp"
                 android:layout_margin="20dp"/>
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginTop="30dp"
+                android:layout_marginTop="20dp"
                 android:layout_marginEnd="30dp"
                 android:layout_marginStart="30dp"
                 android:textSize="@dimen/text_normal"

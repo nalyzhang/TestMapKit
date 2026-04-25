@@ -70,6 +70,9 @@
         <action
             android:id="@+id/action_friendsListFragment_to_userStatisticFragment"
             app:destination="@id/userStatisticFragment" />
+        <action
+            android:id="@+id/action_friendsListFragment_to_statisticFragment"
+            app:destination="@id/statisticFragment" />
     </fragment>
     <fragment
         android:id="@+id/friendFragment"
@@ -173,10 +176,13 @@
             android:id="@+id/action_userStatisticFragment_to_statisticFragment"
             app:destination="@id/statisticFragment" />
         <action
-            android:id="@+id/action_userStatisticFragment_to_friendFragment2"
-            app:destination="@id/friendFragment" />
-        <action
             android:id="@+id/action_userStatisticFragment_to_profileFragment"
             app:destination="@id/profileFragment" />
+        <action
+            android:id="@+id/action_userStatisticFragment_to_friendsListFragment"
+            app:destination="@id/friendsListFragment" />
+        <action
+            android:id="@+id/action_userStatisticFragment_to_friendFragment"
+            app:destination="@id/friendFragment" />
     </fragment>
 </navigation>

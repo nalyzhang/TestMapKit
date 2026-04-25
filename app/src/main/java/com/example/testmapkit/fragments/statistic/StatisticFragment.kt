@@ -108,11 +108,14 @@ class StatisticFragment : Fragment() {
         }
 
         binding.btnMyStatistic.setOnClickListener {
-
-            // TODO bundle
-
             findNavController().navigate(
                 R.id.action_statisticFragment_to_userStatisticFragment
+            )
+        }
+
+        binding.btnUserStatistic.setOnClickListener {
+            findNavController().navigate(
+                R.id.action_statisticFragment_to_friendsListFragment
             )
         }
     }

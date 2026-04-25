@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.example.testmapkit.R
+import com.example.testmapkit.STATISTIC
 import com.example.testmapkit.dataModels.UserWithStatistic
 import com.example.testmapkit.databinding.FragmentProfileBinding
 import com.example.testmapkit.fragments.setting.user.UserViewModel
@@ -45,7 +46,12 @@ class ProfileFragment : Fragment() {
 
     private fun init() {
         binding.btnBackProfile.setOnClickListener {
-            findNavController().navigate(
+            if(STATISTIC)
+                findNavController().navigate(
+                    R.id.action_profileFragment_to_userStatisticFragment
+                )
+            else
+                findNavController().navigate(
                 R.id.action_profileFragment_to_settingFragment)
         }
 

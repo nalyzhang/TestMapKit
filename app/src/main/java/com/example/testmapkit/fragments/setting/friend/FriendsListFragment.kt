@@ -17,6 +17,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.testmapkit.FRIEND_ID
 import com.example.testmapkit.R
+import com.example.testmapkit.STATISTIC
 import com.example.testmapkit.TAG
 import com.example.testmapkit.adapters.UserAdapter
 import com.example.testmapkit.dataModels.User
@@ -64,7 +65,12 @@ class FriendsListFragment : Fragment() {
     private fun init() {
 
         binding.btnBackFriendList.setOnClickListener {
-            findNavController().navigate(
+            if (STATISTIC)
+                findNavController().navigate(
+                    R.id.action_friendsListFragment_to_statisticFragment
+                )
+            else
+                findNavController().navigate(
                 R.id.action_friendsListFragment_to_settingFragment)
         }
 
@@ -78,12 +84,16 @@ class FriendsListFragment : Fragment() {
                 putInt(FRIEND_ID, userId)
             }
 
-            // TODO statistic or friend
-
-            findNavController().navigate(
-                R.id.action_friendsListFragment_to_friendFragment,
-                bundle
-            )
+            if (STATISTIC)
+                findNavController().navigate(
+                    R.id.action_friendsListFragment_to_userStatisticFragment,
+                    bundle
+                )
+            else
+                findNavController().navigate(
+                    R.id.action_friendsListFragment_to_friendFragment,
+                    bundle
+                )
         }
 
         binding.rvFriend.layoutManager = LinearLayoutManager(requireContext())
