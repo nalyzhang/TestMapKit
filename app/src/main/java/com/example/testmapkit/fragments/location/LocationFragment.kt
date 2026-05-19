@@ -1,5 +1,6 @@
 package com.example.testmapkit.fragments.location
 
+import android.content.Intent
 import android.graphics.Canvas
 import android.os.Bundle
 import android.util.Log
@@ -165,12 +166,12 @@ class LocationFragment : Fragment() {
         // Получаем выбранный радиус
         val radius = binding.radiusSizeBar.progress.toDouble() / 10
 
-//        // Отправляем команду сервису
-//        Intent(requireContext(), LocationService::class.java).also { intent ->
-//            intent.action = "START_QUEST"
-//            intent.putExtra("radius", radius)
-//            requireContext().startService(intent)
-//        }
+        // Отправляем команду сервису
+        Intent(requireContext(), LocationService::class.java).also { intent ->
+            intent.action = "START_QUEST"
+            intent.putExtra("radius", radius)
+            requireContext().startService(intent)
+        }
 
         currentLocation?.let { _ ->
             circleController.fixCircle()
@@ -249,38 +250,7 @@ class LocationFragment : Fragment() {
                 Log.d(TAG, "Получен рандомный адрес: ${location[1]?.getAddress()}")
                 sharedLocationsViewModel.setStartLocation(location[0])
                 sharedLocationsViewModel.setFinishLocation(location[1])
-
-                val randomLocation = location[1]
-                if (randomLocation != null) {
-                    val randomPoint = Point(randomLocation.latitude, randomLocation.longitude)
-                    binding.mapView.mapWindow.map.move(
-                        CameraPosition(randomPoint, 15.0f, 0.0f, 0.0f)
-                    )
-                    val placemark = binding.mapView.mapWindow.map.mapObjects.addPlacemark().apply {
-                        geometry = randomPoint
-                        val drawable = AppCompatResources.getDrawable(requireContext(), R.drawable.ic_location)
-                        if (drawable != null) {
-                            // Конвертируем Drawable в Bitmap
-                            val bitmap = createBitmap(drawable.intrinsicWidth, drawable.intrinsicHeight)
-                            val canvas = Canvas(bitmap)
-                            drawable.setBounds(0, 0, canvas.width, canvas.height)
-                            drawable.draw(canvas)
-
-                            setIcon(ImageProvider.fromBitmap(bitmap))
-                        }
-                        zIndex = 100f
-                    }
-                } else {
-                    // Обрабатываем исключения и показываем пользователю сообщение об ошибке
-                    Toast.makeText(
-                            requireContext(),
-                            "Ошибка получения координат",
-                            Toast.LENGTH_LONG
-                        ).show()
-
-                }
-
-                // moveToWalk(location[0], location[1])
+                moveToWalk(location[0], location[1])
             } else {
                 Toast.makeText(
                     requireContext(),
