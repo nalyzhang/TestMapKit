@@ -16,37 +16,33 @@ import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlin.coroutines.resume
 import kotlin.math.PI
 import kotlin.math.cos
+import kotlin.math.sin
+import kotlin.math.sqrt
 import kotlin.random.Random
 
 class SearchController {
 
-    private var randomAddress: String? = null
-
-
-    private fun getRandomNonZero(): Double {
-        var random: Double
-        do {
-            random = Random.nextDouble(-1.0, 1.0)
-        } while (random == 0.0)
-        return random
-    }
-
     private fun searchRandomPosition(longitude: Double,
                                      latitude: Double,
                                      circleRadius: Double): LocationData{
-        val randomLatitudeDistance = getRandomNonZero() * circleRadius
-        val randomLongitudeDistance = getRandomNonZero() * circleRadius
-        val deltaLatitude = (
-                180 * randomLatitudeDistance
-                ) / (
-                PI * EARTH_RADIUS
-                        )
-        val cosLatitude = cos(latitude)
-        val deltaLongitude = (
-                180 * randomLongitudeDistance
-                ) / (
-                PI * EARTH_RADIUS * cosLatitude
-                        )
+        val angle = Random.nextDouble(0.0, 2 * PI)
+
+        var distance: Double
+
+        do {
+            distance = sqrt(
+                Random.nextDouble(0.0, 1.0)
+            ) * circleRadius
+        } while (distance < 1.0)
+
+        val randomLatitudeDistance = distance * cos(angle)
+        val randomLongitudeDistance = distance * sin(angle)
+
+        val deltaLatitude = Math.toDegrees(randomLatitudeDistance / EARTH_RADIUS)
+        val deltaLongitude = Math.toDegrees(
+            randomLongitudeDistance / (
+                    EARTH_RADIUS * cos(Math.toRadians(latitude)))
+        )
         val randomLatitude = latitude + deltaLatitude
         val randomLongitude = longitude + deltaLongitude
         return LocationData(

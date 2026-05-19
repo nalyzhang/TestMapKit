@@ -436,12 +436,12 @@ class UserStatisticFragment : Fragment() {
             binding.llUserStatisticCompletedPer.visibility = View.GONE
         }
         else {
-            val completedRoutesPercent = "${
-                ((completedRoutesCount.toFloat() / routesCount) * 100)
-            } %"
+            val completedRoutesPercent = "%.2f %%".format(
+                ((completedRoutesCount.toFloat() / routesCount) * 100))
             binding.tvUserStatisticCompletedPer.text = completedRoutesPercent
         }
-        val averageRadius = "${statistic.averageRadius} км"
+        val averageRadius = "%.2f км".format(
+            statistic.averageRadius)
         binding.tvUserStatisticRadius.text = averageRadius
 
         initPeriodStatistic(statistic)

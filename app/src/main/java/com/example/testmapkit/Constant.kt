@@ -15,4 +15,4 @@ const val TAG: String = "Android DRF debug"
 const val FRIEND_ID = "FRIEND_ID"
 const val ROUTE_ID = "ROUTE_ID"
 
-const val BASE_URL_IP = "http://192.168.0.202:8000/"
+const val BASE_URL_IP = "http://192.168.1.210:8000/"
