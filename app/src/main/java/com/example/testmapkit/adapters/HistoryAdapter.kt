@@ -1,11 +1,9 @@
 package com.example.testmapkit.adapters
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.testmapkit.R
-import com.example.testmapkit.TAG
 import com.example.testmapkit.controllers.TimeController
 import com.example.testmapkit.dataModels.Route
 import com.example.testmapkit.databinding.ItemHistoryBinding

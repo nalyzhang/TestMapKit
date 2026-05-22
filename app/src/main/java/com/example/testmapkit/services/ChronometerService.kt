@@ -59,14 +59,6 @@ class ChronometerService : Service() {
         return timeController.formatNow()
     }
 
-    fun resetChronometer() {
-        stopChronometer()
-        elapsedTime = 0
-        _timeLiveData.postValue(elapsedTime)
-    }
-
-    fun getCurrentTime(): Long = elapsedTime
-
     override fun onDestroy() {
         super.onDestroy()
         handler.removeCallbacks(updateRunnable)

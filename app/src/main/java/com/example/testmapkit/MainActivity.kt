@@ -4,10 +4,12 @@ import android.annotation.SuppressLint
 import android.content.ComponentName
 import android.content.Intent
 import android.content.ServiceConnection
+import android.content.pm.PackageManager
 import android.os.Bundle
 import android.os.IBinder
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import com.example.testmapkit.databinding.ActivityMainBinding
@@ -68,7 +70,12 @@ class MainActivity : AppCompatActivity() {
             setContentView(binding.root)
 
             MAIN = this
-            startServices()
+
+            if (checkLocationPermissions()) {
+                startServices()
+            } else {
+                requestLocationPermission()
+            }
 
             val navHostFragment = supportFragmentManager
                 .findFragmentById(R.id.nav_host_fragment) as NavHostFragment
@@ -105,6 +112,26 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    // Проверка на наличие разрешения на использование локации
+    private fun checkLocationPermissions(): Boolean {
+        return (ActivityCompat.checkSelfPermission(
+            this,
+            android.Manifest.permission.ACCESS_FINE_LOCATION
+        ) == PackageManager.PERMISSION_GRANTED ||
+                ActivityCompat.checkSelfPermission(
+                    this,
+                    android.Manifest.permission.ACCESS_COARSE_LOCATION
+                ) == PackageManager.PERMISSION_GRANTED)
+    }
+
+    // Запрос на разрешение использования геолокации
+    private fun requestLocationPermission(){
+        ActivityCompat.requestPermissions(
+            this,
+            arrayOf(android.Manifest.permission.ACCESS_FINE_LOCATION, android.Manifest.permission.ACCESS_COARSE_LOCATION),
+            0)
+    }
+
     private fun startServices() {
         // Запуск LocationService
         val locationIntent = Intent(this, LocationService::class.java)
@@ -118,17 +145,28 @@ class MainActivity : AppCompatActivity() {
             chronometerIntent, chronometerServiceConnection, BIND_AUTO_CREATE)
     }
 
-    fun getLocationService(): LocationService? = locationService
+    fun getLocationService(): LocationService? {
+        check()
+        return locationService
+    }
 
     fun getChronometerService(): ChronometerService? = chronometerService
 
     fun setLocationUpdateListener(listener: LocationService.LocationUpdateListener?) {
+        check()
         this.locationUpdateListener = listener
         // Если сервис уже подключен, добавляем слушатель
         if (isLocationServiceBound) {
             listener?.let {
                 locationService?.addLocationListener(it)
             }
+        }
+    }
+
+
+    fun check(){
+        if (!checkLocationPermissions()) {
+            requestLocationPermission()
         }
     }
 

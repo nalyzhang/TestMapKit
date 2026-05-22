@@ -29,7 +29,7 @@ class LocationController(private val context: Context) {
     }
 
     // Проверка на наличие разрешения на использование локации
-    private fun checkLocationPermissions(): Boolean {
+    fun checkLocationPermissions(): Boolean {
         return (ActivityCompat.checkSelfPermission(
             context,
             android.Manifest.permission.ACCESS_FINE_LOCATION
@@ -111,26 +111,7 @@ class LocationController(private val context: Context) {
         }
     }
 
-    fun stopLocationTracking() {
-        locationListener?.let { listener ->
-            locationManager.unsubscribe(listener)
-        }
-    }
-
-    fun getCurrentLocation(): Location? = lastKnownLocation
-
     fun addListener(listener: LocationUpdateListener) {
         listeners.add(listener)
-    }
-
-    fun removeListener(listener: LocationUpdateListener) {
-        listeners.remove(listener)
-    }
-
-    // Метод для очистки ресурсов (вызывать в onDestroy)
-    fun cleanup() {
-        stopLocationTracking()
-        locationListener = null
-        listeners.clear()
     }
 }

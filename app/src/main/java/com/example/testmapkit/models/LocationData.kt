@@ -38,7 +38,7 @@ class LocationData(
 
     fun getStringAddress(): String {
         val list = address.split(' ')
-        var textAddress: String = ""
+        var textAddress = ""
         for (i in 1..<list.size-1) {
             textAddress += "${list[i]} "
         }
@@ -57,9 +57,5 @@ class LocationData(
 
     fun getID(): Int {
         return idServer
-    }
-
-    companion object {
-        private const val serialVersionUID = 1L
     }
 }

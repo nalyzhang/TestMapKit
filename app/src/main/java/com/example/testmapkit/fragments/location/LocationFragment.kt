@@ -1,7 +1,6 @@
 package com.example.testmapkit.fragments.location
 
 import android.content.Intent
-import android.graphics.Canvas
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -9,8 +8,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.SeekBar
 import android.widget.Toast
-import androidx.appcompat.content.res.AppCompatResources
-import androidx.core.graphics.createBitmap
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
@@ -34,11 +31,9 @@ import com.example.testmapkit.repositories.RouteRepository
 import com.example.testmapkit.services.LocationService
 import com.yandex.mapkit.Animation
 import com.yandex.mapkit.MapKitFactory
-import com.yandex.mapkit.geometry.Point
 import com.yandex.mapkit.location.Location
 import com.yandex.mapkit.map.CameraPosition
 import com.yandex.mapkit.user_location.UserLocationLayer
-import com.yandex.runtime.image.ImageProvider
 import java.util.Locale
 
 class LocationFragment : Fragment() {

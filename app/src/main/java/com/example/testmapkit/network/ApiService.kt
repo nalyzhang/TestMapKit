@@ -26,9 +26,6 @@ interface ApiService {
     suspend fun putCurrentUser(@Body request: UserUpdate): Response<UserUpdate>
 
     // ========== Пользователи ==========
-    @GET("api/v1/users/")
-    suspend fun getUsers(): Response<PaginatedResponse<User>>
-
     @GET("api/v1/users/{id}/")
     suspend fun getUserById(
         @Path("id") userId: Int,

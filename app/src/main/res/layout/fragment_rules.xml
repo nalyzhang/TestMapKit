@@ -41,7 +41,7 @@
             android:id="@+id/tv_rules_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="30dp"
+            android:layout_margin="10dp"
             android:textSize="@dimen/text_title"
             android:text="Правила игры"
             android:gravity="center"/>
@@ -50,10 +50,8 @@
             android:id="@+id/tv_rules_desc"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="50dp"
-            android:layout_marginEnd="10dp"
-            android:layout_marginStart="10dp"
-            android:textSize="@dimen/text_normal"
+            android:layout_margin="10dp"
+            android:textAppearance="?android:attr/textAppearanceMedium"
             android:text="Содержание"/>
     </LinearLayout>
 

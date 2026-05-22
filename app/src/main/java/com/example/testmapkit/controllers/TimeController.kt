@@ -11,8 +11,6 @@ import java.time.format.DateTimeFormatter
 import java.util.Date
 import java.util.Locale
 import java.time.LocalDate
-import java.time.LocalTime
-import java.time.Month
 import java.time.format.TextStyle
 
 class TimeController {
@@ -33,18 +31,6 @@ class TimeController {
         return try {
             val offsetDateTime = OffsetDateTime.parse(dateTimeString)
             val formatter = DateTimeFormatter.ofPattern("HH:mm:ss")
-            offsetDateTime.format(formatter)
-        } catch (e: Exception) {
-            dateTimeString
-        }
-    }
-
-    // Полная дата и время
-    // yyy-MM-DDT00:00:00+00:00 -> dd.MM.yyyy HH:mm:ss
-    fun extractDateTime(dateTimeString: String): String {
-        return try {
-            val offsetDateTime = OffsetDateTime.parse(dateTimeString)
-            val formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm:ss")
             offsetDateTime.format(formatter)
         } catch (e: Exception) {
             dateTimeString

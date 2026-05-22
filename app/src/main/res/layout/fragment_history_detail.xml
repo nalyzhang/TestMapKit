@@ -54,7 +54,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="5dp"
-            android:textSize="@dimen/text_title"
+            android:textSize="@dimen/text_normal"
             android:text="Name"
             android:gravity="center"/>
 
@@ -76,7 +76,7 @@
                 android:layout_width="@dimen/text_view_width_extra"
                 android:layout_height="wrap_content"
                 android:layout_margin="5dp"
-                android:textSize="@dimen/text_normal"
+                android:textSize="@dimen/text_small"
                 android:text="Цель"
                 android:gravity="center_vertical"/>
 
@@ -86,7 +86,7 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="5dp"
                 android:layout_gravity="center"
-                android:textSize="@dimen/text_normal"
+                android:textSize="@dimen/text_small"
                 android:text="Destination" />
 
         </LinearLayout>
@@ -100,7 +100,7 @@
                 android:layout_width="@dimen/text_view_width_extra"
                 android:layout_height="wrap_content"
                 android:layout_margin="5dp"
-                android:textSize="@dimen/text_normal"
+                android:textSize="@dimen/text_small"
                 android:text="Расстояние"
                 android:gravity="center_vertical"/>
 
@@ -110,7 +110,7 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="5dp"
                 android:layout_gravity="center"
-                android:textSize="@dimen/text_normal"
+                android:textSize="@dimen/text_small"
                 android:text="Distance" />
 
         </LinearLayout>
@@ -124,7 +124,7 @@
                 android:layout_width="@dimen/text_view_width_extra"
                 android:layout_height="wrap_content"
                 android:layout_margin="5dp"
-                android:textSize="@dimen/text_normal"
+                android:textSize="@dimen/text_small"
                 android:text="Радиус поиска"
                 android:gravity="center_vertical"/>
 
@@ -134,7 +134,7 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="5dp"
                 android:layout_gravity="center"
-                android:textSize="@dimen/text_normal"
+                android:textSize="@dimen/text_small"
                 android:text="Distance" />
 
         </LinearLayout>
@@ -148,7 +148,7 @@
                 android:layout_width="@dimen/text_view_width_extra"
                 android:layout_height="wrap_content"
                 android:layout_margin="5dp"
-                android:textSize="@dimen/text_normal"
+                android:textSize="@dimen/text_small"
                 android:text="Время в пути"
                 android:gravity="center_vertical"/>
 
@@ -158,7 +158,7 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="5dp"
                 android:layout_gravity="center"
-                android:textSize="@dimen/text_normal"
+                android:textSize="@dimen/text_small"
                 android:text="Time" />
 
         </LinearLayout>
@@ -167,7 +167,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
-            android:textSize="@dimen/text_title"
+            android:textSize="@dimen/text_normal"
             android:text="Начало пути"
             android:gravity="center"/>
 
@@ -182,7 +182,7 @@
                 android:layout_margin="5dp"
                 android:gravity="center_vertical"
                 android:text="Начальная локация"
-                android:textSize="@dimen/text_normal" />
+                android:textSize="@dimen/text_small"/>
 
             <TextView
                 android:id="@+id/tv_history_route_start_location"
@@ -190,7 +190,7 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="5dp"
                 android:layout_gravity="center"
-                android:textSize="@dimen/text_normal"
+                android:textSize="@dimen/text_small"
                 android:text="Location" />
 
         </LinearLayout>
@@ -204,7 +204,7 @@
                 android:layout_width="@dimen/text_view_width_extra"
                 android:layout_height="wrap_content"
                 android:layout_margin="5dp"
-                android:textSize="@dimen/text_normal"
+                android:textSize="@dimen/text_small"
                 android:text="Время начала"
                 android:gravity="center_vertical"/>
 
@@ -214,7 +214,7 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="5dp"
                 android:layout_gravity="center"
-                android:textSize="@dimen/text_normal"
+                android:textSize="@dimen/text_small"
                 android:text="Time" />
 
         </LinearLayout>
@@ -223,7 +223,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
-            android:textSize="@dimen/text_title"
+            android:textSize="@dimen/text_normal"
             android:text="Конец пути"
             android:gravity="center"/>
 
@@ -236,7 +236,7 @@
                 android:layout_width="@dimen/text_view_width_extra"
                 android:layout_height="wrap_content"
                 android:layout_margin="5dp"
-                android:textSize="@dimen/text_normal"
+                android:textSize="@dimen/text_small"
                 android:text="Конечная локация"
                 android:gravity="center_vertical"/>
 
@@ -246,7 +246,7 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="5dp"
                 android:layout_gravity="center"
-                android:textSize="@dimen/text_normal"
+                android:textSize="@dimen/text_small"
                 android:text="Location" />
 
         </LinearLayout>
@@ -260,7 +260,7 @@
                 android:layout_width="@dimen/text_view_width_extra"
                 android:layout_height="wrap_content"
                 android:layout_margin="5dp"
-                android:textSize="@dimen/text_normal"
+                android:textSize="@dimen/text_small"
                 android:text="Время завершения"
                 android:gravity="center_vertical"/>
 
@@ -270,7 +270,7 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="5dp"
                 android:layout_gravity="center"
-                android:textSize="@dimen/text_normal"
+                android:textSize="@dimen/text_small"
                 android:text="Time" />
 
         </LinearLayout>

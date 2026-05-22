@@ -134,7 +134,7 @@ class SearchController {
         }
 
 
-        searchManager.submit(point, 16, searchOptions,
+        searchManager.submit(point, 18, searchOptions,
             object: Session.SearchListener {
                 override fun onSearchError(error: com.yandex.runtime.Error) {
                     Log.d(TAG, "Error $error")

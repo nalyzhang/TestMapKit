@@ -12,7 +12,6 @@ import com.example.testmapkit.R
 import com.example.testmapkit.STATISTIC
 import com.example.testmapkit.dataModels.UserWithStatistic
 import com.example.testmapkit.databinding.FragmentProfileBinding
-import com.example.testmapkit.fragments.setting.user.UserViewModel
 import com.example.testmapkit.network.RetrofitClient
 import com.example.testmapkit.network.TokenManager
 import com.example.testmapkit.repositories.UserRepository

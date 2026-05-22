@@ -1,10 +1,6 @@
 package com.example.testmapkit.models
 
-import android.util.Log
-import com.example.testmapkit.TAG
 import java.time.LocalDate
-import java.time.MonthDay
-import java.time.Year
 import java.time.temporal.ChronoField
 
 enum class PeriodType {

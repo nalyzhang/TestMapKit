@@ -7,10 +7,6 @@ import com.example.testmapkit.dataModels.UserStatistic
 import com.example.testmapkit.network.ApiService
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import retrofit2.Response
-import retrofit2.http.GET
-import retrofit2.http.Path
-import retrofit2.http.Query
 
 sealed class StatisticResult<out T> {
     data class Success<T>(val data: T) : StatisticResult<T>()

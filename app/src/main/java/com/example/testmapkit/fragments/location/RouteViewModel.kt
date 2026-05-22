@@ -36,7 +36,6 @@ class RouteViewModel (
     val routeCreationState: LiveData<RouteResult<Route>?> = _routeCreationState
 
     private val _routeAddressState = MutableLiveData<List<Route?>?>()
-    val routeAddressState: LiveData<List<Route?>?> = _routeAddressState
 
     private val _randomAddressState = MutableLiveData<List<LocationData?>>()
     val randomAddressState: LiveData<List<LocationData?>> = _randomAddressState

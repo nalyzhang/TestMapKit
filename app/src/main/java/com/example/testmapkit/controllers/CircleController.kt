@@ -9,10 +9,8 @@ import com.yandex.mapkit.geometry.Circle
 import com.yandex.mapkit.location.Location
 import com.yandex.mapkit.map.CircleMapObject
 import com.yandex.mapkit.map.Map
-import com.yandex.mapkit.map.MapObject
 
 class CircleController(private val activity: AppCompatActivity) {
-    private lateinit var circle: Circle
     private var radiusCircle: Int = DEFAULT_RADIUS_KM
     private var isEnable: Boolean = true
 
@@ -51,10 +49,6 @@ class CircleController(private val activity: AppCompatActivity) {
             drawCircle(location, map)
             Log.d("LocationServer","Радиус изменен: $oldRadius -> $radiusCircle")
         }
-    }
-
-    fun getCircleRadius(): Int {
-        return radiusCircle
     }
 
     fun fixCircle() {

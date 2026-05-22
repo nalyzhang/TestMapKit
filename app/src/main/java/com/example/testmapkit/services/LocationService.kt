@@ -1,7 +1,6 @@
 package com.example.testmapkit.services
 
 import android.app.*
-import android.content.Context
 import android.content.Intent
 import android.os.Binder
 import android.os.Build
@@ -91,7 +90,7 @@ class LocationService : Service() {
             ).apply {
                 description = "Отслеживает ваше местоположение во время квеста"
             }
-            val manager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+            val manager = getSystemService(NOTIFICATION_SERVICE) as NotificationManager
             manager.createNotificationChannel(channel)
         }
 
@@ -124,20 +123,11 @@ class LocationService : Service() {
         return binder
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
-        // locationController.cleanup()
-    }
-
     // Методы для взаимодействия с фрагментами
     fun addLocationListener(listener: LocationUpdateListener) {
         if (!fragmentListeners.contains(listener)) {
             fragmentListeners.add(listener)
         }
-    }
-
-    fun removeLocationListener(listener: LocationUpdateListener) {
-        fragmentListeners.remove(listener)
     }
 
     fun getCurrentLocation(): Location? = currentLocation

@@ -22,7 +22,6 @@ import com.example.testmapkit.repositories.RouteRepository
 import com.example.testmapkit.services.ChronometerService
 import com.example.testmapkit.services.LocationService
 import com.yandex.mapkit.location.Location
-import com.yandex.mapkit.user_location.UserLocationLayer
 import java.util.Locale
 import kotlin.getValue
 
@@ -35,7 +34,6 @@ class WalkFragment : Fragment() {
     private var stopLocation: LocationData? = null
     private var currentLocation: Location? = null
     private var locationService: LocationService? = null
-    private var userLocationLayer: UserLocationLayer? = null
 
     private lateinit var routeViewModel: RouteViewModel
     private lateinit var tokenManager: TokenManager

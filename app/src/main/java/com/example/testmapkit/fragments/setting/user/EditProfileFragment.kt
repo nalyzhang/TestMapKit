@@ -23,7 +23,6 @@ import com.example.testmapkit.R
 import com.example.testmapkit.dataModels.UserUpdate
 import com.example.testmapkit.dataModels.UserWithStatistic
 import com.example.testmapkit.databinding.FragmentEditProfileBinding
-import com.example.testmapkit.fragments.setting.user.UserViewModel
 import com.example.testmapkit.network.RetrofitClient
 import com.example.testmapkit.network.TokenManager
 import com.example.testmapkit.repositories.UserRepository
@@ -411,11 +410,6 @@ class EditProfileFragment : Fragment() {
     private fun getMimeType(uri: Uri): String {
         val mimeType = requireContext().contentResolver.getType(uri)
         return mimeType ?: "image/jpeg" // По умолчанию JPEG
-    }
-
-    private fun compressImage(bytes: ByteArray): ByteArray {
-        // Простое сжатие - можно использовать Bitmap для лучшего сжатия
-        return bytes
     }
 
     private fun deleteAvatar() {

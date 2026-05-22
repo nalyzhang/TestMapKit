@@ -870,8 +870,7 @@ class UserStatisticFragment : Fragment() {
         timeType: TimeType,
         value: ArrayList<Float>): Float {
         if (value.isEmpty()) return 0f
-        var time: Float = 0f
-        time = when(timeType) {
+        val time: Float = when(timeType) {
             (TimeType.MIN) -> value.min()
             (TimeType.MAX) -> value.max()
             (TimeType.AVG) -> value.sum() / value.size
